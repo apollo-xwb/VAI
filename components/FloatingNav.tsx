@@ -1,6 +1,7 @@
-
 import React from 'react';
 import { AppView } from '../types';
+
+import logoUrl from '../assets/logo.png';
 
 interface FloatingNavProps {
   onNavigate: (view: AppView) => void;
@@ -17,7 +18,7 @@ export const FloatingNav: React.FC<FloatingNavProps> = ({ onNavigate, currentVie
       <div className="glass-card shadow-2xl rounded-full pl-4 pr-4 py-3 flex items-center gap-2 border border-navy-900/10 transition-all">
         <div className="flex items-center pr-3 mr-1 border-r border-navy-200/70 dark:border-navy-700/70 gap-2">
           <img
-            src="assets/logo.png"
+            src={logoUrl}
             alt="Fourcee logo"
             className="w-8 h-8 rounded-full object-contain shadow-sm"
           />

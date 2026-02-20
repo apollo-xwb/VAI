@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { EtherealShadow } from './ui/etheral-shadow';
 
+import logoUrl from '../assets/logo.png';
+
 const STATS = [
   "Jewelers lose 40% of leads to missed calls.",
   "Custom ring inquiries peak between 8 PM and 11 PM.",
@@ -50,7 +52,7 @@ export const SplashScreen: React.FC<{ onComplete: () => void }> = ({ onComplete 
           }}
         >
           <img
-            src="assets/logo.png"
+            src={logoUrl}
             alt="Fourcee logo"
             className="w-80 h-80 md:w-[26rem] md:h-[26rem] object-contain"
           />

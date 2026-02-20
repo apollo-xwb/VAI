@@ -1,7 +1,10 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { AppView, BlogPost } from './types';
 import { FloatingNav } from './components/FloatingNav';
+
+import logoUrl from './assets/logo.png';
+import demoImage from './assets/4.jpg';
+import workflowImage from './assets/workflow5.png';
 import { ValueCalculator } from './components/ValueCalculator';
 import { PricingSection } from './components/ui/pricing';
 import { EtherealShadow } from './components/ui/etheral-shadow';
@@ -77,6 +80,17 @@ const App: React.FC = () => {
       document.documentElement.classList.remove('dark');
     }
   }, [isDarkMode]);
+
+  useEffect(() => {
+    let link = document.querySelector<HTMLLinkElement>('link[rel="icon"]');
+    if (!link) {
+      link = document.createElement('link');
+      link.rel = 'icon';
+      document.head.appendChild(link);
+    }
+    link.type = 'image/png';
+    link.href = logoUrl;
+  }, []);
 
   const navigate = (view: AppView, post?: BlogPost) => {
     setCurrentView(view);
@@ -242,7 +256,7 @@ const App: React.FC = () => {
             style={{ scale: demoScale, opacity: demoOpacity, y: demoY }}
             className="relative w-full max-w-4xl aspect-video rounded-[3rem] overflow-hidden shadow-[0_40px_100px_-20px_rgba(0,0,0,0.3)] group origin-center"
           >
-             <img src="assets/4.jpg" alt="Demo" className="w-full h-full object-cover brightness-50 group-hover:scale-105 transition-transform duration-1000" />
+             <img src={demoImage} alt="Demo" className="w-full h-full object-cover brightness-50 group-hover:scale-105 transition-transform duration-1000" />
              <div className="absolute inset-0 flex flex-col items-center justify-center text-white">
                 <button className="w-24 h-24 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center hover:scale-110 active:scale-95 transition-all">
                   <svg className="w-10 h-10 ml-2" fill="currentColor" viewBox="0 0 20 20"><path d="M4.018 14L14.41 8 4.018 2v12z"/></svg>
@@ -316,7 +330,7 @@ const App: React.FC = () => {
               }}
             >
               <img 
-                src="assets/workflow5.png" 
+                src={workflowImage} 
                 className="w-full h-full object-cover brightness-75 hover:scale-105 transition-transform duration-[3000ms]" 
                 alt="Connected digital ecosystem" 
               />
