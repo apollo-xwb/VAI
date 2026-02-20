@@ -1,0 +1,19 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-destructive-foreground: oklch(1 0 0);
+  --color-color-destructive-foreground: var(----color-destructive-foreground);
+}
+
+:root {
+  --destructive-foreground: oklch(1 0 0);
+}
+
+.dark {
+  --destructive-foreground: oklch(1 0 0);
+}
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+}
