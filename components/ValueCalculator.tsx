@@ -19,7 +19,7 @@ export const ValueCalculator: React.FC = () => {
   }, [avgValue, missedCalls, staffSalary]);
 
   return (
-    <div className="glass-card rounded-[2.5rem] p-10 shadow-2xl border border-silver-100 dark:border-navy-800 max-w-xl w-full transition-colors">
+    <div className="glass-card rounded-[2.5rem] p-10 shadow-2xl border border-silver-100 dark:border-navy-800 w-full min-w-0 transition-colors">
       <h3 className="text-2xl font-bold mb-8 text-navy-900 dark:text-white serif">Value Calculator</h3>
       
       <div className="space-y-8">

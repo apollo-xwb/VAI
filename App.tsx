@@ -10,7 +10,7 @@ import { PricingSection } from './components/ui/pricing';
 import { EtherealShadow } from './components/ui/etheral-shadow';
 import { DottedSurface } from './components/ui/dotted-surface';
 import DisplayCards from './components/ui/display-cards';
-import { Diamond3D } from './components/Diamond3D';
+import { PendantFBX } from './components/PendantFBX';
 import { IncomingCallPhone } from './components/ui/incoming-call-phone';
 import { MiniPhone } from './components/ui/mini-phone';
 import { PhoneCall } from 'lucide-react';
@@ -68,6 +68,7 @@ const App: React.FC = () => {
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [showTester, setShowTester] = useState(false);
   const [expandedIntegration, setExpandedIntegration] = useState<number | null>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -103,17 +104,18 @@ const App: React.FC = () => {
     return <SplashScreen onComplete={() => setIsReady(true)} />;
   }
 
-  const LandingPage = () => {
-    const { scrollYProgress } = useScroll();
+  const LandingPage = ({ scrollContainerRef }: { scrollContainerRef: React.RefObject<HTMLDivElement | null> }) => {
     const problemRef = useRef<HTMLElement>(null);
     const demoRef = useRef<HTMLElement>(null);
     const { scrollYProgress: problemScroll } = useScroll({
       target: problemRef,
-      offset: ["start end", "end start"]
+      offset: ["start end", "end start"],
+      container: scrollContainerRef,
     });
     const { scrollYProgress: demoScroll } = useScroll({
       target: demoRef,
-      offset: ["start end", "center center"]
+      offset: ["start end", "center center"],
+      container: scrollContainerRef,
     });
 
     const cardsY = useTransform(problemScroll, [0, 1], [-150, 150]);
@@ -123,28 +125,48 @@ const App: React.FC = () => {
 
     return (
     <div className="animate-in fade-in duration-1000 pb-8">
-      {/* Hero Section - 3D icon: use Diamond3D until pendant OBJ is mesh-only (no NURBS/curv2) */}
-      <section className="relative min-h-screen flex flex-col items-center justify-center text-center px-6 py-12 md:py-24 overflow-hidden bg-transparent transition-colors">
-        <div className="mb-8 animate-bounce duration-[4000ms]">
-          <Diamond3D size="100px" />
-        </div>
-        <div className="relative z-10 max-w-6xl mx-auto flex flex-col items-center">
-          <h1 className="text-5xl md:text-8xl font-bold mb-8 text-navy-900 dark:text-white serif leading-[1.1] tracking-tighter">
-            The Gold Standard <br/><span className="italic shimmer-text">of Voice AI</span>
-          </h1>
-          <p className="text-lg md:text-xl text-navy-500 dark:text-navy-300 max-w-2xl mb-8 font-medium leading-relaxed uppercase tracking-[0.25em] text-[10px] md:text-[12px]">
-            Tailored exclusively for high-end jewelers
-          </p>
-
-          <div className="mb-16 w-full max-w-sm mx-auto">
-            <MiniPhone isDarkMode={isDarkMode} />
+      {/* Hero: ring left (between hero text and Test Fourcee), text + form right; mobile: text → ring → form */}
+      <section className="snap-start snap-always min-h-screen relative flex flex-col items-center justify-center px-4 sm:px-6 py-8 md:py-24 overflow-hidden bg-transparent transition-colors">
+        <div className="w-full max-w-6xl grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-x-20 lg:gap-x-28 md:gap-y-10 items-start md:items-center">
+          {/* Hero text — mobile first, desktop top-right */}
+          <div className="order-1 md:order-2 md:row-start-1 text-center md:text-right">
+            <div className="relative z-10 max-w-2xl md:ml-auto">
+              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold mb-4 text-navy-900 dark:text-white serif leading-[1.1] tracking-tighter">
+                The Gold Standard <br/><span className="italic shimmer-text">of Voice AI</span>
+              </h1>
+              <p className="text-lg md:text-xl text-navy-500 dark:text-navy-300 font-medium leading-relaxed uppercase tracking-[0.25em] text-[10px] md:text-[12px]">
+                Tailored exclusively for high-end jewelers
+              </p>
+            </div>
           </div>
-          
-          <div className="w-full flex flex-col lg:flex-row items-center justify-center gap-12 lg:gap-20">
-            <ValueCalculator />
-            <div className="text-left max-w-sm space-y-6">
+          {/* Ring — mobile middle, desktop left and vertically centered between text and form */}
+          <div className="order-2 md:order-1 md:row-span-2 md:self-center flex justify-center w-full">
+            <div className="w-full max-w-[360px] sm:max-w-[420px] md:max-w-[520px] lg:max-w-[600px] aspect-square max-h-[50vh] sm:max-h-[55vh] md:max-h-[65vh] min-h-[260px] sm:min-h-[300px] md:min-h-[360px]">
+              <PendantFBX className="w-full h-full" />
+            </div>
+          </div>
+          {/* Test Fourcee — mobile last, desktop bottom-right */}
+          <div className="order-3 md:row-start-2 flex justify-center md:justify-end">
+            <div className="w-full max-w-sm">
+              <MiniPhone isDarkMode={isDarkMode} />
+            </div>
+          </div>
+        </div>
+
+        <div className="w-full max-w-6xl flex flex-col gap-8 lg:gap-10 mt-12 md:mt-16">
+          <div className="flex flex-col lg:flex-row items-stretch justify-center gap-6 lg:gap-8">
+            <div className="flex-1 min-w-0">
+              <ValueCalculator />
+            </div>
+            <div className="flex flex-col gap-4 w-full max-w-sm lg:max-w-xs shrink-0">
               <div className="glass-card p-8 rounded-[2.5rem] border border-navy-50 shadow-xl">
-                <p className="text-[10px] font-bold uppercase tracking-widest text-navy-400 dark:text-navy-300 mb-4">Live Performance</p>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-navy-400 dark:text-navy-300 mb-4 flex items-center gap-2">
+                  <span className="relative flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+                  </span>
+                  Live Performance
+                </p>
                 <div className="space-y-4">
                   {[
                     "95% Resolution Rate",
@@ -153,26 +175,24 @@ const App: React.FC = () => {
                   ].map((item, idx) => (
                     <div key={idx} className="flex items-center gap-3">
                       <div className="w-1.5 h-1.5 bg-navy-900 dark:bg-white rounded-full" />
-                      <span className="font-bold text-sm text-navy-900 dark:text-navy-50 tracking-tight">{item}</span>
+                      <span className="font-bold text-base md:text-lg text-navy-900 dark:text-navy-50 tracking-tight">{item}</span>
                     </div>
                   ))}
                 </div>
               </div>
-              <div className="flex flex-col gap-3">
-                <button 
-                  onClick={() => navigate(AppView.CHECKOUT)}
-                  className="w-full py-5 bg-navy-900 dark:bg-white dark:text-navy-950 text-white rounded-full font-bold text-sm uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-2xl"
-                >
-                  Start Free Deployment →
-                </button>
-              </div>
+              <button
+                onClick={() => navigate(AppView.CHECKOUT)}
+                className="w-full py-5 bg-navy-900 dark:bg-white dark:text-navy-950 text-white rounded-full font-bold text-sm uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-2xl"
+              >
+                Start Free Deployment →
+              </button>
             </div>
           </div>
         </div>
       </section>
 
       {/* Problem Step - Moved below Hero: blue + grid faded at top and bottom */}
-      <section ref={problemRef} className="py-32 px-6 text-white relative overflow-hidden border-y border-white/5">
+      <section ref={problemRef} className="snap-start snap-always min-h-screen flex flex-col justify-center py-32 px-6 text-white relative overflow-hidden border-y border-white/5">
         <div
           className="absolute inset-0 pointer-events-none bg-navy-950"
           style={{
@@ -249,7 +269,7 @@ const App: React.FC = () => {
       </section>
 
       {/* Demo Video Section - scroll-linked effect on video placeholder */}
-      <section ref={demoRef} id="demo" className="py-32 px-6 bg-transparent">
+      <section ref={demoRef} id="demo" className="snap-start snap-always min-h-screen flex flex-col justify-center py-32 px-6 bg-transparent">
         <div className="max-w-6xl mx-auto flex flex-col items-center">
           <h2 className="text-4xl md:text-6xl font-bold serif text-navy-900 dark:text-white mb-12 text-center tracking-tighter">Experience the Demo</h2>
           <motion.div
@@ -271,7 +291,7 @@ const App: React.FC = () => {
       </section>
 
       {/* Outbound Calls Section */}
-      <section className="py-20 px-6 bg-transparent transition-colors relative">
+      <section className="snap-start snap-always min-h-screen flex flex-col justify-center py-20 px-6 bg-transparent transition-colors relative">
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
@@ -310,7 +330,7 @@ const App: React.FC = () => {
       </section>
 
       {/* Integrations Section */}
-      <section className="pt-32 pb-16 px-6 bg-transparent transition-colors">
+      <section className="snap-start snap-always min-h-screen flex flex-col justify-center pt-32 pb-16 px-6 bg-transparent transition-colors">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-24 max-w-3xl mx-auto">
             <h2 className="text-4xl md:text-7xl font-bold serif text-navy-900 dark:text-white mb-8 tracking-tighter">Unified Workflow</h2>
@@ -395,7 +415,8 @@ const App: React.FC = () => {
 
 
       {/* Pricing Section */}
-      <PricingSection 
+      <section className="snap-start snap-always min-h-screen flex flex-col justify-center">
+        <PricingSection 
         plans={PACKAGES.map(pkg => ({
           id: pkg.id,
           name: pkg.name,
@@ -414,9 +435,10 @@ const App: React.FC = () => {
           navigate(AppView.CHECKOUT);
         }}
       />
+      </section>
 
       {/* Solutions / Features */}
-      <section className="pt-12 pb-4 px-6 bg-transparent transition-colors relative">
+      <section className="snap-start snap-always min-h-screen flex flex-col justify-center pt-12 pb-4 px-6 bg-transparent transition-colors relative">
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
@@ -484,7 +506,7 @@ const App: React.FC = () => {
   );
 
   return (
-    <div className="relative min-h-screen flex flex-col bg-white dark:bg-navy-950 transition-colors overflow-x-hidden">
+    <div ref={scrollContainerRef} className="relative h-screen flex flex-col overflow-y-auto overflow-x-hidden snap-y snap-mandatory bg-white dark:bg-navy-950 transition-colors">
       <div className="fixed inset-0 z-0 pointer-events-none">
         <EtherealShadow 
           color={isDarkMode ? "rgba(255, 255, 255, 0.12)" : "rgba(16, 42, 67, 0.08)"}
@@ -496,7 +518,7 @@ const App: React.FC = () => {
       <FloatingNav onNavigate={setCurrentView} currentView={currentView} toggleDarkMode={toggleDarkMode} isDarkMode={isDarkMode} />
       
       <main className="relative z-10">
-        {currentView === AppView.LANDING && <LandingPage />}
+        {currentView === AppView.LANDING && <LandingPage scrollContainerRef={scrollContainerRef} />}
         {currentView === AppView.BLOG && <BlogPage />}
         {currentView === AppView.BLOG_POST && selectedPost && (
            <div className="pt-24 animate-in fade-in duration-700">
@@ -514,7 +536,7 @@ const App: React.FC = () => {
       </main>
 
       {/* Global footer: animated dotted surface (white in dark mode, black in light) */}
-      <footer className="relative w-full h-[320px] pointer-events-none overflow-hidden mt-0 z-20" aria-hidden>
+      <footer className="relative w-full min-h-[320px] h-[320px] flex-shrink-0 pointer-events-none overflow-hidden mt-0 z-20" aria-hidden>
         <div
           className="absolute inset-0 z-[5]"
           style={{
