@@ -209,7 +209,7 @@ export const CRMView: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen pt-12 pb-12 px-6 bg-transparent transition-colors">
+    <div className="pt-12 pb-8 md:pb-12 px-6 bg-transparent transition-colors">
       <div className="max-w-6xl mx-auto space-y-12">
         <header className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
           <div className="animate-in slide-in-from-left-4 duration-700">

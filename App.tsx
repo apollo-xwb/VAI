@@ -438,7 +438,7 @@ const App: React.FC = () => {
       </section>
 
       {/* Solutions / Features */}
-      <section className="snap-start snap-always min-h-screen flex flex-col justify-center pt-12 pb-4 px-6 bg-transparent transition-colors relative">
+      <section className="snap-start snap-always flex flex-col justify-center pt-12 pb-8 md:pb-12 px-6 bg-transparent transition-colors relative">
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
@@ -453,9 +453,9 @@ const App: React.FC = () => {
             maskSize: '100% 100%',
           }}
         />
-        <div className="max-w-5xl mx-auto text-center relative z-10">
+        <div className="max-w-4xl mx-auto text-center relative z-10 px-4">
           <h2 className="text-5xl md:text-8xl font-bold serif text-navy-900 dark:text-white mb-6 tracking-tighter">Boutique Intelligence</h2>
-          <div className="grid md:grid-cols-3 gap-6 mt-2">
+          <div className="grid md:grid-cols-3 gap-3 md:gap-4 mt-2">
             {[
               { title: "Voice Cloning", desc: "Your actual voice, scaled across 100 simultaneous calls." },
               { title: "Live Estimates", desc: "Instant pricing based on daily market spot rates." },

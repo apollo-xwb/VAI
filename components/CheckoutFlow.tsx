@@ -156,7 +156,7 @@ export const CheckoutFlow: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen pt-24 pb-12 px-6 bg-transparent transition-colors">
+    <div className="pt-24 pb-8 md:pb-12 px-6 bg-transparent transition-colors">
       <div className="max-w-5xl mx-auto">
         {state.step < 4 && (
           <div className="flex justify-between items-center mb-16 px-4">
