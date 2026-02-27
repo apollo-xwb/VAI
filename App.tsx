@@ -24,6 +24,7 @@ import { PhoneTester } from './components/PhoneTester';
 import { FloatingCalendar } from './components/FloatingCalendar';
 import { FaqMonochrome } from './components/ui/faq-monochrome.tsx';
 import { ArticleCard } from './components/ui/blog-post-card';
+import { FloatingAiAssistant } from './components/ui/glowing-ai-chat-assistant';
 import { BLOG_POSTS, PACKAGES } from './constants';
 
 const INTEGRATIONS_DATA = [
@@ -756,6 +757,9 @@ const App: React.FC = () => {
         </div>
       </section>
 
+      {/* Final snap point just above footer so bottom doesn't bounce */}
+      <div className="snap-end snap-always h-0" />
+
       <FloatingCalendar />
       {showTester && <PhoneTester onClose={() => setShowTester(false)} />}
     </div>
@@ -919,18 +923,8 @@ const App: React.FC = () => {
         {currentView === AppView.TERMS && <TermsPage />}
       </main>
 
-      {currentView === AppView.LANDING && (
-        <button
-          type="button"
-          onClick={() => navigate(AppView.CHECKOUT)}
-          className="fixed bottom-20 right-4 md:bottom-6 md:right-6 z-40 hidden md:inline-flex items-center gap-2 rounded-full bg-navy-900 text-white dark:bg-white dark:text-navy-950 px-6 py-3 text-[10px] font-bold uppercase tracking-[0.25em] shadow-[0_18px_45px_rgba(0,0,0,0.55)] hover:scale-105 active:scale-95 transition-all"
-        >
-          <span>Configure your solution</span>
-        </button>
-      )}
-
       {/* Global footer: animated dotted surface (white in dark mode, black in light) */}
-      <footer className="relative w-full min-h-[320px] h-[320px] flex-shrink-0 overflow-hidden mt-0 z-20">
+      <footer className="relative w-full min-h-[360px] h-[360px] flex-shrink-0 overflow-hidden -mt-60 z-20">
         <div
           className="absolute inset-0 z-[5]"
           style={{
@@ -940,7 +934,7 @@ const App: React.FC = () => {
           }}
         />
         <DottedSurface isDarkMode={isDarkMode} className="z-10" />
-        <div className="absolute inset-0 z-[15] flex items-end justify-center pb-6 px-4">
+        <div className="absolute inset-0 z-[15] flex items-end justify-center pb-28 px-4">
           <button
             type="button"
             onClick={() => navigate(AppView.TERMS)}
@@ -950,6 +944,7 @@ const App: React.FC = () => {
           </button>
         </div>
       </footer>
+      <FloatingAiAssistant />
     </div>
   );
 };
