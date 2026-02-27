@@ -275,10 +275,21 @@ export function PricingSection({
             </p>
           </div>
           <PricingToggle />
-          <div className="mt-24 md:mt-28 grid grid-cols-1 md:grid-cols-3 items-stretch gap-8 md:gap-10 max-w-6xl mx-auto">
-            {plans.map((plan, index) => (
-              <PricingCard key={index} plan={plan} index={index} onSelect={onSelect} />
-            ))}
+          <div className="mt-24 md:mt-28 max-w-6xl mx-auto">
+            <div
+              className="
+                flex md:grid md:grid-cols-3 items-stretch
+                gap-6 md:gap-10
+                overflow-x-auto md:overflow-visible
+                snap-x snap-mandatory md:snap-none
+                pb-4
+                -mx-4 px-2 sm:px-4
+              "
+            >
+              {plans.map((plan, index) => (
+                <PricingCard key={index} plan={plan} index={index} onSelect={onSelect} />
+              ))}
+            </div>
           </div>
         </div>
       </div>
@@ -400,7 +411,7 @@ function PricingCard({ plan, index, onSelect }: { plan: PricingPlan; index: numb
         delay: index * 0.15,
       }}
       className={cn(
-        "rounded-[2.5rem] p-10 flex flex-col relative bg-white/80 dark:bg-navy-950/80 backdrop-blur-md transition-all hover:shadow-2xl",
+        "snap-center shrink-0 w-[82vw] sm:w-[70vw] md:w-auto md:shrink rounded-[2.5rem] p-8 sm:p-10 flex flex-col relative bg-white/80 dark:bg-navy-950/80 backdrop-blur-md transition-all hover:shadow-2xl",
         plan.isPopular
           ? "border-2 border-navy-900 dark:border-white shadow-xl scale-105 z-10"
           : "border border-navy-100 dark:border-navy-800",

@@ -233,31 +233,31 @@ const App: React.FC = () => {
             />
           </div>
           {/* Hero text — mobile first, desktop top-right */}
-          <div className="order-1 md:order-2 md:row-start-1 text-center md:text-right">
+          <div className="order-1 md:order-2 md:row-start-1 text-center md:text-right mt-8 sm:mt-12 md:mt-0">
             <div className="relative z-10 max-w-2xl md:ml-auto">
-              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold mb-4 text-slate-900 dark:text-white serif leading-[1.1] tracking-tighter">
+              <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-bold mb-3 text-slate-900 dark:text-white serif leading-[1.1] tracking-tighter">
                 The Gold Standard <br/><span className="italic shimmer-text">of Voice AI</span>
               </h1>
-              <p className="text-lg md:text-xl text-slate-600 dark:text-navy-300 font-medium leading-relaxed uppercase tracking-[0.25em] text-[10px] md:text-[12px]">
+              <p className="text-xs sm:text-sm md:text-base text-slate-600 dark:text-navy-300 font-medium leading-relaxed uppercase tracking-[0.25em]">
                 Tailored exclusively for high-end jewelers
               </p>
             </div>
           </div>
           {/* Ring — mobile middle, desktop left and vertically centered between text and form */}
           <div className="order-2 md:order-1 md:row-span-2 md:self-center flex justify-center w-full">
-            <div className="w-full max-w-[360px] sm:max-w-[420px] md:max-w-[520px] lg:max-w-[600px] aspect-square max-h-[50vh] sm:max-h-[55vh] md:max-h-[65vh] min-h-[260px] sm:min-h-[300px] md:min-h-[360px]">
+            <div className="w-full max-w-[220px] sm:max-w-[320px] md:max-w-[520px] lg:max-w-[600px] aspect-square max-h-[34vh] sm:max-h-[48vh] md:max-h-[65vh] min-h-[200px] sm:min-h-[280px] md:min-h-[360px]">
               <PendantFBX className="w-full h-full" />
             </div>
           </div>
           {/* Mobile ROI CTA — sits above Test Fourcee on small screens */}
-          <div className="order-3 w-full flex justify-center md:hidden mt-6">
+          <div className="order-3 w-full flex justify-center md:hidden mt-4">
             <button
               type="button"
               onClick={scrollToRoi}
-              className="group inline-flex items-center gap-3 rounded-full border border-navy-300/60 bg-white/80 px-6 py-2.5 text-[10px] font-bold uppercase tracking-[0.25em] text-slate-800 shadow-sm hover:bg-white transition-colors"
+              className="group inline-flex items-center gap-2 rounded-full border border-navy-300/60 bg-white/80 px-4 py-2 text-[9px] font-bold uppercase tracking-[0.25em] text-slate-800 shadow-sm hover:bg-white transition-colors"
             >
               <span>Calculate ROI now</span>
-              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-navy-900 text-white shadow">
+              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-navy-900 text-white shadow">
                 <ChevronDown className="w-3 h-3 group-hover:translate-y-0.5 transition-transform" />
               </span>
             </button>
@@ -478,8 +478,8 @@ const App: React.FC = () => {
             className="h-full w-full opacity-80 [mask-image:linear-gradient(to_top,black,transparent)]"
           />
         </div>
-        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-20 relative z-10">
-          <div className="flex-1 space-y-8 animate-in slide-in-from-left duration-1000">
+        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-12 md:gap-20 relative z-10">
+          <div className="order-2 md:order-1 flex-1 space-y-8 animate-in slide-in-from-left duration-1000">
             <h2 className="text-4xl md:text-7xl font-bold serif leading-[1.1] text-slate-900 dark:text-white">Proactive <br/><span className="italic shimmer-text">Reach</span></h2>
             <p className="text-xl text-navy-600 dark:text-navy-300 font-light leading-relaxed">
               Fourcee doesn't just wait for customers. It actively nurtures your pipeline with high-fidelity outbound reminders and follow-ups.
@@ -502,8 +502,8 @@ const App: React.FC = () => {
               <span>Select a package</span>
             </button>
           </div>
-          <div className="flex-1 relative animate-in slide-in-from-right duration-1000 flex items-center justify-center">
-            <IncomingCallPhone className="w-full max-w-[320px]" isDarkMode={isDarkMode} />
+          <div className="order-1 md:order-2 flex-1 relative animate-in slide-in-from-right duration-1000 flex items-center justify-center">
+            <IncomingCallPhone className="w-full max-w-[260px] sm:max-w-[320px]" isDarkMode={isDarkMode} />
           </div>
         </div>
       </section>
@@ -607,46 +607,9 @@ const App: React.FC = () => {
             opacity: 0.9,
           }}
         />
-        <div className="relative max-w-6xl mx-auto grid gap-12 lg:gap-20 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)] items-center">
-          <div className="space-y-6 text-left">
-            <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#C2CCD6]/80">
-              Nivoda-native inventory intelligence
-            </p>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold serif text-white tracking-tight">
-              Your AI hears<br className="hidden sm:block" /> the same diamonds you see.
-            </h2>
-            <p className="text-sm sm:text-base text-[#C2CCD6]/90 max-w-xl leading-relaxed">
-              Fourcee doesn&apos;t guess what&apos;s in your case — it reads live data from Nivoda. Every search,
-              estimate and availability check is backed by the same inventory spine your buyers already trust.
-            </p>
-            <div className="grid gap-4 sm:grid-cols-2 text-xs sm:text-sm text-[#C2CCD6]">
-              <div className="rounded-2xl border border-[#535B68]/60 bg-black/40 px-4 py-3 backdrop-blur-md">
-                <p className="font-semibold mb-1 text-white">Real-time availability</p>
-                <p className="leading-relaxed">
-                  Quote from live Nivoda feeds so your AI never offers stones that have already left the pipeline.
-                </p>
-              </div>
-              <div className="rounded-2xl border border-[#3A5A88]/70 bg-black/40 px-4 py-3 backdrop-blur-md">
-                <p className="font-semibold mb-1 text-white">Smart search logic</p>
-                <p className="leading-relaxed">
-                  Translate vague requests (&quot;oval, lab-grown, under 3 carats&quot;) into structured Nivoda queries
-                  in the background.
-                </p>
-              </div>
-              <div className="rounded-2xl border border-[#535B68]/60 bg-black/40 px-4 py-3 backdrop-blur-md sm:col-span-2">
-                <p className="font-semibold mb-1 text-white">CRM + analytics ready</p>
-                <p className="leading-relaxed">
-                  Every Nivoda-backed search can be logged against a contact in your CRM and surfaced in the analytics
-                  portal — so you see which profiles are driving real diamond demand.
-                </p>
-              </div>
-            </div>
-            <p className="text-[10px] uppercase tracking-[0.25em] text-[#C2CCD6]/70 pt-2">
-              Built to sit on top of your existing Nivoda workflows — not replace them.
-            </p>
-          </div>
-          <div className="relative flex items-center justify-center">
-            <div className="max-w-md w-full aspect-[4/5]">
+        <div className="relative max-w-6xl mx-auto grid gap-10 lg:gap-20 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] items-center">
+          <div className="relative flex items-center justify-center order-1">
+            <div className="w-full max-w-[220px] sm:max-w-[260px] md:max-w-md aspect-[4/5]">
               <svg
                 viewBox="0 0 100 125"
                 className="w-full h-full"
@@ -683,6 +646,43 @@ const App: React.FC = () => {
               </svg>
             </div>
           </div>
+          <div className="space-y-6 text-left order-2">
+            <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#C2CCD6]/80">
+              Nivoda-native inventory intelligence
+            </p>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold serif text-white tracking-tight">
+              Your AI hears<br className="hidden sm:block" /> the same diamonds you see.
+            </h2>
+            <p className="text-sm sm:text-base text-[#C2CCD6]/90 max-w-xl leading-relaxed">
+              Fourcee doesn&apos;t guess what&apos;s in your case — it reads live data from Nivoda. Every search,
+              estimate and availability check is backed by the same inventory spine your buyers already trust.
+            </p>
+            <div className="grid gap-4 sm:grid-cols-2 text-xs sm:text-sm text-[#C2CCD6]">
+              <div className="rounded-2xl border border-[#535B68]/60 bg-black/40 px-4 py-3 backdrop-blur-md">
+                <p className="font-semibold mb-1 text-white">Real-time availability</p>
+                <p className="leading-relaxed">
+                  Quote from live Nivoda feeds so your AI never offers stones that have already left the pipeline.
+                </p>
+              </div>
+              <div className="rounded-2xl border border-[#3A5A88]/70 bg-black/40 px-4 py-3 backdrop-blur-md">
+                <p className="font-semibold mb-1 text-white">Smart search logic</p>
+                <p className="leading-relaxed">
+                  Translate vague requests (&quot;oval, lab-grown, under 3 carats&quot;) into structured Nivoda queries
+                  in the background.
+                </p>
+              </div>
+              <div className="rounded-2xl border border-[#535B68]/60 bg-black/40 px-4 py-3 backdrop-blur-md sm:col-span-2">
+                <p className="font-semibold mb-1 text-white">CRM + analytics ready</p>
+                <p className="leading-relaxed">
+                  Every Nivoda-backed search can be logged against a contact in your CRM and surfaced in the analytics
+                  portal — so you see which profiles are driving real diamond demand.
+                </p>
+              </div>
+            </div>
+            <p className="text-[10px] uppercase tracking-[0.25em] text-[#C2CCD6]/70 pt-2">
+              Built to sit on top of your existing Nivoda workflows — not replace them.
+            </p>
+          </div>
         </div>
       </section>
 
@@ -693,18 +693,21 @@ const App: React.FC = () => {
       {/* Pricing Section */}
       <section id="pricing" className="snap-start snap-always min-h-screen flex flex-col justify-center">
         <PricingSection 
-        plans={PACKAGES.map(pkg => ({
-          id: pkg.id,
-          name: pkg.name,
-          price: pkg.monthly,
-          yearlyPrice: pkg.yearlyPrice,
-          setupFee: pkg.price,
-          period: "month",
-          features: pkg.features,
-          description: pkg.description,
-          buttonText: "Secure Your Model",
-          isPopular: pkg.id === 'premium'
-        }))}
+        plans={[...PACKAGES]
+          .slice()
+          .sort((a, b) => b.price - a.price)
+          .map(pkg => ({
+            id: pkg.id,
+            name: pkg.name,
+            price: pkg.monthly,
+            yearlyPrice: pkg.yearlyPrice,
+            setupFee: pkg.price,
+            period: "month",
+            features: pkg.features,
+            description: pkg.description,
+            buttonText: "Secure Your Model",
+            isPopular: pkg.id === 'premium'
+          }))}
         title="Investment Tiers"
         description="Scaling with your brilliance"
         onSelect={(id) => {

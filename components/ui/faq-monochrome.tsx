@@ -44,7 +44,8 @@ export function FaqMonochrome({ isDarkMode, faqs, steps }: FaqMonochromeProps) {
   return (
     <div
       className={[
-        'relative w-full overflow-hidden rounded-[2.5rem] border px-5 py-7 md:px-8 md:py-9',
+        'relative w-full max-w-full overflow-hidden rounded-3xl sm:rounded-[2.5rem] border',
+        'px-3 py-5 sm:px-5 sm:py-7 md:px-8 md:py-9',
         'backdrop-blur-2xl transition-colors duration-700',
         isDarkMode
           ? 'bg-navy-950/70 border-white/10 text-white shadow-[0_28px_120px_rgba(0,0,0,0.85)]'
@@ -101,7 +102,7 @@ export function FaqMonochrome({ isDarkMode, faqs, steps }: FaqMonochromeProps) {
         </div>
         {/* Header + Client Journey */}
         <header className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
-          <div className="space-y-4 md:max-w-md">
+          <div className="space-y-3 md:space-y-4 md:max-w-md">
             <p
               className={[
                 'text-[10px] font-bold uppercase tracking-[0.35em]',
@@ -167,14 +168,14 @@ export function FaqMonochrome({ isDarkMode, faqs, steps }: FaqMonochromeProps) {
           >
             Designed for the boardroom — the questions your CFO will ask
           </p>
-          <div className="grid gap-4 md:grid-cols-2">
+          <div className="grid gap-3 md:gap-4 md:grid-cols-2">
             {faqs.map((item, index) => {
               const open = activeIndex === index;
               return (
                 <div
                   key={item.question}
                   className={[
-                    'relative overflow-hidden rounded-2xl border px-4 py-4 text-left transition-all duration-300 cursor-pointer group',
+                    'relative overflow-hidden rounded-2xl border px-3 py-3 sm:px-4 sm:py-4 text-left transition-all duration-300 cursor-pointer group',
                     isDarkMode
                       ? 'border-white/12 bg-white/0 hover:bg-white/5'
                       : 'border-navy-100 bg-white/60 hover:bg-white',
@@ -209,7 +210,7 @@ export function FaqMonochrome({ isDarkMode, faqs, steps }: FaqMonochromeProps) {
                         {item.meta && (
                           <span
                             className={[
-                              'inline-flex items-center rounded-full border px-3 py-1 text-[10px] uppercase tracking-[0.35em]',
+                              'hidden sm:inline-flex items-center rounded-full border px-3 py-1 text-[9px] md:text-[10px] uppercase tracking-[0.3em] max-w-[60%] md:max-w-none truncate',
                               isDarkMode
                                 ? 'border-white/20 text-slate-200 bg-white/5'
                                 : 'border-slate-200 text-slate-600 bg-white/80',
