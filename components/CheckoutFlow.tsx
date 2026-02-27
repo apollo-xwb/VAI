@@ -2,8 +2,13 @@
 import React, { useState } from 'react';
 import { PACKAGES, UPSELLS } from '../constants.tsx';
 import { CheckoutState } from '../types';
+import fcShad from '../public/assets/fcshad.png';
 
-export const CheckoutFlow: React.FC = () => {
+interface CheckoutFlowProps {
+  isDarkMode?: boolean;
+}
+
+export const CheckoutFlow: React.FC<CheckoutFlowProps> = ({ isDarkMode = false }) => {
   const [state, setState] = useState<CheckoutState>({
     packageId: PACKAGES[1].id,
     upsells: [],
@@ -158,6 +163,13 @@ export const CheckoutFlow: React.FC = () => {
   return (
     <div className="pt-24 pb-8 md:pb-12 px-6 bg-transparent transition-colors">
       <div className="max-w-5xl mx-auto">
+        <div className="flex justify-center mb-10">
+          <img
+            src={fcShad}
+            alt="Fourcee mark"
+            className={`h-10 md:h-12 object-contain ${isDarkMode ? 'invert' : ''}`}
+          />
+        </div>
         {state.step < 4 && (
           <div className="flex justify-between items-center mb-16 px-4">
             {[1, 2, 3].map(s => (

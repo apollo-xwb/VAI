@@ -35,7 +35,7 @@ export const PACKAGES: Package[] = [
 export const UPSELLS = [
   { id: 'voice_cloning', name: 'Voice Cloning', price: 750, description: 'Mimic your own voice for a personalized brand sound.' },
   { id: 'outbound_reminders', name: 'Outbound Reminders', price: 500, description: 'Reduce no-shows with automated appointment follow-ups.' },
-  { id: 'inventory_api', name: 'Real-Time Inventory API', price: 750, description: 'Let AI check stock levels and provide instant availability.' }
+  { id: 'inventory_api', name: 'Real-Time Inventory API', price: 750, description: 'Let AI check stock levels, including live Nivoda inventory, and provide instant availability.' }
 ];
 
 export const BLOG_POSTS: BlogPost[] = [

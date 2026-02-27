@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import { CallRecord } from '../types';
+import fcShad from '../public/assets/fcshad.png';
 
 const MOCK_CALLS: CallRecord[] = [
   { id: '1', caller: '+1 (555) 0123', duration: '4:12', status: 'Booked', sentiment: 'Positive', timestamp: '10:45 AM', transcript: "Hi, I'm looking for a 2ct sapphire engagement ring. Your AI suggested a consultation on Friday at 4 PM, which works perfectly." },
@@ -9,7 +10,11 @@ const MOCK_CALLS: CallRecord[] = [
   { id: '4', caller: 'Robert Miller', duration: '6:30', status: 'Inquiry', sentiment: 'Positive', timestamp: 'Yesterday', transcript: "Discussing the clarity difference between VVS1 and VS2. AI provided a great comparison chart." },
 ];
 
-export const CRMView: React.FC = () => {
+interface CRMViewProps {
+  isDarkMode?: boolean;
+}
+
+export const CRMView: React.FC<CRMViewProps> = ({ isDarkMode = false }) => {
   const [activeTab, setActiveTab] = useState<'overview' | 'calls' | 'billing'>('overview');
   const [selectedCall, setSelectedCall] = useState<CallRecord | null>(null);
 
@@ -28,7 +33,7 @@ export const CRMView: React.FC = () => {
             <div className="grid md:grid-cols-3 gap-8">
               <div className="md:col-span-2 glass-card rounded-[2.5rem] p-8 border border-silver-100 dark:border-navy-800">
                 <div className="flex justify-between items-center mb-8">
-                  <h3 className="text-xl font-bold serif dark:text-white">Live AI Status</h3>
+                  <h3 className="text-xl font-bold serif text-slate-900 dark:text-white">Live AI Status</h3>
                   <div className="flex items-center gap-2">
                     <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
                     <span className="text-[10px] uppercase font-bold text-navy-400">Agent Online</span>
@@ -38,12 +43,12 @@ export const CRMView: React.FC = () => {
                 <div className="space-y-6">
                   <div className="p-6 rounded-2xl bg-pearl-50 dark:bg-navy-900/30 border border-navy-50 dark:border-navy-800">
                     <p className="text-[10px] font-bold uppercase text-navy-400 mb-2">Current Focus</p>
-                    <p className="text-sm font-medium dark:text-white">Handling inquiries for "Holiday Custom Pieces" and "Engagement Consultations".</p>
+                    <p className="text-sm font-medium text-slate-900 dark:text-white">Handling inquiries for "Holiday Custom Pieces" and "Engagement Consultations".</p>
                   </div>
                   <div className="grid grid-cols-2 gap-4">
                     <div className="p-6 rounded-2xl border border-silver-50 dark:border-navy-800">
                       <p className="text-[10px] font-bold uppercase text-navy-400 mb-1">Peak Hours</p>
-                      <p className="text-lg font-bold dark:text-white">19:00 - 22:30</p>
+                      <p className="text-lg font-bold text-slate-900 dark:text-white">19:00 - 22:30</p>
                     </div>
                     <div className="p-6 rounded-2xl border border-silver-50 dark:border-navy-800">
                       <p className="text-[10px] font-bold uppercase text-navy-400 mb-1">Sentiment Avg</p>
@@ -54,7 +59,7 @@ export const CRMView: React.FC = () => {
               </div>
 
               <div className="glass-card rounded-[2.5rem] p-8 border border-silver-100 dark:border-navy-800">
-                <h3 className="text-xl font-bold serif mb-6 dark:text-white">Account Health</h3>
+                <h3 className="text-xl font-bold serif mb-6 text-slate-900 dark:text-white">Account Health</h3>
                 <div className="space-y-6">
                   <div>
                     <div className="flex justify-between text-xs font-bold uppercase mb-2">
@@ -160,7 +165,7 @@ export const CRMView: React.FC = () => {
               <div className="absolute top-0 right-0 w-64 h-64 bg-navy-500/5 blur-[100px] pointer-events-none" />
               <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8 mb-12">
                 <div>
-                  <h3 className="text-3xl font-bold serif dark:text-white mb-2">Premium Suite</h3>
+                  <h3 className="text-3xl font-bold serif text-slate-900 dark:text-white mb-2">Premium Suite</h3>
                   <p className="text-sm font-medium text-navy-400 uppercase tracking-widest">Active • Next bill: Nov 24, 2025</p>
                 </div>
                 <div className="text-right">
@@ -213,6 +218,11 @@ export const CRMView: React.FC = () => {
       <div className="max-w-6xl mx-auto space-y-12">
         <header className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
           <div className="animate-in slide-in-from-left-4 duration-700">
+          <img
+            src={fcShad}
+            alt="Fourcee mark"
+            className={`h-8 md:h-10 mb-4 object-contain ${isDarkMode ? 'invert' : ''}`}
+          />
             <h1 className="text-5xl font-bold serif text-navy-900 dark:text-white tracking-tighter">Showroom Portal</h1>
             <p className="text-navy-400 dark:text-navy-500 font-bold uppercase tracking-[0.2em] text-[10px] mt-2">The Gold Standard in Jeweller AI</p>
           </div>

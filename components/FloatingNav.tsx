@@ -1,7 +1,6 @@
 import React from 'react';
 import { AppView } from '../types';
-
-import logoUrl from '../assets/logo.png';
+import fcShad from '../public/assets/fcshad.png';
 
 interface FloatingNavProps {
   onNavigate: (view: AppView) => void;
@@ -15,16 +14,13 @@ export const FloatingNav: React.FC<FloatingNavProps> = ({ onNavigate, currentVie
 
   return (
     <div className="nav-floating animate-in slide-in-from-bottom duration-700">
-      <div className="glass-card shadow-2xl rounded-full pl-4 pr-4 py-3 flex items-center gap-2 border border-navy-900/10 transition-all">
-        <div className="flex items-center pr-3 mr-1 border-r border-navy-200/70 dark:border-navy-700/70 gap-2">
+      <div className="glass-card shadow-2xl rounded-full pl-4 pr-4 py-3 flex items-center gap-3 border border-navy-900/10 transition-all">
+        <div className="flex items-center pr-3 mr-1 border-r border-navy-200/70 dark:border-navy-700/70">
           <img
-            src={logoUrl}
+            src={fcShad}
             alt="Fourcee logo"
-            className="w-8 h-8 rounded-full object-contain shadow-sm"
+            className={`w-10 h-10 object-contain drop-shadow-md ${isDarkMode ? 'invert' : ''}`}
           />
-          <span className="hidden md:inline text-[10px] font-bold tracking-[0.25em] uppercase text-navy-500 dark:text-navy-200">
-            Fourcee
-          </span>
         </div>
         <NavItem 
           onClick={() => onNavigate(AppView.LANDING)} 

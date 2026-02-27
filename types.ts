@@ -4,7 +4,8 @@ export enum AppView {
   BLOG = 'blog',
   BLOG_POST = 'blog-post',
   CHECKOUT = 'checkout',
-  DASHBOARD = 'dashboard'
+  DASHBOARD = 'dashboard',
+  TERMS = 'terms',
 }
 
 export interface CallRecord {

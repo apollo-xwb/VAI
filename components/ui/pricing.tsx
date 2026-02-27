@@ -382,6 +382,7 @@ function PricingToggle() {
 function PricingCard({ plan, index, onSelect }: { plan: PricingPlan; index: number; onSelect: (id: string) => void; key?: React.Key }) {
   const { isMonthly } = useContext(PricingContext);
   const isDesktop = useMediaQuery("(min-width: 1024px)");
+  const [showSetupInfo, setShowSetupInfo] = useState(false);
 
   return (
     <motion.div
@@ -444,7 +445,17 @@ function PricingCard({ plan, index, onSelect }: { plan: PricingPlan; index: numb
           </p>
           <div className="mt-2 space-y-1">
             <div className="flex justify-between text-xs font-medium">
-              <span className="text-navy-500">Setup Fee</span>
+              <span className="text-navy-500 flex items-center gap-1">
+                <span>Once-off Setup</span>
+                <button
+                  type="button"
+                  onClick={() => setShowSetupInfo((prev) => !prev)}
+                  className="inline-flex h-4 w-4 items-center justify-center rounded-full border border-navy-300/70 dark:border-navy-600/70 text-[8px] font-semibold text-navy-500 dark:text-navy-300 hover:text-navy-900 dark:hover:text-white hover:border-navy-500 dark:hover:border-white transition-colors"
+                  aria-label="What the setup fee covers"
+                >
+                  i
+                </button>
+              </span>
               <span className="text-navy-900 dark:text-white">${plan.setupFee.toLocaleString()}</span>
             </div>
             {!isMonthly && (
@@ -459,6 +470,13 @@ function PricingCard({ plan, index, onSelect }: { plan: PricingPlan; index: numb
                 ${(isMonthly ? (plan.setupFee + plan.price) : (plan.setupFee + plan.yearlyPrice * 12)).toLocaleString()}
               </span>
             </div>
+            {showSetupInfo && (
+              <p className="mt-3 text-[11px] leading-relaxed text-left text-navy-500 dark:text-navy-300">
+                Your setup fee is charged once per showroom. It covers call-flow design, safe-guarding, integrations
+                (including Nivoda, calendars, and CRM), test environment, iteration cycles, and the final handover to
+                your team.
+              </p>
+            )}
           </div>
         </div>
 
