@@ -33,6 +33,14 @@ export const PACKAGES: Package[] = [
 ];
 
 export const UPSELLS = [
+  {
+    id: 'unified_chat',
+    name: 'Unified Messaging',
+    price: 1200,
+    monthlyPrice: 49,
+    description: 'One AI across every channel. WhatsApp, Instagram DMs, SMS, and an embeddable website widget — same knowledge, same tone, same CRM sync. Your clients reach you wherever they are.',
+    features: ['Omnichannel inbox (WhatsApp, IG, SMS)', 'Embeddable website chatbot', 'Single AI trained on your voice agent', 'Unified CRM logging across channels'],
+  },
   { id: 'voice_cloning', name: 'Voice Cloning', price: 750, description: 'Mimic your own voice for a personalized brand sound.' },
   { id: 'outbound_reminders', name: 'Outbound Reminders', price: 500, description: 'Reduce no-shows with automated appointment follow-ups.' },
   { id: 'inventory_api', name: 'Real-Time Inventory API', price: 750, description: 'Let AI check stock levels, including live Nivoda inventory, and provide instant availability.' }

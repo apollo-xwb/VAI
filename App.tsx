@@ -6,7 +6,8 @@ import logoUrl from './assets/logo.png';
 import demoImage from './public/assets/placeholder.gif';
 import workflowImage from './assets/workflow5.png';
 import nivodaGif from './public/assets/nivoda.gif';
-import fcShad from './public/assets/fcshad.png';
+import fcWhite from './public/assets/fcwhite.png';
+import fcBlack from './public/assets/fcblack.png';
 import { ValueCalculator } from './components/ValueCalculator';
 import { PricingSection } from './components/ui/pricing';
 import { EtherealShadow } from './components/ui/etheral-shadow';
@@ -69,31 +70,31 @@ const INTEGRATIONS_DATA = [
 const JOURNEY_STEPS = [
   {
     label: "1. Select package",
-    description: "Choose Starter, Premium or Enterprise based on call volume and complexity.",
+    description: "Choose Starter, Premium or Enterprise based on call volume, complexity and integrations. We'll recommend a tier if you're unsure.",
   },
   {
     label: "2. Onboarding workshop",
-    description: "Map your scripts, tone, safe-guards and escalation rules with our team.",
+    description: "90-min session to map scripts, tone, safeguards and escalation rules. We capture your brand voice and edge cases.",
   },
   {
     label: "3. Setup & integrations",
-    description: "Wire up Nivoda, calendars, telephony and your CRM so data flows both ways.",
+    description: "We wire Nivoda, calendars, telephony and your CRM. You provide access; we handle the technical build and sync logic.",
   },
   {
     label: "4. Testing & hardening",
-    description: "You and your team stress-test every edge case before a single live caller hears it.",
+    description: "You and your team stress-test every scenario before go-live. No caller hears the AI until you sign off.",
   },
   {
     label: "5. Iterate & refine",
-    description: "We tune prompts and flows based on real transcripts until it feels on-brand.",
+    description: "We tune prompts and flows from real transcripts until it feels like your showroom — not a generic bot.",
   },
   {
     label: "6. Go-live & handover",
-    description: "We flip the switch together and train your team on the controls.",
+    description: "We flip the switch together and train your team on controls, overrides and the analytics portal.",
   },
   {
     label: "7. Analytics & CRM portal",
-    description: "Track every call, conversion and transcript inside the analytics portal and your CRM.",
+    description: "Every call, conversion and transcript in one place. Syncs to your CRM for full visibility.",
   },
 ];
 
@@ -101,37 +102,37 @@ const FAQ_ITEMS = [
   {
     question: "Is this meant to replace my front-desk team?",
     answer:
-      "No. Fourcee mops up the after-hours, overflow and repetitive questions so your humans can focus on design consults, VIPs and in-person selling. You decide when and where it answers, and when to route straight to a human.",
+      "No. Fourcee handles after-hours, overflow and repetitive questions so your team can focus on design consults, VIPs and in-person selling. You control when it answers and when to route straight to a human. Most showrooms see staff time reclaimed, not replaced.",
     meta: "Team",
   },
   {
     question: "What if Fourcee misunderstands a high‑value client?",
     answer:
-      "We bias everything toward \"fail-safe\": strict guardrails, human handoff paths and clear escalation rules for high-ticket intents. During testing we rehearse VIP scenarios until you are comfortable before going live.",
+      "We bias everything toward fail-safe: strict guardrails, human handoff paths and clear escalation rules for high-ticket intents. During testing we rehearse VIP scenarios until you're comfortable. You can always override or add custom escalation triggers.",
     meta: "Safeguards",
   },
   {
     question: "How heavy is the Nivoda / CRM integration lift on our side?",
     answer:
-      "We handle the plumbing. You give us access to Nivoda, calendars and your CRM, and we build the flows, sync logic and testing harness. Your team focuses on approvals, not middleware.",
+      "We handle the technical build. You provide API access or credentials to Nivoda, calendars and your CRM; we build the flows, sync logic and testing harness. Your team focuses on approvals and edge-case decisions, not middleware or code.",
     meta: "Integrations",
   },
   {
     question: "What if we don’t like the voice or phrasing?",
     answer:
-      "Voice, pacing and phrasing are part of onboarding. We can voice-clone a key team member or choose a premium voice, then iterate until it feels like \"your\" showroom answering, not a generic bot.",
+      "Voice, pacing and phrasing are part of onboarding. We can voice-clone a key team member or choose a premium voice, then iterate until it feels like your showroom answering. Revisions are included in the setup phase.",
     meta: "Brand",
   },
   {
     question: "How are calls recorded and where do the analytics live?",
     answer:
-      "Every call can be recorded, transcribed and summarised with timestamps. Those summaries and stats land in an analytics portal and, where supported, directly inside your CRM against the contact record.",
+      "Every call can be recorded, transcribed and summarised with timestamps. Summaries and stats live in your analytics portal and, where supported, sync directly to your CRM against each contact. You own the data.",
     meta: "Data",
   },
   {
     question: "What happens if we feel the ROI isn’t there?",
     answer:
-      "The setup fee is once-off and covers the build. After that, you’re on a simple subscription. If performance isn’t where it should be, we iterate with you; if it still doesn’t fit, you can talk to us about pausing or stepping down your deployment.",
+      "The setup fee is once-off and covers the build. After that, you’re on a simple subscription. If performance isn’t where it should be, we iterate with you. If it still doesn’t fit, we'll discuss pausing or stepping down — no lock-in.",
     meta: "ROI",
   },
 ];
@@ -143,6 +144,7 @@ const App: React.FC = () => {
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [showTester, setShowTester] = useState(false);
   const [expandedIntegration, setExpandedIntegration] = useState<number | null>(null);
+  const [preSelectedPackageId, setPreSelectedPackageId] = useState<string | null>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -168,9 +170,11 @@ const App: React.FC = () => {
     link.href = logoUrl;
   }, []);
 
-  const navigate = (view: AppView, post?: BlogPost) => {
+  const navigate = (view: AppView, post?: BlogPost, packageId?: string) => {
     setCurrentView(view);
     if (post) setSelectedPost(post);
+    if (view === AppView.CHECKOUT) setPreSelectedPackageId(packageId ?? null);
+    else setPreSelectedPackageId(null);
   };
 
   const toggleDarkMode = () => setIsDarkMode(!isDarkMode);
@@ -213,7 +217,7 @@ const App: React.FC = () => {
     return (
     <div className="animate-in fade-in duration-1000 pb-32 md:pb-40">
       {/* Hero: ring left (between hero text and Test Fourcee), text + form right; mobile: text → ring → form */}
-      <section className="snap-start snap-always min-h-screen relative flex flex-col items-center justify-center px-4 sm:px-6 py-8 md:py-24 overflow-hidden bg-transparent transition-colors">
+      <section className="snap-start snap-always min-h-screen relative flex flex-col items-center justify-center px-4 sm:px-6 pt-20 sm:pt-24 pb-8 md:py-24 overflow-hidden bg-transparent transition-colors">
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[220px] md:h-[260px]">
           <div
             className="absolute inset-0 bg-gradient-to-b from-transparent via-white/60 to-white dark:via-navy-950/70 dark:to-navy-950"
@@ -225,15 +229,8 @@ const App: React.FC = () => {
         </div>
 
         <div className="w-full max-w-6xl grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-x-20 lg:gap-x-28 md:gap-y-10 items-start md:items-center">
-          <div className="absolute top-8 sm:top-8 md:top-12 left-[68%] sm:left-[60%] md:left-[58%] -translate-x-1/2 z-20 flex justify-center">
-            <img
-              src={fcShad}
-              alt="Fourcee Crest"
-              className={`h-16 sm:h-20 md:h-24 w-auto drop-shadow-[0_18px_45px_rgba(0,0,0,0.65)] opacity-100 ${isDarkMode ? 'invert' : ''}`}
-            />
-          </div>
-          {/* Hero text — mobile first, desktop top-right */}
-          <div className="order-1 md:order-2 md:row-start-1 text-center md:text-right mt-8 sm:mt-12 md:mt-0">
+          {/* Hero text — mobile below 3D object, desktop top-right */}
+          <div className="order-2 md:order-2 md:row-start-1 text-center md:text-right mt-4 md:mt-0">
             <div className="relative z-10 max-w-2xl md:ml-auto">
               <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-bold mb-3 text-slate-900 dark:text-white serif leading-[1.1] tracking-tighter">
                 The Gold Standard <br/><span className="italic shimmer-text">of Voice AI</span>
@@ -243,9 +240,9 @@ const App: React.FC = () => {
               </p>
             </div>
           </div>
-          {/* Ring — mobile middle, desktop left and vertically centered between text and form */}
-          <div className="order-2 md:order-1 md:row-span-2 md:self-center flex justify-center w-full">
-            <div className="w-full max-w-[220px] sm:max-w-[320px] md:max-w-[520px] lg:max-w-[600px] aspect-square max-h-[34vh] sm:max-h-[48vh] md:max-h-[65vh] min-h-[200px] sm:min-h-[280px] md:min-h-[360px]">
+          {/* Ring — mobile above text (under logo), desktop left and vertically centered */}
+          <div className="order-1 md:order-1 md:row-span-2 md:self-center flex justify-center w-full">
+            <div className="w-full max-w-[140px] min-[375px]:max-w-[180px] sm:max-w-[280px] md:max-w-[520px] lg:max-w-[600px] aspect-square max-h-[22vh] min-[375px]:max-h-[28vh] sm:max-h-[40vh] md:max-h-[65vh] min-h-[120px] min-[375px]:min-h-[160px] sm:min-h-[220px] md:min-h-[360px]">
               <PendantFBX className="w-full h-full" />
             </div>
           </div>
@@ -297,8 +294,7 @@ const App: React.FC = () => {
               <br className="hidden md:block" /> for your showroom?
             </h2>
             <p className="text-sm sm:text-base text-navy-600 dark:text-navy-300 max-w-xl">
-              Drag the sliders based on your real averages. We&apos;ll show you how much unlocked revenue and reclaimed
-              staff time your showroom could be compounding every year.
+              Use your real averages. We&apos;ll show you estimated unlocked revenue and reclaimed staff time — adjust the sliders and see the numbers update in real time.
             </p>
             <ValueCalculator />
           </div>
@@ -330,7 +326,7 @@ const App: React.FC = () => {
               onClick={() => navigate(AppView.CHECKOUT)}
               className="w-full py-5 bg-navy-900 dark:bg-white dark:text-navy-950 text-white rounded-full font-bold text-sm uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-2xl"
             >
-              Start Free Deployment →
+              Configure your solution →
             </button>
           </div>
         </div>
@@ -711,7 +707,7 @@ const App: React.FC = () => {
         title="Investment Tiers"
         description="Scaling with your brilliance"
         onSelect={(id) => {
-          navigate(AppView.CHECKOUT);
+          navigate(AppView.CHECKOUT, undefined, id);
         }}
       />
       </section>
@@ -751,7 +747,7 @@ const App: React.FC = () => {
           </div>
         </div>
 
-        <div className="max-w-5xl mx-auto mt-16 relative z-10">
+        <div className="max-w-5xl mx-auto mt-16 relative z-10 px-4 sm:px-6 w-full min-w-0">
           <FaqMonochrome
             isDarkMode={isDarkMode}
             faqs={FAQ_ITEMS}
@@ -772,9 +768,9 @@ const App: React.FC = () => {
     <div className="pt-24 pb-12 px-6 max-w-6xl mx-auto animate-in fade-in duration-700 bg-transparent">
       <div className="flex justify-center mb-6">
         <img
-          src={fcShad}
+          src={isDarkMode ? fcWhite : fcBlack}
           alt="Fourcee mark"
-          className={`h-9 md:h-10 object-contain ${isDarkMode ? 'invert' : ''}`}
+          className="h-9 md:h-10 object-contain"
         />
       </div>
       <h1 className="text-6xl font-bold serif mb-4 text-center tracking-tighter text-slate-900 dark:text-white">The Ledger</h1>
@@ -905,6 +901,15 @@ const App: React.FC = () => {
         />
       </div>
 
+      {currentView === AppView.LANDING && (
+        <div className="fixed top-8 sm:top-8 md:top-12 left-[68%] sm:left-[60%] md:left-[58%] -translate-x-1/2 z-[100] pointer-events-none">
+          <img
+            src={isDarkMode ? fcWhite : fcBlack}
+            alt="Fourcee"
+            className="h-16 sm:h-20 md:h-24 w-auto drop-shadow-[0_18px_45px_rgba(0,0,0,0.65)] opacity-100"
+          />
+        </div>
+      )}
       <FloatingNav onNavigate={setCurrentView} currentView={currentView} toggleDarkMode={toggleDarkMode} isDarkMode={isDarkMode} />
       
       <main className="relative z-10">
@@ -921,7 +926,7 @@ const App: React.FC = () => {
               </div>
            </div>
         )}
-        {currentView === AppView.CHECKOUT && <CheckoutFlow isDarkMode={isDarkMode} />}
+        {currentView === AppView.CHECKOUT && <CheckoutFlow isDarkMode={isDarkMode} initialPackageId={preSelectedPackageId} />}
         {currentView === AppView.DASHBOARD && <CRMView isDarkMode={isDarkMode} />}
         {currentView === AppView.TERMS && <TermsPage />}
       </main>

@@ -1,6 +1,5 @@
 import React from 'react';
 import { AppView } from '../types';
-import fcShad from '../public/assets/fcshad.png';
 
 interface FloatingNavProps {
   onNavigate: (view: AppView) => void;
@@ -13,15 +12,8 @@ export const FloatingNav: React.FC<FloatingNavProps> = ({ onNavigate, currentVie
   const isActive = (view: AppView) => currentView === view;
 
   return (
-    <div className="nav-floating animate-in slide-in-from-bottom duration-700">
-      <div className="glass-card shadow-2xl rounded-full pl-4 pr-4 py-3 flex items-center gap-3 border border-navy-900/10 transition-all">
-        <div className="flex items-center pr-3 mr-1 border-r border-navy-200/70 dark:border-navy-700/70">
-          <img
-            src={fcShad}
-            alt="Fourcee logo"
-            className={`w-10 h-10 object-contain drop-shadow-md ${isDarkMode ? 'invert' : ''}`}
-          />
-        </div>
+    <div className="nav-floating animate-in slide-in-from-bottom duration-700 w-full max-w-[calc(100vw-2rem)] sm:max-w-none">
+      <div className="glass-card shadow-2xl rounded-full pl-2 pr-2 sm:pl-4 sm:pr-4 py-2.5 sm:py-3 flex items-center justify-center gap-1 sm:gap-3 border border-navy-900/10 transition-all mx-auto w-fit max-w-full">
         <NavItem 
           onClick={() => onNavigate(AppView.LANDING)} 
           active={isActive(AppView.LANDING)}
@@ -40,21 +32,21 @@ export const FloatingNav: React.FC<FloatingNavProps> = ({ onNavigate, currentVie
           label="CRM"
           icon={<svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>}
         />
-        <div className="w-[1px] h-6 bg-navy-200 dark:bg-navy-700 mx-2" />
+        <div className="w-px h-5 sm:h-6 bg-navy-200 dark:bg-navy-700 mx-1 sm:mx-2 shrink-0" />
         <button 
           onClick={toggleDarkMode}
-          className="p-2.5 text-navy-400 dark:text-navy-300 hover:text-navy-900 dark:hover:text-white transition-colors"
+          className="p-2 sm:p-2.5 text-navy-400 dark:text-navy-300 hover:text-navy-900 dark:hover:text-white transition-colors shrink-0"
           title="Toggle Theme"
         >
           {isDarkMode ? (
-            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707M17.657 17.657l.707-.707M6.343 6.343l.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z" /></svg>
+            <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707M17.657 17.657l.707-.707M6.343 6.343l.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z" /></svg>
           ) : (
-            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
+            <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
           )}
         </button>
         <button 
           onClick={() => onNavigate(AppView.CHECKOUT)}
-          className={`px-6 py-2.5 rounded-full text-xs font-bold transition-all uppercase tracking-widest ${isActive(AppView.CHECKOUT) ? 'bg-navy-900 text-white dark:bg-white dark:text-navy-950 shadow-lg' : 'bg-navy-900 dark:bg-white text-white dark:text-navy-950 hover:shadow-xl hover:scale-105 active:scale-95'}`}
+          className={`px-3 py-2 sm:px-6 sm:py-2.5 rounded-full text-[10px] sm:text-xs font-bold transition-all uppercase tracking-widest shrink-0 ${isActive(AppView.CHECKOUT) ? 'bg-navy-900 text-white dark:bg-white dark:text-navy-950 shadow-lg' : 'bg-navy-900 dark:bg-white text-white dark:text-navy-950 hover:shadow-xl hover:scale-105 active:scale-95'}`}
         >
           {isActive(AppView.CHECKOUT) ? 'Paying' : 'Get Fourcee'}
         </button>
@@ -66,9 +58,9 @@ export const FloatingNav: React.FC<FloatingNavProps> = ({ onNavigate, currentVie
 const NavItem: React.FC<{ onClick: () => void; active: boolean; label: string; icon: React.ReactNode }> = ({ onClick, active, label, icon }) => (
   <button 
     onClick={onClick}
-    className={`flex items-center gap-2 px-4 py-2.5 rounded-full transition-all duration-300 ${active ? 'bg-navy-900 text-white dark:bg-white dark:text-navy-950 shadow-md' : 'text-navy-400 dark:text-navy-400 hover:text-navy-900 dark:hover:text-white'}`}
+    className={`flex items-center gap-1.5 sm:gap-2 px-2.5 py-2 sm:px-4 sm:py-2.5 rounded-full transition-all duration-300 shrink-0 [&>svg]:w-4 [&>svg]:h-4 sm:[&>svg]:w-5 sm:[&>svg]:h-5 ${active ? 'bg-navy-900 text-white dark:bg-white dark:text-navy-950 shadow-md' : 'text-navy-400 dark:text-navy-400 hover:text-navy-900 dark:hover:text-white'}`}
   >
     {icon}
-    {active && <span className="text-[10px] font-bold uppercase tracking-[0.15em] animate-in fade-in slide-in-from-left-2 duration-300">{label}</span>}
+    {active && <span className="hidden sm:inline text-[10px] font-bold uppercase tracking-[0.15em] animate-in fade-in slide-in-from-left-2 duration-300">{label}</span>}
   </button>
 );

@@ -44,7 +44,7 @@ export function FaqMonochrome({ isDarkMode, faqs, steps }: FaqMonochromeProps) {
   return (
     <div
       className={[
-        'relative w-full max-w-full overflow-hidden rounded-3xl sm:rounded-[2.5rem] border',
+        'relative w-full max-w-full min-w-0 overflow-hidden rounded-3xl sm:rounded-[2.5rem] border box-border',
         'px-3 py-5 sm:px-5 sm:py-7 md:px-8 md:py-9',
         'backdrop-blur-2xl transition-colors duration-700',
         isDarkMode
@@ -69,7 +69,7 @@ export function FaqMonochrome({ isDarkMode, faqs, steps }: FaqMonochromeProps) {
         <div className="flex justify-center mb-2">
           <div
             className={[
-              'relative flex items-center gap-3 rounded-full px-4 py-2 w-full max-w-xs sm:max-w-sm',
+              'relative flex items-center gap-2 sm:gap-3 rounded-full px-3 sm:px-4 py-2 w-full max-w-[min(100%,16rem)] sm:max-w-sm',
               'border text-[10px] font-semibold uppercase tracking-[0.35em]',
               isDarkMode
                 ? 'bg-black/60 border-white/15 text-slate-100'
@@ -101,8 +101,8 @@ export function FaqMonochrome({ isDarkMode, faqs, steps }: FaqMonochromeProps) {
           </div>
         </div>
         {/* Header + Client Journey */}
-        <header className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
-          <div className="space-y-3 md:space-y-4 md:max-w-md">
+        <header className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between min-w-0">
+          <div className="space-y-3 md:space-y-4 md:max-w-md min-w-0">
             <p
               className={[
                 'text-[10px] font-bold uppercase tracking-[0.35em]',
@@ -111,12 +111,12 @@ export function FaqMonochrome({ isDarkMode, faqs, steps }: FaqMonochromeProps) {
             >
               From package to portal
             </p>
-            <h2 className="text-2xl md:text-3xl lg:text-4xl font-semibold leading-tight serif tracking-tight">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-semibold leading-tight serif tracking-tight break-words">
               What the journey actually looks like once you say &ldquo;yes&rdquo;.
             </h2>
             <p
               className={[
-                'text-xs md:text-sm leading-relaxed',
+                'text-xs md:text-sm leading-relaxed break-words',
                 isDarkMode ? 'text-navy-300' : 'text-navy-600',
               ].join(' ')}
             >
@@ -125,8 +125,8 @@ export function FaqMonochrome({ isDarkMode, faqs, steps }: FaqMonochromeProps) {
             </p>
           </div>
 
-          <div className="md:max-w-sm w-full">
-            <div className="rounded-[1.75rem] bg-white/90 dark:bg-white/5 border border-white/40 dark:border-white/20 px-4 py-4 shadow-sm">
+          <div className="md:max-w-sm w-full min-w-0">
+            <div className="rounded-[1.75rem] bg-white/90 dark:bg-white/5 border border-white/40 dark:border-white/20 px-3 sm:px-4 py-4 shadow-sm min-w-0 overflow-hidden">
               <div className="flex items-center justify-between mb-3">
                 <span className="text-[10px] font-semibold uppercase tracking-[0.3em] text-navy-400 dark:text-navy-300">
                   Client journey
@@ -138,7 +138,7 @@ export function FaqMonochrome({ isDarkMode, faqs, steps }: FaqMonochromeProps) {
                   <div
                     key={step.label}
                     className={[
-                      'min-w-[150px] rounded-2xl border px-3 py-2.5 text-left shadow-sm',
+                      'min-w-[130px] sm:min-w-[150px] flex-shrink-0 rounded-2xl border px-3 py-2.5 text-left shadow-sm',
                       'bg-white dark:bg-white/5',
                       idx === 0
                         ? 'border-navy-900/70 dark:border-white/70'
@@ -162,7 +162,7 @@ export function FaqMonochrome({ isDarkMode, faqs, steps }: FaqMonochromeProps) {
         <section className="space-y-4">
           <p
             className={[
-              'text-[10px] font-bold uppercase tracking-[0.35em]',
+              'text-[10px] font-bold uppercase tracking-[0.35em] break-words',
               isDarkMode ? 'text-emerald-300' : 'text-navy-500',
             ].join(' ')}
           >
@@ -206,7 +206,7 @@ export function FaqMonochrome({ isDarkMode, faqs, steps }: FaqMonochromeProps) {
                     </span>
                     <div className="flex-1">
                       <div className="flex items-start justify-between gap-3">
-                        <p className="text-sm md:text-[15px] font-semibold leading-snug">{item.question}</p>
+                        <p className="text-sm md:text-[15px] font-semibold leading-snug break-words">{item.question}</p>
                         {item.meta && (
                           <span
                             className={[
@@ -227,7 +227,7 @@ export function FaqMonochrome({ isDarkMode, faqs, steps }: FaqMonochromeProps) {
                           isDarkMode ? 'text-navy-200' : 'text-navy-600',
                         ].join(' ')}
                       >
-                        <p>{item.answer}</p>
+                        <p className="break-words">{item.answer}</p>
                       </div>
                     </div>
                   </div>
