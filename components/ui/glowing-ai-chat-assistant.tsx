@@ -42,10 +42,10 @@ const FloatingAiAssistant: React.FC = () => {
   }, []);
 
   return (
-    <div className="fixed bottom-6 right-8 z-40">
-      {/* Floating 3D Glowing AI Logo */}
+    <div className="fixed bottom-5 right-4 sm:bottom-6 sm:right-6 md:bottom-6 md:right-8 z-40">
+      {/* Floating 3D Glowing AI Logo — smaller on mobile to match nav buttons */}
       <button
-        className={`floating-ai-button relative w-14 h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center transition-all duration-500 transform ${
+        className={`floating-ai-button relative w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 rounded-full flex items-center justify-center transition-all duration-500 transform ${
           isChatOpen ? 'rotate-90' : 'rotate-0'
         }`}
         onClick={() => setIsChatOpen(!isChatOpen)}
@@ -60,8 +60,8 @@ const FloatingAiAssistant: React.FC = () => {
         <div className="absolute inset-0 rounded-full bg-gradient-to-b from-white/20 to-transparent opacity-30" />
         <div className="absolute inset-0 rounded-full border-2 border-white/10" />
 
-        <div className="relative z-10 text-white">
-          {isChatOpen ? <X className="w-6 h-6" /> : <Bot className="w-7 h-7" />}
+        <div className="relative z-10 text-white flex items-center justify-center">
+          {isChatOpen ? <X className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" /> : <Bot className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7" />}
         </div>
 
         <div className="absolute inset-0 rounded-full animate-ping opacity-20 bg-indigo-500" />

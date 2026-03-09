@@ -2,49 +2,65 @@
 import React from 'react';
 import { BlogPost, Package } from './types';
 
+// Configurator-only pricing (every quote is custom; not shown on public pricing)
 export const PACKAGES: Package[] = [
   {
     id: 'starter',
     name: 'Starter',
     price: 3000,
-    monthly: 99,
-    yearlyPrice: 79,
-    description: 'Perfect for boutique showrooms and independent designers.',
-    features: ['Basic Bookings', 'CRM Export', 'Standard Voice', '24/7 Coverage']
+    monthly: 499,
+    yearlyPrice: 4790, // 20% off annual
+    description: '500 min/month (~100 calls). Basic voice. WhatsApp pics + booking.',
+    features: ['500 min/month (~100 calls)', 'Basic voice', 'WhatsApp pics + booking', '24/7 Coverage']
   },
   {
     id: 'premium',
-    name: 'Premium',
-    price: 4000,
-    monthly: 199,
-    yearlyPrice: 159,
-    description: 'Ideal for growing teams and multi-location businesses.',
-    features: ['Estimates & Quotes', 'CRM Real-time Sync', 'Luxury AI Voice', 'Priority Support', 'Order Tracking']
+    name: 'Pro',
+    price: 5000,
+    monthly: 799,
+    yearlyPrice: 7670, // 20% off: 799*12*0.8
+    description: '2,000 min/month (~400 calls). Voice cloning + custom accents. Unlimited after cap.',
+    features: ['2,000 min/month (~400 calls)', 'Voice cloning + custom accents', 'Upsell scripts + analytics', 'Unlimited after cap']
   },
   {
     id: 'enterprise',
     name: 'Enterprise',
-    price: 6000,
-    monthly: 299,
-    yearlyPrice: 239,
-    description: 'For large organizations with specific custom logic needs.',
-    features: ['Custom Knowledge Base', 'Multi-location', 'API Access', 'Dedicated Account Manager', 'Custom Logic']
+    price: 10000,
+    monthly: 1299,
+    yearlyPrice: 12470, // 20% off
+    description: 'Unlimited min/calls. Multi-store (up to 5). CRM + sales reports. White-label.',
+    features: ['Unlimited min/calls', 'Multi-store (up to 5)', 'CRM + sales reports', 'White-label', 'Custom']
   }
 ];
 
 export const UPSELLS = [
-  {
-    id: 'unified_chat',
-    name: 'Unified Messaging',
-    price: 1200,
-    monthlyPrice: 49,
-    description: 'One AI across every channel. WhatsApp, Instagram DMs, SMS, and an embeddable website widget — same knowledge, same tone, same CRM sync. Your clients reach you wherever they are.',
-    features: ['Omnichannel inbox (WhatsApp, IG, SMS)', 'Embeddable website chatbot', 'Single AI trained on your voice agent', 'Unified CRM logging across channels'],
-  },
-  { id: 'voice_cloning', name: 'Voice Cloning', price: 750, description: 'Mimic your own voice for a personalized brand sound.' },
-  { id: 'outbound_reminders', name: 'Outbound Reminders', price: 500, description: 'Reduce no-shows with automated appointment follow-ups.' },
-  { id: 'inventory_api', name: 'Real-Time Inventory API', price: 750, description: 'Let AI check stock levels, including live Nivoda inventory, and provide instant availability.' }
+  { id: 'image_gen', name: 'Image Generation', price: 0, monthlyPrice: 99, description: 'AI-generated product and marketing imagery.' },
+  { id: 'website_chatbot', name: 'Website Chatbot Widget', price: 0, monthlyPrice: 149, description: 'Embeddable chat widget for your site.' },
+  { id: 'whatsapp_chatbot', name: 'WhatsApp Chatbot', price: 0, monthlyPrice: 199, description: 'Dedicated WhatsApp AI assistant.' },
+  { id: 'all_inboxes_chatbot', name: 'All-Inboxes Chatbot', price: 0, monthlyPrice: 299, description: 'Unified inbox across WhatsApp, web, and more.' },
+  { id: 'nivoda_integration', name: 'Nivoda Integration', price: 0, monthlyPrice: 249, description: 'Live Nivoda inventory and diamond sourcing.' },
+  { id: 'unlimited_calls', name: 'Unlimited Calls', price: 0, monthlyPrice: 200, description: 'Add-on: unlimited minutes/calls on top of plan.' },
+  { id: 'custom_voice_analytics', name: 'Custom Voice / Analytics', price: 0, monthlyPrice: 300, description: 'Custom voice and advanced analytics.' },
 ];
+
+// Reference pricing matrix (for your call quotes) — only shown in configurator
+export const PRICING_MATRIX = {
+  tiers: [
+    { name: 'Starter', monthly: 499, setup: 3000, details: '500 min/month (~100 calls). Basic voice. WhatsApp pics + booking.' },
+    { name: 'Pro', monthly: 799, setup: 5000, details: '2,000 min/month (~400 calls). Voice cloning + custom accents. Upsell scripts + analytics. Unlimited after cap.' },
+    { name: 'Enterprise', monthly: 1299, setup: '10,000+', details: 'Unlimited min/calls. Multi-store (up to 5). CRM + sales reports. White-label.' },
+  ],
+  addOns: [
+    { name: 'Image Generation', price: '$99/mo' },
+    { name: 'Website Chatbot Widget', price: '$149/mo' },
+    { name: 'WhatsApp Chatbot', price: '$199/mo' },
+    { name: 'All-Inboxes Chatbot', price: '$299/mo' },
+    { name: 'Nivoda Integration', price: '$249/mo' },
+    { name: 'Unlimited Calls', price: '+$200/mo' },
+    { name: 'Custom Voice/Analytics', price: '+$300/mo' },
+  ],
+  annualNote: 'Annual: 20% off (e.g. Pro = $7,670/year upfront).',
+};
 
 export const BLOG_POSTS: BlogPost[] = [
   {

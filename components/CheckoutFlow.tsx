@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { PACKAGES, UPSELLS } from '../constants.tsx';
 import { CheckoutState } from '../types';
 import fcShad from '../public/assets/fcshad.png';
+import { PricingMatrix } from './PricingMatrix';
 
 interface CheckoutFlowProps {
   isDarkMode?: boolean;
@@ -19,7 +20,7 @@ export const CheckoutFlow: React.FC<CheckoutFlowProps> = ({ isDarkMode = false, 
   });
 
   const selectedPackage = PACKAGES.find(p => p.id === state.packageId)!;
-  const upsellTotal = UPSELLS.filter(u => state.upsells.includes(u.id)).reduce((acc, curr) => acc + curr.price, 0);
+  const upsellTotal = UPSELLS.filter(u => state.upsells.includes(u.id)).reduce((acc, curr) => acc + (curr.price || 0), 0);
   const upsellMonthlyTotal = UPSELLS.filter(u => state.upsells.includes(u.id))
     .reduce((acc, u) => acc + (('monthlyPrice' in u && (u as { monthlyPrice?: number }).monthlyPrice) || 0), 0);
   const total = selectedPackage.price + upsellTotal;
@@ -56,7 +57,8 @@ export const CheckoutFlow: React.FC<CheckoutFlowProps> = ({ isDarkMode = false, 
                     className={`p-6 rounded-2xl border-2 cursor-pointer transition-all ${state.packageId === pkg.id ? 'border-navy-900 dark:border-white bg-white dark:bg-navy-900 shadow-xl' : 'border-silver-200 dark:border-navy-800 hover:border-navy-300'}`}
                   >
                     <p className="text-[10px] font-bold uppercase tracking-widest text-navy-700 dark:text-navy-300 mb-2">{pkg.name}</p>
-                    <p className="text-3xl font-bold serif mb-4 text-navy-900 dark:text-white">${pkg.price.toLocaleString()}</p>
+                    <p className="text-2xl sm:text-3xl font-bold serif text-navy-900 dark:text-white">${pkg.monthly}/mo</p>
+                    <p className="text-xs text-navy-600 dark:text-navy-400 mb-4">Setup: ${pkg.price.toLocaleString()}</p>
                     <ul className="text-xs space-y-2 text-navy-800 dark:text-navy-400">
                       {pkg.features.map(f => <li key={f} className="flex items-center gap-2"><span className="text-navy-900 dark:text-white">✓</span> {f}</li>)}
                     </ul>
@@ -64,7 +66,9 @@ export const CheckoutFlow: React.FC<CheckoutFlowProps> = ({ isDarkMode = false, 
                 ))}
               </div>
             </div>
-            
+
+            <PricingMatrix />
+
             <div>
               <p className="text-[10px] font-bold uppercase tracking-widest text-navy-700 dark:text-navy-300 mb-4">Optional Capabilities</p>
               <div className="space-y-4">
@@ -122,12 +126,14 @@ export const CheckoutFlow: React.FC<CheckoutFlowProps> = ({ isDarkMode = false, 
                         )}
                       </div>
                       <span className="font-bold text-base text-navy-900 dark:text-white flex-shrink-0 ml-4 text-right">
-                        +${u.price}
-                        {'monthlyPrice' in u && (u as { monthlyPrice?: number }).monthlyPrice && (
+                        {u.price ? `+$${u.price}` : null}
+                        {'monthlyPrice' in u && (u as { monthlyPrice?: number }).monthlyPrice ? (
                           <span className="block text-xs font-medium text-navy-700 dark:text-navy-400 mt-0.5">
-                            +${(u as { monthlyPrice: number }).monthlyPrice} p/m
+                            ${(u as { monthlyPrice: number }).monthlyPrice}/mo
                           </span>
-                        )}
+                        ) : u.price ? (
+                          <span className="block text-xs font-medium text-navy-700 dark:text-navy-400 mt-0.5">one-time</span>
+                        ) : null}
                       </span>
                     </label>
                   );

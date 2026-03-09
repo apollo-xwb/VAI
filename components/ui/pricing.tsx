@@ -212,6 +212,7 @@ interface PricingSectionProps {
   title?: string;
   description?: string;
   onSelect: (id: string) => void;
+  hideAmounts?: boolean;
 }
 
 // Context for state management
@@ -229,6 +230,7 @@ export function PricingSection({
   title = "Simple, Transparent Pricing",
   description = "Choose the plan that's right for you. All plans include our core features and support.",
   onSelect,
+  hideAmounts = false,
 }: PricingSectionProps) {
   const [isMonthly, setIsMonthly] = useState(true);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -287,7 +289,7 @@ export function PricingSection({
               "
             >
               {plans.map((plan, index) => (
-                <PricingCard key={index} plan={plan} index={index} onSelect={onSelect} />
+                <PricingCard key={index} plan={plan} index={index} onSelect={onSelect} hideAmounts={hideAmounts} />
               ))}
             </div>
           </div>
@@ -390,7 +392,7 @@ function PricingToggle() {
 }
 
 // Pricing Card Component
-function PricingCard({ plan, index, onSelect }: { plan: PricingPlan; index: number; onSelect: (id: string) => void; key?: React.Key }) {
+function PricingCard({ plan, index, onSelect, hideAmounts = false }: { plan: PricingPlan; index: number; onSelect: (id: string) => void; hideAmounts?: boolean; key?: React.Key }) {
   const { isMonthly } = useContext(PricingContext);
   const isDesktop = useMediaQuery("(min-width: 1024px)");
   const [showSetupInfo, setShowSetupInfo] = useState(false);
@@ -411,7 +413,7 @@ function PricingCard({ plan, index, onSelect }: { plan: PricingPlan; index: numb
         delay: index * 0.15,
       }}
       className={cn(
-        "snap-center shrink-0 w-[82vw] sm:w-[70vw] md:w-auto md:shrink rounded-[2.5rem] p-8 sm:p-10 flex flex-col relative bg-white/80 dark:bg-navy-950/80 backdrop-blur-md transition-all hover:shadow-2xl",
+        "snap-center shrink-0 w-[78vw] sm:w-[68vw] md:w-auto md:shrink rounded-[2rem] sm:rounded-[2.5rem] p-6 sm:p-8 md:p-10 flex flex-col relative bg-white/80 dark:bg-navy-950/80 backdrop-blur-md transition-all hover:shadow-2xl",
         plan.isPopular
           ? "border-2 border-navy-900 dark:border-white shadow-xl scale-105 z-10"
           : "border border-navy-100 dark:border-navy-800",
@@ -428,68 +430,80 @@ function PricingCard({ plan, index, onSelect }: { plan: PricingPlan; index: numb
         </div>
       )}
       <div className="flex-1 flex flex-col text-center">
-        <h3 className="text-2xl font-bold serif text-navy-900 dark:text-white">{plan.name}</h3>
-        <p className="mt-3 text-sm text-navy-500 dark:text-navy-400 font-medium">
+        <h3 className="text-xl sm:text-2xl font-bold serif text-navy-900 dark:text-white">{plan.name}</h3>
+        <p className="mt-3 text-xs sm:text-sm text-navy-500 dark:text-navy-400 font-medium">
           {plan.description}
         </p>
-        <div className="mt-8 flex items-baseline justify-center gap-x-1">
-          <span className="text-5xl font-bold tracking-tight text-navy-900 dark:text-white">
-            <NumberFlow
-              value={
-                isMonthly ? plan.price : plan.yearlyPrice
-              }
-              format={{
-                style: "currency",
-                currency: "USD",
-                minimumFractionDigits: 0,
-              }}
-              className="font-variant-numeric: tabular-nums serif"
-            />
-          </span>
-          <span className="text-sm font-bold leading-6 tracking-wide text-navy-300 uppercase">
-            / {plan.period}
-          </span>
-        </div>
-        <div className="mt-4 p-4 rounded-2xl bg-navy-50 dark:bg-navy-900/50 border border-navy-100 dark:border-navy-800">
-          <p className="text-[10px] font-bold uppercase tracking-widest text-navy-400">
-            {isMonthly ? "Monthly Breakdown" : "Annual Breakdown"}
-          </p>
-          <div className="mt-2 space-y-1">
-            <div className="flex justify-between text-xs font-medium">
-              <span className="text-navy-500 flex items-center gap-1">
-                <span>Once-off Setup</span>
-                <button
-                  type="button"
-                  onClick={() => setShowSetupInfo((prev) => !prev)}
-                  className="inline-flex h-4 w-4 items-center justify-center rounded-full border border-navy-300/70 dark:border-navy-600/70 text-[8px] font-semibold text-navy-500 dark:text-navy-300 hover:text-navy-900 dark:hover:text-white hover:border-navy-500 dark:hover:border-white transition-colors"
-                  aria-label="What the setup fee covers"
-                >
-                  i
-                </button>
+        {!hideAmounts ? (
+          <>
+            <div className="mt-6 md:mt-8 flex items-baseline justify-center gap-x-1">
+              <span className="text-4xl sm:text-5xl font-bold tracking-tight text-navy-900 dark:text-white">
+                <NumberFlow
+                  value={isMonthly ? plan.price : plan.yearlyPrice}
+                  format={{
+                    style: "currency",
+                    currency: "USD",
+                    minimumFractionDigits: 0,
+                  }}
+                  className="font-variant-numeric: tabular-nums serif"
+                />
               </span>
-              <span className="text-navy-900 dark:text-white">${plan.setupFee.toLocaleString()}</span>
-            </div>
-            {!isMonthly && (
-              <div className="flex justify-between text-xs font-medium">
-                <span className="text-navy-500">Annual Sub</span>
-                <span className="text-navy-900 dark:text-white">${(plan.yearlyPrice * 12).toLocaleString()}</span>
-              </div>
-            )}
-            <div className="pt-1 border-t border-navy-100 dark:border-navy-800 flex justify-between text-xs font-bold">
-              <span className="text-navy-900 dark:text-white">Due Today</span>
-              <span className="text-navy-900 dark:text-white">
-                ${(isMonthly ? (plan.setupFee + plan.price) : (plan.setupFee + plan.yearlyPrice * 12)).toLocaleString()}
+              <span className="text-xs sm:text-sm font-bold leading-6 tracking-wide text-navy-300 uppercase">
+                / {plan.period}
               </span>
             </div>
-            {showSetupInfo && (
-              <p className="mt-3 text-[11px] leading-relaxed text-left text-navy-500 dark:text-navy-300">
-                Your setup fee is charged once per showroom. It covers call-flow design, safe-guarding, integrations
-                (including Nivoda, calendars, and CRM), test environment, iteration cycles, and the final handover to
-                your team.
+            <div className="mt-4 p-4 rounded-2xl bg-navy-50 dark:bg-navy-900/50 border border-navy-100 dark:border-navy-800">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-navy-400">
+                {isMonthly ? "Monthly Breakdown" : "Annual Breakdown"}
               </p>
-            )}
+              <div className="mt-2 space-y-1">
+                <div className="flex justify-between text-xs font-medium">
+                  <span className="text-navy-500 flex items-center gap-1">
+                    <span>Once-off Setup</span>
+                    <button
+                      type="button"
+                      onClick={() => setShowSetupInfo((prev) => !prev)}
+                      className="inline-flex h-4 w-4 items-center justify-center rounded-full border border-navy-300/70 dark:border-navy-600/70 text-[8px] font-semibold text-navy-500 dark:text-navy-300 hover:text-navy-900 dark:hover:text-white hover:border-navy-500 dark:hover:border-white transition-colors"
+                      aria-label="What the setup fee covers"
+                    >
+                      i
+                    </button>
+                  </span>
+                  <span className="text-navy-900 dark:text-white">${plan.setupFee.toLocaleString()}</span>
+                </div>
+                {!isMonthly && (
+                  <div className="flex justify-between text-xs font-medium">
+                    <span className="text-navy-500">Annual Sub</span>
+                    <span className="text-navy-900 dark:text-white">${(plan.yearlyPrice * 12).toLocaleString()}</span>
+                  </div>
+                )}
+                <div className="pt-1 border-t border-navy-100 dark:border-navy-800 flex justify-between text-xs font-bold">
+                  <span className="text-navy-900 dark:text-white">Due Today</span>
+                  <span className="text-navy-900 dark:text-white">
+                    ${(isMonthly ? (plan.setupFee + plan.price) : (plan.setupFee + plan.yearlyPrice * 12)).toLocaleString()}
+                  </span>
+                </div>
+                {showSetupInfo && (
+                  <p className="mt-3 text-[11px] leading-relaxed text-left text-navy-500 dark:text-navy-300">
+                    Your setup fee is charged once per showroom. It covers call-flow design, safe-guarding, integrations
+                    (including Nivoda, calendars, and CRM), test environment, iteration cycles, and the final handover to
+                    your team.
+                  </p>
+                )}
+              </div>
+            </div>
+          </>
+        ) : (
+          <div className="mt-6 md:mt-8 p-4 rounded-2xl bg-navy-50 dark:bg-navy-900/50 border border-navy-100 dark:border-navy-800">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-navy-400">
+              Private Pricing
+            </p>
+            <p className="mt-2 text-xs sm:text-sm text-navy-600 dark:text-navy-300 leading-relaxed">
+              Every deployment is quoted custom for your call volume, locations and integrations. Choose a tier to configure
+              your quote — no pricing appears until you&apos;re in the secure configurator.
+            </p>
           </div>
-        </div>
+        )}
 
         <ul
           role="list"

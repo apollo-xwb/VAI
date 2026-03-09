@@ -20,6 +20,7 @@ import { PhoneCall, ChevronDown } from 'lucide-react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { CheckoutFlow } from './components/CheckoutFlow';
 import { CRMView } from './components/CRMView';
+import { AdminDashboard } from './components/AdminDashboard';
 import { SplashScreen } from './components/SplashScreen';
 import { PhoneTester } from './components/PhoneTester';
 import { FloatingCalendar } from './components/FloatingCalendar';
@@ -211,7 +212,7 @@ const App: React.FC = () => {
       }
     };
 
-    const scrollToRoi = () => scrollToSectionById('roi-section');
+    const scrollToRoi = () => scrollToSectionById('roi-calculator');
     const scrollToPricing = () => scrollToSectionById('pricing');
 
     return (
@@ -240,9 +241,9 @@ const App: React.FC = () => {
               </p>
             </div>
           </div>
-          {/* Ring — mobile above text (under logo), desktop left and vertically centered */}
+          {/* Ring — mobile above text (under logo), desktop left and vertically centered; smaller on very small phones */}
           <div className="order-1 md:order-1 md:row-span-2 md:self-center flex justify-center w-full">
-            <div className="w-full max-w-[140px] min-[375px]:max-w-[180px] sm:max-w-[280px] md:max-w-[520px] lg:max-w-[600px] aspect-square max-h-[22vh] min-[375px]:max-h-[28vh] sm:max-h-[40vh] md:max-h-[65vh] min-h-[120px] min-[375px]:min-h-[160px] sm:min-h-[220px] md:min-h-[360px]">
+            <div className="w-full max-w-[100px] min-[340px]:max-w-[130px] min-[375px]:max-w-[160px] sm:max-w-[280px] md:max-w-[520px] lg:max-w-[600px] aspect-square max-h-[18vh] min-[340px]:max-h-[22vh] min-[375px]:max-h-[26vh] sm:max-h-[40vh] md:max-h-[65vh] min-h-[90px] min-[340px]:min-h-[110px] min-[375px]:min-h-[140px] sm:min-h-[220px] md:min-h-[360px]">
               <PendantFBX className="w-full h-full" />
             </div>
           </div>
@@ -260,9 +261,9 @@ const App: React.FC = () => {
             </button>
           </div>
 
-          {/* Test Fourcee — mobile last, desktop bottom-right */}
+          {/* Test Fourcee — mobile last, desktop bottom-right; smaller on very small phones */}
           <div className="order-4 md:order-3 md:row-start-2 flex justify-center md:justify-end">
-            <div className="w-full max-w-sm">
+            <div className="w-full max-w-[130px] min-[340px]:max-w-[160px] min-[375px]:max-w-[200px] sm:max-w-[280px] md:max-w-sm">
               <MiniPhone isDarkMode={isDarkMode} />
             </div>
           </div>
@@ -282,8 +283,52 @@ const App: React.FC = () => {
         </div>
       </section>
 
-      {/* ROI / Value Calculator Section */}
-      <section id="roi-section" className="snap-start snap-always min-h-screen flex flex-col justify-center px-4 sm:px-6 py-16 md:py-24 bg-transparent">
+      {/* Demo Video Section - now directly after hero; 9:16 portrait on mobile */}
+      <section ref={demoRef} id="demo" className="snap-start snap-always min-h-screen flex flex-col justify-center py-24 md:py-32 px-4 sm:px-6 bg-transparent relative">
+        <div className="max-w-6xl mx-auto flex flex-col items-center w-full min-w-0">
+          <h2 className="text-4xl md:text-6xl font-bold serif text-navy-900 dark:text-white mb-8 md:mb-12 text-center tracking-tighter">Experience the Demo</h2>
+          <motion.div
+            style={{ scale: demoScale, opacity: demoOpacity, y: demoY }}
+            className="relative w-full max-w-[280px] aspect-[9/16] md:max-w-4xl md:aspect-video rounded-2xl md:rounded-[3rem] overflow-hidden shadow-[0_40px_100px_-20px_rgba(0,0,0,0.3)] group origin-center"
+          >
+             <img src={demoImage} alt="Demo" className="w-full h-full object-cover brightness-50 group-hover:scale-105 transition-transform duration-1000" />
+             <div className="absolute inset-0 flex flex-col items-center justify-center text-white p-4 md:p-0">
+                <button className="w-16 h-16 md:w-24 md:h-24 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center hover:scale-110 active:scale-95 transition-all shrink-0">
+                  <svg className="w-8 h-8 md:w-10 md:h-10 ml-1 md:ml-2" fill="currentColor" viewBox="0 0 20 20"><path d="M4.018 14L14.41 8 4.018 2v12z"/></svg>
+                </button>
+                <div className="mt-4 md:mt-8 text-center max-w-md px-2 md:px-6">
+                  <p className="text-sm md:text-xl serif italic leading-relaxed">"Fourcee didn't just replace our receptionist; it enhanced the entire client experience. Our ROI was instant."</p>
+                  <p className="text-[9px] md:text-[10px] uppercase font-bold mt-2 md:mt-4 tracking-widest">— Julianna Rossi, Rossi Haute Joaillerie</p>
+                </div>
+             </div>
+          </motion.div>
+          <div className="mt-10 flex justify-center">
+            <button
+              type="button"
+              onClick={scrollToPricing}
+              className="inline-flex items-center gap-2 rounded-full bg-navy-900 text-white dark:bg-white dark:text-navy-950 px-7 py-3 text-[10px] font-bold uppercase tracking-[0.25em] shadow-2xl hover:scale-105 active:scale-95 transition-all"
+            >
+              <span>Select a package</span>
+            </button>
+          </div>
+        </div>
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-64 md:h-72">
+          <DottedSurface
+            isDarkMode={isDarkMode}
+            className="h-full w-full opacity-75 [mask-image:linear-gradient(to_top,black,transparent)]"
+          />
+        </div>
+      </section>
+
+      {/* Value Calculator Section - before ROI messaging; its own snap after demo */}
+      <section id="roi-calculator" className="snap-start snap-always min-h-screen flex flex-col justify-center px-4 sm:px-6 py-16 md:py-24 bg-transparent">
+        <div className="w-full max-w-4xl mx-auto">
+          <ValueCalculator />
+        </div>
+      </section>
+
+      {/* ROI Messaging Section (without calculator, stacked on mobile) */}
+      <section className="snap-start snap-always min-h-screen flex flex-col justify-center px-4 sm:px-6 py-16 md:py-24 bg-transparent">
         <div className="w-full max-w-6xl mx-auto grid gap-10 lg:gap-16 lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)] items-start">
           <div className="space-y-6">
             <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-navy-400 dark:text-navy-300">
@@ -294,9 +339,8 @@ const App: React.FC = () => {
               <br className="hidden md:block" /> for your showroom?
             </h2>
             <p className="text-sm sm:text-base text-navy-600 dark:text-navy-300 max-w-xl">
-              Use your real averages. We&apos;ll show you estimated unlocked revenue and reclaimed staff time — adjust the sliders and see the numbers update in real time.
+              Use your real averages to understand the real value of answered calls, reclaimed staff time, and higher-intent leads.
             </p>
-            <ValueCalculator />
           </div>
           <div className="flex flex-col gap-6">
             <div className="glass-card p-8 rounded-[2.5rem] border border-navy-50 shadow-xl dark:border-navy-800">
@@ -332,7 +376,7 @@ const App: React.FC = () => {
         </div>
       </section>
 
-      {/* Problem Step - Moved below Hero: blue + grid faded at top and bottom */}
+      {/* Problem Step - moved below calculator: blue + grid faded at top and bottom */}
       <section ref={problemRef} className="snap-start snap-always min-h-screen flex flex-col justify-center py-32 px-6 text-white relative overflow-hidden border-y border-white/5">
         <div
           className="absolute inset-0 pointer-events-none bg-navy-950"
@@ -369,10 +413,10 @@ const App: React.FC = () => {
               </div>
             </div>
           </div>
-          <div className="relative h-[500px] flex items-start justify-center pt-4">
+          <div className="relative h-[320px] sm:h-[400px] md:h-[500px] flex items-start justify-center pt-4 overflow-visible">
             <motion.div 
               style={{ y: cardsY }}
-              className="relative group z-10 mt-16"
+              className="relative group z-10 mt-8 md:mt-16 scale-[0.55] sm:scale-75 md:scale-100 origin-center"
             >
               <div className="absolute -inset-10 bg-navy-900/50 blur-[100px] group-hover:bg-navy-800/50 transition-all"></div>
               <DisplayCards 
@@ -407,48 +451,11 @@ const App: React.FC = () => {
                 ]}
               />
             </motion.div>
-            <div className="absolute bottom-0 -left-10 p-8 glass-card rounded-[2rem] border-white/10 max-w-xs text-navy-950 dark:text-white shadow-2xl z-20">
-              <p className="italic text-lg serif leading-tight">"We missed a $12k anniversary lead on a Sunday. Never again."</p>
-              <p className="text-[10px] uppercase font-bold mt-4 tracking-widest text-navy-400 dark:text-navy-300">— London Diamonds</p>
+            <div className="absolute bottom-0 left-0 md:-left-10 p-4 md:p-8 glass-card rounded-xl md:rounded-[2rem] border-white/10 max-w-[200px] sm:max-w-xs text-navy-950 dark:text-white shadow-2xl z-20">
+              <p className="italic text-sm md:text-lg serif leading-tight">"We missed a $12k anniversary lead on a Sunday. Never again."</p>
+              <p className="text-[9px] md:text-[10px] uppercase font-bold mt-2 md:mt-4 tracking-widest text-navy-400 dark:text-navy-300">— London Diamonds</p>
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* Demo Video Section - scroll-linked effect on video placeholder */}
-      <section ref={demoRef} id="demo" className="snap-start snap-always min-h-screen flex flex-col justify-center py-32 px-6 bg-transparent relative">
-        <div className="max-w-6xl mx-auto flex flex-col items-center">
-          <h2 className="text-4xl md:text-6xl font-bold serif text-navy-900 dark:text-white mb-12 text-center tracking-tighter">Experience the Demo</h2>
-          <motion.div
-            style={{ scale: demoScale, opacity: demoOpacity, y: demoY }}
-            className="relative w-full max-w-4xl aspect-video rounded-[3rem] overflow-hidden shadow-[0_40px_100px_-20px_rgba(0,0,0,0.3)] group origin-center"
-          >
-             <img src={demoImage} alt="Demo" className="w-full h-full object-cover brightness-50 group-hover:scale-105 transition-transform duration-1000" />
-             <div className="absolute inset-0 flex flex-col items-center justify-center text-white">
-                <button className="w-24 h-24 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center hover:scale-110 active:scale-95 transition-all">
-                  <svg className="w-10 h-10 ml-2" fill="currentColor" viewBox="0 0 20 20"><path d="M4.018 14L14.41 8 4.018 2v12z"/></svg>
-                </button>
-                <div className="mt-8 text-center max-w-md px-6">
-                  <p className="text-xl serif italic leading-relaxed">"Fourcee didn't just replace our receptionist; it enhanced the entire client experience. Our ROI was instant."</p>
-                  <p className="text-[10px] uppercase font-bold mt-4 tracking-widest">— Julianna Rossi, Rossi Haute Joaillerie</p>
-                </div>
-             </div>
-          </motion.div>
-          <div className="mt-10 flex justify-center">
-            <button
-              type="button"
-              onClick={scrollToPricing}
-              className="inline-flex items-center gap-2 rounded-full bg-navy-900 text-white dark:bg-white dark:text-navy-950 px-7 py-3 text-[10px] font-bold uppercase tracking-[0.25em] shadow-2xl hover:scale-105 active:scale-95 transition-all"
-            >
-              <span>Select a package</span>
-            </button>
-          </div>
-        </div>
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-64 md:h-72">
-          <DottedSurface
-            isDarkMode={isDarkMode}
-            className="h-full w-full opacity-75 [mask-image:linear-gradient(to_top,black,transparent)]"
-          />
         </div>
       </section>
 
@@ -504,20 +511,20 @@ const App: React.FC = () => {
         </div>
       </section>
 
-      {/* Integrations Section */}
-      <section className="snap-start snap-always min-h-screen flex flex-col justify-center pt-32 pb-16 px-6 bg-transparent transition-colors">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-24 max-w-3xl mx-auto">
-            <h2 className="text-4xl md:text-7xl font-bold serif text-slate-900 dark:text-white mb-8 tracking-tighter">Unified Workflow</h2>
+      {/* Integrations Section — contained on mobile, no horizontal overflow */}
+      <section className="snap-start snap-always min-h-screen flex flex-col justify-center pt-32 pb-16 overflow-x-hidden bg-transparent transition-colors">
+        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 min-w-0">
+          <div className="text-center mb-16 md:mb-24 max-w-3xl mx-auto">
+            <h2 className="text-3xl sm:text-4xl md:text-7xl font-bold serif text-slate-900 dark:text-white mb-6 md:mb-8 tracking-tighter break-words">Unified Workflow</h2>
             <p className="text-slate-600 dark:text-navy-400 uppercase tracking-[0.2em] text-[11px] font-bold mb-6">Built for your current stack</p>
-            <p className="text-lg text-slate-800 dark:text-navy-300 font-light leading-relaxed">
+            <p className="text-base sm:text-lg text-slate-800 dark:text-navy-300 font-light leading-relaxed">
               Fourcee integrates seamlessly with the tools you already use. From deep Nivoda inventory sync to global e-commerce leaders, your existing workflow remains untouched, only enhanced.
             </p>
           </div>
 
-          <div className="mb-24 relative overflow-hidden rounded-[4rem] shadow-2xl">
+          <div className="mb-16 md:mb-24 relative overflow-hidden rounded-2xl sm:rounded-[3rem] md:rounded-[4rem] shadow-2xl w-full max-w-full">
             <div
-              className="relative w-full h-[600px]"
+              className="relative w-full h-[45vh] min-h-[220px] max-h-[400px] sm:h-[50vh] sm:max-h-[480px] md:h-[600px] md:min-h-[500px] md:max-h-none"
               style={{
                 maskImage: 'radial-gradient(ellipse 65% 65% at 50% 50%, black 20%, transparent 100%)',
                 WebkitMaskImage: 'radial-gradient(ellipse 65% 65% at 50% 50%, black 20%, transparent 100%)',
@@ -526,7 +533,7 @@ const App: React.FC = () => {
             >
               <img 
                 src={workflowImage} 
-                className="w-full h-full object-cover brightness-75" 
+                className="w-full h-full object-contain brightness-75" 
                 alt="Connected digital ecosystem" 
               />
             </div>
@@ -539,17 +546,17 @@ const App: React.FC = () => {
               }}
               aria-hidden
             />
-            <div className="absolute inset-0 z-[2] bg-gradient-to-t from-navy-950/80 via-transparent to-transparent flex items-end p-16 pointer-events-none">
+            <div className="absolute inset-0 z-[2] bg-gradient-to-t from-navy-950/80 via-transparent to-transparent flex items-end p-4 sm:p-8 md:p-16 pointer-events-none">
               <div className="max-w-xl">
-                <h3 className={`text-4xl font-bold serif mb-4 italic ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>The Synchronized Showroom</h3>
-                <p className={`font-light text-lg ${isDarkMode ? 'text-white/80' : 'text-slate-800'}`}>Fourcee acts as the intelligent bridge between your client interactions and your inventory, scheduling, and CRM systems.</p>
+                <h3 className={`text-2xl sm:text-3xl md:text-4xl font-bold serif mb-2 md:mb-4 italic ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>The Synchronized Showroom</h3>
+                <p className={`font-light text-sm sm:text-base md:text-lg ${isDarkMode ? 'text-white/80' : 'text-slate-800'}`}>Fourcee acts as the intelligent bridge between your client interactions and your inventory, scheduling, and CRM systems.</p>
               </div>
             </div>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="md:grid md:grid-cols-2 lg:grid-cols-3 gap-8 flex overflow-x-auto snap-x snap-mandatory gap-4 sm:gap-6 pb-2 md:overflow-visible md:flex-none scrollbar-thin">
             {INTEGRATIONS_DATA.map((cat, idx) => (
-              <div key={idx} className="glass-card p-10 rounded-[3rem] border border-navy-50 dark:border-navy-800 flex flex-col">
+              <div key={idx} className="glass-card p-6 sm:p-10 rounded-[2rem] sm:rounded-[3rem] border border-navy-50 dark:border-navy-800 flex flex-col flex-shrink-0 w-[calc(50%-0.5rem)] min-w-[calc(50%-0.5rem)] sm:min-w-0 snap-center md:w-auto">
                 <h4 className="text-[11px] font-bold uppercase tracking-[0.2em] text-navy-400 mb-6">{cat.category}</h4>
                 <div className="flex flex-wrap gap-2 mb-6">
                   {cat.popular.map(p => (
@@ -704,6 +711,7 @@ const App: React.FC = () => {
             buttonText: "Secure Your Model",
             isPopular: pkg.id === 'premium'
           }))}
+        hideAmounts
         title="Investment Tiers"
         description="Scaling with your brilliance"
         onSelect={(id) => {
@@ -928,6 +936,7 @@ const App: React.FC = () => {
         )}
         {currentView === AppView.CHECKOUT && <CheckoutFlow isDarkMode={isDarkMode} initialPackageId={preSelectedPackageId} />}
         {currentView === AppView.DASHBOARD && <CRMView isDarkMode={isDarkMode} />}
+        {currentView === AppView.ADMIN && <AdminDashboard isDarkMode={isDarkMode} />}
         {currentView === AppView.TERMS && <TermsPage />}
       </main>
 

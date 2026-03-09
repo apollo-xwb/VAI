@@ -5,6 +5,7 @@ export enum AppView {
   BLOG_POST = 'blog-post',
   CHECKOUT = 'checkout',
   DASHBOARD = 'dashboard',
+  ADMIN = 'admin',
   TERMS = 'terms',
 }
 

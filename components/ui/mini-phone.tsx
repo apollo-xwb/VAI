@@ -41,7 +41,7 @@ export function MiniPhone({ className, isDarkMode = true }: MiniPhoneProps) {
   return (
     <div
       className={cn(
-        'w-full max-w-sm rounded-2xl p-6 border backdrop-blur-2xl shadow-[0_25px_60px_-12px_rgba(0,0,0,0.35)]',
+        'w-full max-w-sm rounded-2xl p-4 sm:p-6 border backdrop-blur-2xl shadow-[0_25px_60px_-12px_rgba(0,0,0,0.35)]',
         isDarkMode ? 'bg-white/5 border-white/20' : 'bg-white/80 border-navy-200/50',
         className
       )}
@@ -74,7 +74,7 @@ export function MiniPhone({ className, isDarkMode = true }: MiniPhoneProps) {
                 type="button"
                 onClick={() => setDropdownOpen(!dropdownOpen)}
                 className={cn(
-                  'h-12 px-3 rounded-xl border flex items-center gap-2 text-sm font-bold min-w-[5rem]',
+                  'h-10 sm:h-12 px-3 rounded-lg sm:rounded-xl border flex items-center gap-2 text-xs sm:text-sm font-bold min-w-[4.5rem]',
                   inputBg,
                   textClass
                 )}
@@ -124,7 +124,7 @@ export function MiniPhone({ className, isDarkMode = true }: MiniPhoneProps) {
               value={phone}
               onChange={(e) => setPhone(e.target.value.replace(/\D/g, '').slice(0, 15))}
               className={cn(
-                'flex-1 h-12 px-4 rounded-xl border text-sm font-medium placeholder:opacity-60 focus:outline-none focus:ring-2 focus:ring-white/30',
+                'flex-1 h-10 sm:h-12 px-3 sm:px-4 rounded-lg sm:rounded-xl border text-xs sm:text-sm font-medium placeholder:opacity-60 focus:outline-none focus:ring-2 focus:ring-white/30',
                 inputBg,
                 textClass
               )}
@@ -137,7 +137,7 @@ export function MiniPhone({ className, isDarkMode = true }: MiniPhoneProps) {
             disabled={!phone.trim() || status === 'calling'}
             onClick={handleCall}
             className={cn(
-              'w-full h-12 rounded-xl font-bold text-sm uppercase tracking-widest flex items-center justify-center gap-2 transition-all disabled:opacity-50',
+              'w-full h-10 sm:h-11 rounded-lg sm:rounded-xl font-bold text-xs sm:text-sm uppercase tracking-[0.2em] flex items-center justify-center gap-2 transition-all disabled:opacity-50',
               'bg-green-500 text-white hover:bg-green-600 active:scale-[0.98]'
             )}
           >
