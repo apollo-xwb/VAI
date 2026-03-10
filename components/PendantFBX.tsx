@@ -23,9 +23,11 @@ function toAssetUrl(folder: string, file = 'scene.gltf'): string {
 
 interface PendantFBXProps {
   className?: string;
+  /** When false (light mode), use silver/inverted look instead of gold */
+  isDarkMode?: boolean;
 }
 
-export const PendantFBX: React.FC<PendantFBXProps> = ({ className = '' }) => {
+export const PendantFBX: React.FC<PendantFBXProps> = ({ className = '', isDarkMode = true }) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const sceneRef = useRef<{
     renderer: THREE.WebGLRenderer;
@@ -83,13 +85,14 @@ export const PendantFBX: React.FC<PendantFBXProps> = ({ className = '' }) => {
     fillLight.position.set(-1, 2, 2);
     scene.add(fillLight);
 
-    const goldChromeMaterial = new THREE.MeshPhysicalMaterial({
-      color: 0xc9a227,
+    const baseColor = isDarkMode ? 0xc9a227 : 0xa8b2c1; // gold (dark) / silver (light)
+    const chromeMaterial = new THREE.MeshPhysicalMaterial({
+      color: baseColor,
       metalness: 0.92,
-      roughness: 0.05,
+      roughness: isDarkMode ? 0.05 : 0.12,
       clearcoat: 0.6,
       clearcoatRoughness: 0,
-      envMapIntensity: 2.2,
+      envMapIntensity: isDarkMode ? 2.2 : 1.4,
     });
 
     const addModel = (gltf: { scene: THREE.Group }, assetUrl: string) => {
@@ -99,7 +102,7 @@ export const PendantFBX: React.FC<PendantFBXProps> = ({ className = '' }) => {
         if ((child as THREE.Mesh).isMesh) {
           const mesh = child as THREE.Mesh;
           if (isSphere) {
-            mesh.material = goldChromeMaterial;
+            mesh.material = chromeMaterial;
           } else {
             const mat = mesh.material;
             if (Array.isArray(mat)) {
@@ -119,7 +122,10 @@ export const PendantFBX: React.FC<PendantFBXProps> = ({ className = '' }) => {
       const center = new THREE.Vector3();
       box.getCenter(center);
       const targetHeight = 1.15;
-      const scale = targetHeight / (size.y || 1);
+      const targetWidth = 1.15;
+      const scaleY = targetHeight / (size.y || 1);
+      const scaleX = targetWidth / (size.x || 1);
+      const scale = Math.min(scaleY, scaleX);
       object.scale.setScalar(scale);
       object.position.x = -center.x * scale;
       object.position.z = -center.z * scale;
@@ -195,7 +201,7 @@ export const PendantFBX: React.FC<PendantFBXProps> = ({ className = '' }) => {
         container.removeChild(renderer.domElement);
       }
     };
-  }, []);
+  }, [isDarkMode]);
 
   return (
     <div

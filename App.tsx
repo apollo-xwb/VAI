@@ -149,7 +149,9 @@ const App: React.FC = () => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    const el = scrollContainerRef.current;
+    if (el) el.scrollTo({ top: 0, behavior: 'instant' });
+    else window.scrollTo(0, 0);
   }, [currentView]);
 
   useEffect(() => {
@@ -174,8 +176,12 @@ const App: React.FC = () => {
   const navigate = (view: AppView, post?: BlogPost, packageId?: string) => {
     setCurrentView(view);
     if (post) setSelectedPost(post);
-    if (view === AppView.CHECKOUT) setPreSelectedPackageId(packageId ?? null);
-    else setPreSelectedPackageId(null);
+    if (view === AppView.CHECKOUT) {
+      setPreSelectedPackageId(packageId ?? null);
+      const el = scrollContainerRef.current;
+      if (el) el.scrollTo({ top: 0, behavior: 'instant' });
+      else window.scrollTo({ top: 0, behavior: 'instant' });
+    } else setPreSelectedPackageId(null);
   };
 
   const toggleDarkMode = () => setIsDarkMode(!isDarkMode);
@@ -218,7 +224,7 @@ const App: React.FC = () => {
     return (
     <div className="animate-in fade-in duration-1000 pb-32 md:pb-40">
       {/* Hero: ring left (between hero text and Test Fourcee), text + form right; mobile: text → ring → form */}
-      <section className="snap-start snap-always min-h-screen relative flex flex-col items-center justify-center px-4 sm:px-6 pt-20 sm:pt-24 pb-8 md:py-24 overflow-hidden bg-transparent transition-colors">
+      <section className="snap-start snap-always min-h-screen relative flex flex-col items-center justify-center px-4 sm:px-6 pt-12 min-[400px]:pt-10 min-[430px]:pt-8 sm:pt-16 pb-8 md:pt-24 md:pb-24 overflow-hidden bg-transparent transition-colors">
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[220px] md:h-[260px]">
           <div
             className="absolute inset-0 bg-gradient-to-b from-transparent via-white/60 to-white dark:via-navy-950/70 dark:to-navy-950"
@@ -233,18 +239,33 @@ const App: React.FC = () => {
           {/* Hero text — mobile below 3D object, desktop top-right */}
           <div className="order-2 md:order-2 md:row-start-1 text-center md:text-right mt-4 md:mt-0">
             <div className="relative z-10 max-w-2xl md:ml-auto">
-              <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-bold mb-3 text-slate-900 dark:text-white serif leading-[1.1] tracking-tighter">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-6xl 2xl:text-7xl font-bold mb-3 text-slate-900 dark:text-white serif leading-[1.1] tracking-tighter">
                 The Gold Standard <br/><span className="italic shimmer-text">of Voice AI</span>
               </h1>
-              <p className="text-xs sm:text-sm md:text-base text-slate-600 dark:text-navy-300 font-medium leading-relaxed uppercase tracking-[0.25em]">
+              <p className="text-xs sm:text-sm md:text-sm lg:text-base text-slate-600 dark:text-navy-300 font-medium leading-relaxed uppercase tracking-[0.25em]">
                 Tailored exclusively for high-end jewelers
               </p>
             </div>
           </div>
-          {/* Ring — mobile above text (under logo), desktop left and vertically centered; smaller on very small phones */}
-          <div className="order-1 md:order-1 md:row-span-2 md:self-center flex justify-center w-full">
-            <div className="w-full max-w-[100px] min-[340px]:max-w-[130px] min-[375px]:max-w-[160px] sm:max-w-[280px] md:max-w-[520px] lg:max-w-[600px] aspect-square max-h-[18vh] min-[340px]:max-h-[22vh] min-[375px]:max-h-[26vh] sm:max-h-[40vh] md:max-h-[65vh] min-h-[90px] min-[340px]:min-h-[110px] min-[375px]:min-h-[140px] sm:min-h-[220px] md:min-h-[360px]">
-              <PendantFBX className="w-full h-full" />
+          {/* Ring — mobile above text (under logo), desktop left and vertically centered; tighter to logo on mobile, bigger on Pro Max / large phones */}
+          <div className="order-1 md:order-1 md:row-span-2 md:self-center flex justify-center w-full min-w-0 relative -mt-1 min-[430px]:-mt-2">
+            <div className="relative w-full max-w-[130px] min-[340px]:max-w-[180px] min-[375px]:max-w-[220px] min-[430px]:max-w-[280px] sm:max-w-[320px] md:max-w-[560px] lg:max-w-[680px] xl:max-w-[760px] 2xl:max-w-[840px] aspect-square max-h-[22vh] min-[340px]:max-h-[28vh] min-[375px]:max-h-[32vh] min-[430px]:max-h-[38vh] sm:max-h-[42vh] md:max-h-[70vh] lg:max-h-[75vh] min-h-[110px] min-[340px]:min-h-[150px] min-[375px]:min-h-[180px] min-[430px]:min-h-[240px] sm:min-h-[260px] md:min-h-[380px] lg:min-h-[420px] [contain:layout]">
+              <PendantFBX className="w-full h-full relative z-10" isDarkMode={isDarkMode} />
+              {/* Object shadow beneath 3D so it appears grounded */}
+              <div
+                className="absolute left-1/2 -translate-x-1/2 z-0 pointer-events-none"
+                style={{
+                  bottom: '-8%',
+                  width: '75%',
+                  height: '24%',
+                  background: isDarkMode
+                    ? 'radial-gradient(ellipse 80% 50% at 50% 50%, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.2) 40%, transparent 70%)'
+                    : 'radial-gradient(ellipse 80% 50% at 50% 50%, rgba(16,42,67,0.2) 0%, rgba(16,42,67,0.08) 40%, transparent 70%)',
+                  filter: 'blur(6px)',
+                  borderRadius: '50%',
+                }}
+                aria-hidden
+              />
             </div>
           </div>
           {/* Mobile ROI CTA — sits above Test Fourcee on small screens */}
@@ -592,11 +613,11 @@ const App: React.FC = () => {
         </div>
       </section>
 
-      {/* Nivoda Deep Integration Section */}
+      {/* Nivoda Deep Integration Section — inverts for light mode */}
       <section
-        className="snap-start snap-always min-h-[80vh] flex flex-col justify-center px-6 py-16 md:py-24 relative"
+        className="snap-start snap-always min-h-[80vh] flex flex-col justify-center px-6 py-16 md:py-24 relative transition-colors"
         style={{
-          backgroundColor: '#090906',
+          backgroundColor: isDarkMode ? '#090906' : '#f4f5f7',
           maskImage:
             'linear-gradient(to bottom, transparent 0%, black 12%, black 88%, transparent 100%)',
           WebkitMaskImage:
@@ -606,7 +627,9 @@ const App: React.FC = () => {
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
-            backgroundImage: `repeating-radial-gradient(circle at 0 0, rgba(194,204,214,0.12) 0, rgba(194,204,214,0.12) 1px, transparent 1px, transparent 3px)`,
+            backgroundImage: isDarkMode
+              ? `repeating-radial-gradient(circle at 0 0, rgba(194,204,214,0.12) 0, rgba(194,204,214,0.12) 1px, transparent 1px, transparent 3px)`
+              : `repeating-radial-gradient(circle at 0 0, rgba(16,42,67,0.08) 0, rgba(16,42,67,0.08) 1px, transparent 1px, transparent 3px)`,
             opacity: 0.9,
           }}
         />
@@ -615,7 +638,7 @@ const App: React.FC = () => {
             <div className="w-full max-w-[220px] sm:max-w-[260px] md:max-w-md aspect-[4/5]">
               <svg
                 viewBox="0 0 100 125"
-                className="w-full h-full"
+                className={`w-full h-full ${!isDarkMode ? 'invert' : ''}`}
                 aria-label="Nivoda inventory layers feeding Fourcee"
                 role="img"
               >
@@ -650,39 +673,39 @@ const App: React.FC = () => {
             </div>
           </div>
           <div className="space-y-6 text-left order-2">
-            <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#C2CCD6]/80">
+            <p className={`text-[10px] font-bold uppercase tracking-[0.3em] ${isDarkMode ? 'text-[#C2CCD6]/80' : 'text-navy-600/80'}`}>
               Nivoda-native inventory intelligence
             </p>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold serif text-white tracking-tight">
+            <h2 className={`text-3xl sm:text-4xl md:text-5xl font-bold serif tracking-tight ${isDarkMode ? 'text-white' : 'text-navy-900'}`}>
               Your AI hears<br className="hidden sm:block" /> the same diamonds you see.
             </h2>
-            <p className="text-sm sm:text-base text-[#C2CCD6]/90 max-w-xl leading-relaxed">
+            <p className={`text-sm sm:text-base max-w-xl leading-relaxed ${isDarkMode ? 'text-[#C2CCD6]/90' : 'text-navy-700/90'}`}>
               Fourcee doesn&apos;t guess what&apos;s in your case — it reads live data from Nivoda. Every search,
               estimate and availability check is backed by the same inventory spine your buyers already trust.
             </p>
-            <div className="grid gap-4 sm:grid-cols-2 text-xs sm:text-sm text-[#C2CCD6]">
-              <div className="rounded-2xl border border-[#535B68]/60 bg-black/40 px-4 py-3 backdrop-blur-md">
-                <p className="font-semibold mb-1 text-white">Real-time availability</p>
+            <div className={`grid gap-4 sm:grid-cols-2 text-xs sm:text-sm ${isDarkMode ? 'text-[#C2CCD6]' : 'text-navy-700'}`}>
+              <div className={`rounded-2xl border px-4 py-3 backdrop-blur-md ${isDarkMode ? 'border-[#535B68]/60 bg-black/40' : 'border-navy-200 bg-white/80'}`}>
+                <p className={`font-semibold mb-1 ${isDarkMode ? 'text-white' : 'text-navy-900'}`}>Real-time availability</p>
                 <p className="leading-relaxed">
                   Quote from live Nivoda feeds so your AI never offers stones that have already left the pipeline.
                 </p>
               </div>
-              <div className="rounded-2xl border border-[#3A5A88]/70 bg-black/40 px-4 py-3 backdrop-blur-md">
-                <p className="font-semibold mb-1 text-white">Smart search logic</p>
+              <div className={`rounded-2xl border px-4 py-3 backdrop-blur-md ${isDarkMode ? 'border-[#3A5A88]/70 bg-black/40' : 'border-navy-200 bg-white/80'}`}>
+                <p className={`font-semibold mb-1 ${isDarkMode ? 'text-white' : 'text-navy-900'}`}>Smart search logic</p>
                 <p className="leading-relaxed">
                   Translate vague requests (&quot;oval, lab-grown, under 3 carats&quot;) into structured Nivoda queries
                   in the background.
                 </p>
               </div>
-              <div className="rounded-2xl border border-[#535B68]/60 bg-black/40 px-4 py-3 backdrop-blur-md sm:col-span-2">
-                <p className="font-semibold mb-1 text-white">CRM + analytics ready</p>
+              <div className={`rounded-2xl border px-4 py-3 backdrop-blur-md sm:col-span-2 ${isDarkMode ? 'border-[#535B68]/60 bg-black/40' : 'border-navy-200 bg-white/80'}`}>
+                <p className={`font-semibold mb-1 ${isDarkMode ? 'text-white' : 'text-navy-900'}`}>CRM + analytics ready</p>
                 <p className="leading-relaxed">
                   Every Nivoda-backed search can be logged against a contact in your CRM and surfaced in the analytics
                   portal — so you see which profiles are driving real diamond demand.
                 </p>
               </div>
             </div>
-            <p className="text-[10px] uppercase tracking-[0.25em] text-[#C2CCD6]/70 pt-2">
+            <p className={`text-[10px] uppercase tracking-[0.25em] pt-2 ${isDarkMode ? 'text-[#C2CCD6]/70' : 'text-navy-600/70'}`}>
               Built to sit on top of your existing Nivoda workflows — not replace them.
             </p>
           </div>

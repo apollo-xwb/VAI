@@ -3,8 +3,6 @@ import React, { useState } from 'react';
 import { PACKAGES, UPSELLS } from '../constants.tsx';
 import { CheckoutState } from '../types';
 import fcShad from '../public/assets/fcshad.png';
-import { PricingMatrix } from './PricingMatrix';
-
 interface CheckoutFlowProps {
   isDarkMode?: boolean;
   initialPackageId?: string | null;
@@ -50,7 +48,9 @@ export const CheckoutFlow: React.FC<CheckoutFlowProps> = ({ isDarkMode = false, 
             <div>
               <p className="text-[10px] font-bold uppercase tracking-widest text-navy-700 dark:text-navy-300 mb-4">Voice Tier</p>
               <div className="grid md:grid-cols-3 gap-4">
-                {PACKAGES.map(pkg => (
+                {[...PACKAGES]
+                  .sort((a, b) => b.monthly - a.monthly)
+                  .map(pkg => (
                   <div 
                     key={pkg.id}
                     onClick={() => setState(s => ({ ...s, packageId: pkg.id }))}
@@ -67,12 +67,12 @@ export const CheckoutFlow: React.FC<CheckoutFlowProps> = ({ isDarkMode = false, 
               </div>
             </div>
 
-            <PricingMatrix />
-
             <div>
               <p className="text-[10px] font-bold uppercase tracking-widest text-navy-700 dark:text-navy-300 mb-4">Optional Capabilities</p>
               <div className="space-y-4">
-                {UPSELLS.map(u => {
+                {[...UPSELLS]
+                  .sort((a, b) => ((b as { monthlyPrice?: number }).monthlyPrice ?? 0) - ((a as { monthlyPrice?: number }).monthlyPrice ?? 0))
+                  .map(u => {
                   const isChecked = state.upsells.includes(u.id);
                   const isUnifiedChat = u.id === 'unified_chat';
                   const features = 'features' in u ? (u as { features?: string[] }).features : undefined;
@@ -240,7 +240,7 @@ export const CheckoutFlow: React.FC<CheckoutFlowProps> = ({ isDarkMode = false, 
   };
 
   return (
-    <div className="pt-24 pb-32 md:pb-36 px-6 bg-transparent transition-colors">
+    <div className="pt-24 pb-40 md:pb-36 px-6 bg-transparent transition-colors">
       <div className="max-w-5xl mx-auto">
         <div className="flex justify-center mb-10">
           <img
@@ -268,7 +268,7 @@ export const CheckoutFlow: React.FC<CheckoutFlowProps> = ({ isDarkMode = false, 
         {renderStep()}
 
         {state.step < 4 && (
-          <div className="mt-16 flex justify-between items-center relative z-10">
+          <div className="mt-16 flex justify-between items-center relative z-30 min-h-[72px] pb-24 sm:pb-20">
             <button 
               type="button"
               onClick={prevStep}
@@ -279,8 +279,13 @@ export const CheckoutFlow: React.FC<CheckoutFlowProps> = ({ isDarkMode = false, 
             </button>
             <button 
               type="button"
-              onClick={nextStep}
-              className="bg-navy-900 dark:bg-white text-white dark:text-navy-950 px-12 py-5 rounded-full font-bold text-xs uppercase tracking-[0.2em] hover:shadow-2xl hover:scale-105 active:scale-95 transition-all cursor-pointer shrink-0"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                nextStep();
+              }}
+              className="bg-navy-900 dark:bg-white text-white dark:text-navy-950 px-12 py-5 rounded-full font-bold text-xs uppercase tracking-[0.2em] hover:shadow-2xl hover:scale-105 active:scale-95 transition-all cursor-pointer shrink-0 select-none touch-manipulation"
+              style={{ WebkitTapHighlightColor: 'transparent' }}
             >
               {state.step === 3 ? `Authorize $${total.toLocaleString()}` : 'Forward →'}
             </button>

@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { Search, Plus, Pencil, Trash2, ChevronUp, ChevronDown, X, FileDown, History, StickyNote } from 'lucide-react';
+import { PricingMatrix } from './PricingMatrix';
 
 export type PaymentStatus = 'paid' | 'missed' | 'overdue';
 
@@ -217,6 +218,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ isDarkMode = fal
           <p className="text-[10px] font-bold uppercase tracking-widest text-navy-500 dark:text-navy-400 mb-1">Overdue</p>
           <p className="text-2xl font-bold serif text-red-600 dark:text-red-400">{clients.filter((c) => c.paymentStatus === 'overdue').length}</p>
         </div>
+      </div>
+
+      <div className="mb-8">
+        <PricingMatrix />
       </div>
 
       <div className="flex flex-wrap gap-2 mb-6">

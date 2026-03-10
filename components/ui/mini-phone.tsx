@@ -41,7 +41,7 @@ export function MiniPhone({ className, isDarkMode = true }: MiniPhoneProps) {
   return (
     <div
       className={cn(
-        'w-full max-w-sm rounded-2xl p-4 sm:p-6 border backdrop-blur-2xl shadow-[0_25px_60px_-12px_rgba(0,0,0,0.35)]',
+        'w-full min-w-0 max-w-sm rounded-2xl p-4 sm:p-6 border backdrop-blur-2xl shadow-[0_25px_60px_-12px_rgba(0,0,0,0.35)]',
         isDarkMode ? 'bg-white/5 border-white/20' : 'bg-white/80 border-navy-200/50',
         className
       )}
@@ -68,8 +68,8 @@ export function MiniPhone({ className, isDarkMode = true }: MiniPhoneProps) {
             </div>
           </div>
 
-          <div className="flex gap-2 mb-4">
-            <div className="relative">
+          <div className="flex gap-2 mb-4 min-w-0 overflow-hidden">
+            <div className="relative shrink-0">
               <button
                 type="button"
                 onClick={() => setDropdownOpen(!dropdownOpen)}
@@ -124,7 +124,7 @@ export function MiniPhone({ className, isDarkMode = true }: MiniPhoneProps) {
               value={phone}
               onChange={(e) => setPhone(e.target.value.replace(/\D/g, '').slice(0, 15))}
               className={cn(
-                'flex-1 h-10 sm:h-12 px-3 sm:px-4 rounded-lg sm:rounded-xl border text-xs sm:text-sm font-medium placeholder:opacity-60 focus:outline-none focus:ring-2 focus:ring-white/30',
+                'flex-1 min-w-0 h-10 sm:h-12 px-3 sm:px-4 rounded-lg sm:rounded-xl border text-xs sm:text-sm font-medium placeholder:opacity-60 focus:outline-none focus:ring-2 focus:ring-white/30',
                 inputBg,
                 textClass
               )}
