@@ -9,7 +9,6 @@ import nivodaGif from './public/assets/nivoda.gif';
 import fcWhite from './public/assets/fcwhite.png';
 import fcBlack from './public/assets/fcblack.png';
 import { ValueCalculator } from './components/ValueCalculator';
-import { PricingSection } from './components/ui/pricing';
 import { EtherealShadow } from './components/ui/etheral-shadow';
 import { DottedSurface } from './components/ui/dotted-surface';
 import DisplayCards from './components/ui/display-cards';
@@ -27,7 +26,8 @@ import { FloatingCalendar } from './components/FloatingCalendar';
 import { FaqMonochrome } from './components/ui/faq-monochrome.tsx';
 import { ArticleCard } from './components/ui/blog-post-card';
 import { FloatingAiAssistant } from './components/ui/glowing-ai-chat-assistant';
-import { BLOG_POSTS, PACKAGES } from './constants';
+import { BLOG_POSTS } from './constants';
+import { AuditPage } from './components/AuditPage';
 
 const INTEGRATIONS_DATA = [
   {
@@ -133,7 +133,7 @@ const FAQ_ITEMS = [
   {
     question: "What happens if we feel the ROI isn’t there?",
     answer:
-      "The setup fee is once-off and covers the build. After that, you’re on a simple subscription. If performance isn’t where it should be, we iterate with you. If it still doesn’t fit, we'll discuss pausing or stepping down — no lock-in.",
+      "On annual billing, the one-time setup fee is waived. On monthly billing, a setup fee applies by tier. After that, you’re on a simple subscription. If performance isn’t where it should be, we iterate with you. If it still doesn’t fit, we'll discuss pausing or stepping down — no lock-in.",
     meta: "ROI",
   },
 ];
@@ -185,6 +185,9 @@ const App: React.FC = () => {
   };
 
   const toggleDarkMode = () => setIsDarkMode(!isDarkMode);
+  const openCalendarBooking = () => {
+    window.open('https://calendly.com/fourcee/15min', '_blank', 'noopener,noreferrer');
+  };
 
   if (!isReady) {
     return <SplashScreen onComplete={() => setIsReady(true)} />;
@@ -219,7 +222,7 @@ const App: React.FC = () => {
     };
 
     const scrollToRoi = () => scrollToSectionById('roi-calculator');
-    const scrollToPricing = () => scrollToSectionById('pricing');
+    const scrollToPricing = () => navigate(AppView.CHECKOUT);
 
     return (
     <div className="animate-in fade-in duration-1000 pb-32 md:pb-40">
@@ -716,33 +719,6 @@ const App: React.FC = () => {
 
 
 
-      {/* Pricing Section */}
-      <section id="pricing" className="snap-start snap-always min-h-screen flex flex-col justify-center">
-        <PricingSection 
-        plans={[...PACKAGES]
-          .slice()
-          .sort((a, b) => b.price - a.price)
-          .map(pkg => ({
-            id: pkg.id,
-            name: pkg.name,
-            price: pkg.monthly,
-            yearlyPrice: pkg.yearlyPrice,
-            setupFee: pkg.price,
-            period: "month",
-            features: pkg.features,
-            description: pkg.description,
-            buttonText: "Secure Your Model",
-            isPopular: pkg.id === 'premium'
-          }))}
-        hideAmounts
-        title="Investment Tiers"
-        description="Scaling with your brilliance"
-        onSelect={(id) => {
-          navigate(AppView.CHECKOUT, undefined, id);
-        }}
-      />
-      </section>
-
       {/* Solutions / Features */}
       <section className="snap-start snap-always flex flex-col justify-center pt-12 pb-8 md:pb-12 px-6 bg-transparent transition-colors relative">
         <div
@@ -847,14 +823,17 @@ const App: React.FC = () => {
           <h2 className="font-bold text-navy-900 dark:text-white mb-2">Commercial terms & payment</h2>
           <ul className="list-disc pl-5 space-y-2">
             <li>
-              <span className="font-semibold">Setup fee (once-off).</span> The setup fee you see on the pricing page is
-              charged a single time per showroom. It covers discovery, call-flow design, integrations (including
-              Nivoda, calendars and CRM), test environment, and iterative tuning.
+              <span className="font-semibold">Setup fee.</span> For standard monthly subscriptions, a one-time setup fee
+              applies by tier. If you pay annually for a published plan, that setup fee is typically waived. Custom
+              agreements may differ. When a setup fee applies, it is charged once per showroom and covers discovery,
+              call-flow design, integrations (including Nivoda, calendars and CRM), test environment, and iterative
+              tuning.
             </li>
             <li>
-              <span className="font-semibold">First month upfront — but only after sign-off.</span> We typically collect
-              the setup fee and first month&apos;s subscription upfront. Your first month of billing only begins once
-              testing is complete and you confirm in writing that you are happy for Fourcee to go live.
+              <span className="font-semibold">First payment — but only after sign-off.</span> We typically collect your
+              first month or annual subscription (and any applicable setup fee) before go-live. Billing for the
+              subscription period only begins once testing is complete and you confirm in writing that you are happy
+              for Fourcee to go live.
             </li>
             <li>
               <span className="font-semibold">Ongoing subscription.</span> After go-live, you pay a recurring
@@ -932,7 +911,7 @@ const App: React.FC = () => {
         />
       </div>
 
-      {currentView === AppView.LANDING && (
+      {(currentView === AppView.LANDING || currentView === AppView.LEAD_MAGNET) && (
         <div className="fixed top-8 sm:top-8 md:top-12 left-[68%] sm:left-[60%] md:left-[58%] -translate-x-1/2 z-[100] pointer-events-none">
           <img
             src={isDarkMode ? fcWhite : fcBlack}
@@ -945,6 +924,13 @@ const App: React.FC = () => {
       
       <main className="relative z-10">
         {currentView === AppView.LANDING && <LandingPage scrollContainerRef={scrollContainerRef} />}
+        {currentView === AppView.LEAD_MAGNET && (
+          <AuditPage
+            isDarkMode={isDarkMode}
+            onGetLive={() => navigate(AppView.CHECKOUT)}
+            onBookCall={openCalendarBooking}
+          />
+        )}
         {currentView === AppView.BLOG && <BlogPage />}
         {currentView === AppView.BLOG_POST && selectedPost && (
            <div className="pt-24 animate-in fade-in duration-700">
@@ -963,27 +949,56 @@ const App: React.FC = () => {
         {currentView === AppView.TERMS && <TermsPage />}
       </main>
 
+      <button
+        type="button"
+        onClick={() => navigate(AppView.ADMIN)}
+        className="fixed bottom-4 left-4 z-[120] h-3 w-3 rounded-full bg-navy-900/20 dark:bg-white/20 hover:bg-navy-900/50 dark:hover:bg-white/50 transition-colors"
+        aria-label="Hidden admin access"
+        title="Admin access"
+      />
+
       {/* Global footer: animated dotted surface (white in dark mode, black in light) */}
-      <footer className="relative w-full min-h-[360px] h-[360px] flex-shrink-0 overflow-hidden -mt-60 z-20">
-        <div
-          className="absolute inset-0 z-[5]"
-          style={{
-            background: isDarkMode
-              ? 'linear-gradient(to bottom, transparent 0%, rgba(5,27,45,0.3) 100%)'
-              : 'linear-gradient(to bottom, transparent 0%, rgba(255,255,255,0.4) 100%)',
-          }}
-        />
-        <DottedSurface isDarkMode={isDarkMode} className="z-10" />
-        <div className="absolute inset-0 z-[15] flex items-end justify-center pb-28 px-4">
-          <button
-            type="button"
-            onClick={() => navigate(AppView.TERMS)}
-            className="text-[10px] font-bold uppercase tracking-[0.25em] text-navy-500 dark:text-navy-200 bg-white/80 dark:bg-navy-950/80 border border-navy-200/60 dark:border-white/20 rounded-full px-5 py-2 backdrop-blur-md shadow-md hover:bg-white dark:hover:bg-navy-900 transition-colors"
-          >
-            Terms, safeguards &amp; disclaimer
-          </button>
-        </div>
-      </footer>
+      {currentView === AppView.LEAD_MAGNET ? (
+        <footer className="relative w-full min-h-[320px] h-[320px] flex-shrink-0 overflow-hidden z-20 border-t border-white/10 bg-black">
+          <div
+            className="absolute inset-0 z-[5]"
+            style={{
+              background: 'linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.5) 100%)',
+            }}
+          />
+          <DottedSurface isDarkMode className="absolute inset-0 z-10 h-full w-full opacity-95" />
+          <div className="absolute inset-0 z-[15] flex items-end justify-center pb-20 px-4">
+            <button
+              type="button"
+              onClick={() => navigate(AppView.TERMS)}
+              className="text-[10px] font-bold uppercase tracking-[0.25em] text-white bg-white/5 border border-white/20 rounded-full px-5 py-2 backdrop-blur-md hover:bg-white/10 transition-colors"
+            >
+              Terms, safeguards &amp; disclaimer
+            </button>
+          </div>
+        </footer>
+      ) : (
+        <footer className="relative w-full min-h-[360px] h-[360px] flex-shrink-0 overflow-hidden -mt-60 z-20">
+          <div
+            className="absolute inset-0 z-[5]"
+            style={{
+              background: isDarkMode
+                ? 'linear-gradient(to bottom, transparent 0%, rgba(5,27,45,0.3) 100%)'
+                : 'linear-gradient(to bottom, transparent 0%, rgba(255,255,255,0.4) 100%)',
+            }}
+          />
+          <DottedSurface isDarkMode={isDarkMode} className="z-10" />
+          <div className="absolute inset-0 z-[15] flex items-end justify-center pb-28 px-4">
+            <button
+              type="button"
+              onClick={() => navigate(AppView.TERMS)}
+              className="text-[10px] font-bold uppercase tracking-[0.25em] text-navy-500 dark:text-navy-200 bg-white/80 dark:bg-navy-950/80 border border-navy-200/60 dark:border-white/20 rounded-full px-5 py-2 backdrop-blur-md shadow-md hover:bg-white dark:hover:bg-navy-900 transition-colors"
+            >
+              Terms, safeguards &amp; disclaimer
+            </button>
+          </div>
+        </footer>
+      )}
       <FloatingAiAssistant />
     </div>
   );

@@ -9,8 +9,8 @@ export const ValueCalculator: React.FC = () => {
 
   const results = useMemo(() => {
     const months = 12;
-    const recoveryRate = 0.2; // 20% of missed calls that Fourcee meaningfully recovers
-    const automationShare = 0.3; // portion of front-desk workload offloaded to AI
+    const recoveryRate = 0.2;
+    const automationShare = 0.3;
 
     const extraBookingsPerMonth = missedCalls * recoveryRate;
     const extraBookingsYear = extraBookingsPerMonth * months;
@@ -19,7 +19,8 @@ export const ValueCalculator: React.FC = () => {
     const staffingSavings = staffSalary * months * automationShare;
     const totalBenefit = addedRevenue + staffingSavings;
     const monthlyBenefit = totalBenefit / months || 0;
-    const roiMonths = monthlyBenefit > 0 ? 3000 / monthlyBenefit : Infinity;
+    const firstMonthHurdle = 997;
+    const roiMonths = monthlyBenefit > 0 ? firstMonthHurdle / monthlyBenefit : Infinity;
 
     return {
       annual: totalBenefit,
@@ -42,61 +43,71 @@ export const ValueCalculator: React.FC = () => {
       ? '—'
       : results.roiMonths.toFixed(1);
 
+  const rangeClass =
+    'h-2 w-full cursor-pointer appearance-none rounded-full bg-zinc-800 accent-amber-500 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border [&::-webkit-slider-thumb]:border-amber-400/50 [&::-webkit-slider-thumb]:bg-gradient-to-br [&::-webkit-slider-thumb]:from-amber-200 [&::-webkit-slider-thumb]:to-amber-700 [&::-webkit-slider-thumb]:shadow-[0_0_12px_rgba(212,175,55,0.45)]';
+
   return (
-    <div className="glass-card rounded-[2.5rem] p-10 shadow-2xl border border-silver-100 dark:border-navy-800 w-full min-w-0 transition-colors">
-      <h3 className="text-2xl font-bold mb-2 text-navy-900 dark:text-white serif">Value Calculator</h3>
-      <p className="text-[10px] sm:text-xs font-bold uppercase tracking-[0.2em] text-navy-400 dark:text-navy-300 mb-6">
+    <div className="w-full min-w-0 rounded-[2rem] border border-white/10 bg-gradient-to-br from-zinc-950/80 via-black to-zinc-900 p-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] md:p-10">
+      <h3 className="serif text-2xl font-bold text-slate-100">Value Calculator</h3>
+      <p className="mb-6 mt-2 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 sm:text-xs">
         Calculate ROI now — see if Fourcee is even worth it for your current setup.
       </p>
-      
+
       <div className="space-y-8">
         <div>
-          <label className="flex justify-between text-[10px] font-bold mb-3 text-navy-500 dark:text-navy-300 uppercase tracking-[0.2em]">
+          <label className="mb-3 flex justify-between text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">
             <span>Avg. Piece Value</span>
-            <span className="text-navy-900 dark:text-white">${avgValue.toLocaleString()}</span>
+            <span className="text-slate-100">${avgValue.toLocaleString()}</span>
           </label>
-          <input 
-            type="range" min="1000" max="50000" step="500" 
-            value={avgValue} 
-            onChange={(e) => setAvgValue(parseInt(e.target.value))}
-            className="w-full"
+          <input
+            type="range"
+            min="1000"
+            max="50000"
+            step="500"
+            value={avgValue}
+            onChange={(e) => setAvgValue(parseInt(e.target.value, 10))}
+            className={rangeClass}
           />
         </div>
 
         <div>
-          <label className="flex justify-between text-[10px] font-bold mb-3 text-navy-500 dark:text-navy-300 uppercase tracking-[0.2em]">
+          <label className="mb-3 flex justify-between text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">
             <span>Monthly Missed Calls</span>
-            <span className="text-navy-900 dark:text-white">{missedCalls}</span>
+            <span className="text-slate-100">{missedCalls}</span>
           </label>
-          <input 
-            type="range" min="0" max="100" step="5" 
-            value={missedCalls} 
-            onChange={(e) => setMissedCalls(parseInt(e.target.value))}
-            className="w-full"
+          <input
+            type="range"
+            min="0"
+            max="100"
+            step="5"
+            value={missedCalls}
+            onChange={(e) => setMissedCalls(parseInt(e.target.value, 10))}
+            className={rangeClass}
           />
         </div>
 
         <div>
-          <label className="flex justify-between text-[10px] font-bold mb-3 text-navy-500 dark:text-navy-300 uppercase tracking-[0.2em]">
+          <label className="mb-3 flex justify-between text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">
             <span>Monthly Staff Salary Cost</span>
-            <span className="text-navy-900 dark:text-white">${staffSalary.toLocaleString()}</span>
+            <span className="text-slate-100">${staffSalary.toLocaleString()}</span>
           </label>
-          <input 
-            type="range" min="1000" max="10000" step="100" 
-            value={staffSalary} 
-            onChange={(e) => setStaffSalary(parseInt(e.target.value))}
-            className="w-full"
+          <input
+            type="range"
+            min="1000"
+            max="10000"
+            step="100"
+            value={staffSalary}
+            onChange={(e) => setStaffSalary(parseInt(e.target.value, 10))}
+            className={rangeClass}
           />
         </div>
 
-        <div className="pt-8 border-t border-navy-100 dark:border-navy-800 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6">
+        <div className="flex flex-col items-start justify-between gap-6 border-t border-white/10 pt-8 sm:flex-row sm:items-center">
           <div>
-            <p className="text-[10px] uppercase text-navy-400 dark:text-navy-500 font-bold tracking-[0.2em]">Est. Annual Value</p>
-            <p className="text-4xl font-bold text-navy-900 dark:text-white serif">
-              {formatCurrency(results.annual)}
-            </p>
+            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500">Est. Annual Value</p>
+            <p className="serif mt-1 text-4xl font-bold text-slate-100">{formatCurrency(results.annual)}</p>
           </div>
-          <div className="bg-navy-900 dark:bg-white text-white dark:text-navy-950 px-6 py-3 rounded-full text-[10px] uppercase font-bold tracking-widest shadow-xl">
+          <div className="rounded-full border border-amber-500/35 bg-gradient-to-r from-zinc-900 via-zinc-800 to-black px-6 py-3 text-[10px] font-bold uppercase tracking-widest text-amber-100 shadow-[0_0_24px_rgba(212,175,55,0.15)]">
             ROI in {roiMonthsLabel} Months
           </div>
         </div>
@@ -104,42 +115,44 @@ export const ValueCalculator: React.FC = () => {
         <button
           type="button"
           onClick={() => setShowInsights((prev) => !prev)}
-          className="mt-2 inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-navy-500 dark:text-navy-300 hover:text-navy-900 dark:hover:text-white transition-colors"
+          className="mt-2 inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 transition-colors hover:text-slate-200"
         >
-          <span className="inline-flex h-5 w-5 items-center justify-center rounded-full border border-navy-300/70 dark:border-navy-600/70 text-[9px] font-semibold">
+          <span className="inline-flex h-5 w-5 items-center justify-center rounded-full border border-white/20 bg-white/5 text-[9px] font-semibold text-slate-300">
             i
           </span>
           <span>Show the math behind this ROI</span>
         </button>
 
         {showInsights && (
-          <div className="mt-4 rounded-2xl bg-navy-950/90 dark:bg-black/70 text-navy-50 px-5 py-4 text-xs leading-relaxed space-y-2 border border-white/10">
-            <p className="font-semibold uppercase tracking-[0.18em] text-[9px] text-emerald-300">
+          <div className="mt-4 space-y-2 rounded-2xl border border-white/10 bg-black/60 px-5 py-4 text-xs leading-relaxed text-slate-300">
+            <p className="text-[9px] font-semibold uppercase tracking-[0.18em] text-amber-200/90">
               How we arrive at your annual value
             </p>
             <p>
               • Missed-call recovery: {missedCalls} missed calls/month × {(results.recoveryRate * 100).toFixed(0)}% of
               those saved by Fourcee × 12 months × {formatCurrency(avgValue)} average piece value ≈{' '}
-              <span className="font-semibold">{formatCurrency(results.addedRevenue)}</span> in reclaimed sales
-              opportunity.
+              <span className="font-semibold text-slate-100">{formatCurrency(results.addedRevenue)}</span> in reclaimed
+              sales opportunity.
             </p>
             <p>
-              • Front-desk efficiency: assuming Fourcee quietly handles {(results.automationShare * 100).toFixed(0)}% of
-              your phone load, that&apos;s about{' '}
-              <span className="font-semibold">{formatCurrency(results.staffingSavings)}</span> per year in staff time
-              you can redirect to white-glove client work instead of chasing the phone.
+              • Front-desk efficiency: assuming Fourcee quietly handles {(results.automationShare * 100).toFixed(0)}%
+              of your phone load, that&apos;s about{' '}
+              <span className="font-semibold text-slate-100">{formatCurrency(results.staffingSavings)}</span> per year in
+              staff time you can redirect to white-glove client work instead of chasing the phone.
             </p>
             <p>
               • Combined lift: {formatCurrency(results.addedRevenue)} + {formatCurrency(results.staffingSavings)} ≈{' '}
-              <span className="font-semibold">{formatCurrency(results.annual)}</span> extra economic value flowing
-              through your showroom each year at these inputs.
+              <span className="font-semibold text-slate-100">{formatCurrency(results.annual)}</span> extra economic
+              value flowing through your showroom each year at these inputs.
             </p>
             {roiMonthsLabel !== '—' && (
               <p>
-                • Payback window: a {formatCurrency(3000)} setup fee ÷ about{' '}
-                <span className="font-semibold">{formatCurrency(results.monthlyBenefit)}</span> of monthly uplift means
-                you typically earn the setup back in roughly{' '}
-                <span className="font-semibold">{roiMonthsLabel} months</span> — then it&apos;s pure upside.
+                • Payback window (illustrative): first month subscription (e.g. {formatCurrency(997)} on Pro, setup
+                waived on annual) vs about{' '}
+                <span className="font-semibold text-slate-100">{formatCurrency(results.monthlyBenefit)}</span> of
+                monthly uplift → roughly{' '}
+                <span className="font-semibold text-slate-100">{roiMonthsLabel} months</span> to break even on that
+                month, then upside.
               </p>
             )}
           </div>

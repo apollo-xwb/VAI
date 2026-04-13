@@ -10,7 +10,7 @@ export interface KnowledgeEntry {
 export const CHAT_KNOWLEDGE_BASE: KnowledgeEntry[] = [
   {
     keywords: ['price', 'pricing', 'cost', 'how much', 'fee', 'monthly', 'setup', 'investment', 'tier', 'package', 'plan'],
-    answer: "Fourcee offers three tiers: **Starter** ($499/mo, $3,000 setup — 500 min/month, basic voice, WhatsApp + booking), **Pro** ($799/mo, $5,000 setup — 2,000 min, voice cloning, upsell scripts, unlimited after cap), and **Enterprise** ($1,299/mo, $10k+ setup — unlimited calls, multi-store, CRM, white-label). Add-ons like Nivoda ($249/mo), Unlimited Calls ($200/mo), and Custom Voice/Analytics ($300/mo) are available. Annual plans get 20% off. You can configure your solution and see exact pricing on the site.",
+    answer: "Fourcee has four plans — **Starter** ($497/mo or $4,764/year), **Pro** ($997/mo or $9,564/year), **Enterprise** ($1,997/mo or $19,164/year), and **Diamond** ($3,499/mo or $33,588/year). **The one-time setup fee is waived only when you pay annually.** On monthly billing, setup applies (tiered by plan — see checkout). Starter includes 500 minutes, basic voice, WhatsApp booking, and a website chatbot. Pro adds 2,000 minutes, voice cloning, upsell scripts, all-inboxes chatbot, and image generation. Enterprise adds unlimited minutes, up to 5 stores, CRM and sales reports, Nivoda, and a dedicated manager. Diamond adds unlimited stores, custom APIs, quarterly strategy calls, 24/7 priority support, and co-branded marketing assets. Choose monthly vs annual in checkout to see your exact total.",
   },
   {
     keywords: ['nivoda', 'inventory', 'diamond', 'stock', 'live data', 'availability'],
@@ -34,7 +34,7 @@ export const CHAT_KNOWLEDGE_BASE: KnowledgeEntry[] = [
   },
   {
     keywords: ['roi', 'return', 'investment', 'worth it', 'pay for itself', 'value'],
-    answer: "Many showrooms see **ROI within 90 days**. The setup investment (e.g. $3k–$10k depending on tier) is often offset by capturing even one extra high-value lead per month that would have been missed after hours. We offer an ROI calculator on the site; you can also book a demo to discuss your call volume and typical deal sizes.",
+    answer: "Many showrooms see **ROI within 90 days**. With setup fees waived on current plans, payback is driven by recovered calls and staff time. We offer an ROI calculator on the site; you can also book a demo to discuss your call volume and typical deal sizes.",
   },
   {
     keywords: ['demo', 'book', 'schedule', 'meeting', 'talk', 'speak to someone'],

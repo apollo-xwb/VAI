@@ -2,64 +2,126 @@
 import React from 'react';
 import { BlogPost, Package } from './types';
 
-// Configurator-only pricing (every quote is custom; not shown on public pricing)
+/** Live plan catalog — `price` = one-time setup (monthly billing). Setup waived only on annual. */
 export const PACKAGES: Package[] = [
   {
     id: 'starter',
     name: 'Starter',
     price: 3000,
-    monthly: 499,
-    yearlyPrice: 4790, // 20% off annual
-    description: '500 min/month (~100 calls). Basic voice. WhatsApp pics + booking.',
-    features: ['500 min/month (~100 calls)', 'Basic voice', 'WhatsApp pics + booking', '24/7 Coverage']
+    monthly: 497,
+    yearlyPrice: 4764,
+    description: 'or $4,764/year (setup fee waived)',
+    features: [
+      '500 minutes/month',
+      'Basic voice concierge',
+      'WhatsApp booking',
+      'Website chatbot widget',
+    ],
   },
   {
-    id: 'premium',
+    id: 'pro',
     name: 'Pro',
     price: 5000,
-    monthly: 799,
-    yearlyPrice: 7670, // 20% off: 799*12*0.8
-    description: '2,000 min/month (~400 calls). Voice cloning + custom accents. Unlimited after cap.',
-    features: ['2,000 min/month (~400 calls)', 'Voice cloning + custom accents', 'Upsell scripts + analytics', 'Unlimited after cap']
+    monthly: 997,
+    yearlyPrice: 9564,
+    description: 'or $9,564/year (setup fee waived)',
+    features: [
+      '2,000 minutes/month',
+      'Voice cloning + custom accent',
+      'Upsell scripts + analytics',
+      'WhatsApp + All-inboxes chatbot',
+      'Image generation',
+    ],
   },
   {
     id: 'enterprise',
     name: 'Enterprise',
     price: 10000,
-    monthly: 1299,
-    yearlyPrice: 12470, // 20% off
-    description: 'Unlimited min/calls. Multi-store (up to 5). CRM + sales reports. White-label.',
-    features: ['Unlimited min/calls', 'Multi-store (up to 5)', 'CRM + sales reports', 'White-label', 'Custom']
-  }
+    monthly: 1997,
+    yearlyPrice: 19164,
+    description: 'or $19,164/year (setup fee waived)',
+    features: [
+      'Unlimited calls & minutes',
+      'Multi-store (up to 5)',
+      'Full CRM + sales reports',
+      'Nivoda integration',
+      'Dedicated account manager',
+    ],
+  },
+  {
+    id: 'diamond',
+    name: 'Diamond',
+    price: 15000,
+    monthly: 3499,
+    yearlyPrice: 33588,
+    description: 'or $33,588/year (setup fee waived)',
+    features: [
+      'Everything in Enterprise',
+      'Unlimited stores',
+      'Custom API integrations',
+      'Quarterly strategy calls',
+      'Priority 24/7 support',
+      'Co-branded marketing assets',
+    ],
+  },
 ];
 
-export const UPSELLS = [
-  { id: 'image_gen', name: 'Image Generation', price: 0, monthlyPrice: 99, description: 'AI-generated product and marketing imagery.' },
-  { id: 'website_chatbot', name: 'Website Chatbot Widget', price: 0, monthlyPrice: 149, description: 'Embeddable chat widget for your site.' },
-  { id: 'whatsapp_chatbot', name: 'WhatsApp Chatbot', price: 0, monthlyPrice: 199, description: 'Dedicated WhatsApp AI assistant.' },
-  { id: 'all_inboxes_chatbot', name: 'All-Inboxes Chatbot', price: 0, monthlyPrice: 299, description: 'Unified inbox across WhatsApp, web, and more.' },
-  { id: 'nivoda_integration', name: 'Nivoda Integration', price: 0, monthlyPrice: 249, description: 'Live Nivoda inventory and diamond sourcing.' },
-  { id: 'unlimited_calls', name: 'Unlimited Calls', price: 0, monthlyPrice: 200, description: 'Add-on: unlimited minutes/calls on top of plan.' },
-  { id: 'custom_voice_analytics', name: 'Custom Voice / Analytics', price: 0, monthlyPrice: 300, description: 'Custom voice and advanced analytics.' },
+/** Optional add-ons beyond base plans (most capabilities are included in tiers above) */
+export const UPSELLS: {
+  id: string;
+  name: string;
+  price: number;
+  monthlyPrice?: number;
+  description: string;
+}[] = [
+  {
+    id: 'white_glove_onboarding',
+    name: 'White-glove onboarding sprint',
+    price: 1500,
+    monthlyPrice: 0,
+    description: 'Dedicated launch week with same-day script iterations and staff training.',
+  },
+  {
+    id: 'extra_location_pack',
+    name: 'Extra showroom location',
+    price: 0,
+    monthlyPrice: 399,
+    description: 'Additional branded voice profile and routing for one more location.',
+  },
 ];
 
-// Reference pricing matrix (for your call quotes) — only shown in configurator
 export const PRICING_MATRIX = {
   tiers: [
-    { name: 'Starter', monthly: 499, setup: 3000, details: '500 min/month (~100 calls). Basic voice. WhatsApp pics + booking.' },
-    { name: 'Pro', monthly: 799, setup: 5000, details: '2,000 min/month (~400 calls). Voice cloning + custom accents. Upsell scripts + analytics. Unlimited after cap.' },
-    { name: 'Enterprise', monthly: 1299, setup: '10,000+', details: 'Unlimited min/calls. Multi-store (up to 5). CRM + sales reports. White-label.' },
+    {
+      name: 'Starter',
+      monthly: 497,
+      setup: 3000,
+      details: '500 min/mo. Setup $3,000 on monthly; waived on annual.',
+    },
+    {
+      name: 'Pro',
+      monthly: 997,
+      setup: 5000,
+      details: '2,000 min/mo. Setup $5,000 on monthly; waived on annual.',
+    },
+    {
+      name: 'Enterprise',
+      monthly: 1997,
+      setup: 10000,
+      details: 'Unlimited minutes, up to 5 stores. Setup $10,000 on monthly; waived on annual.',
+    },
+    {
+      name: 'Diamond',
+      monthly: 3499,
+      setup: 15000,
+      details: 'Full Diamond tier. Setup $15,000 on monthly; waived on annual.',
+    },
   ],
   addOns: [
-    { name: 'Image Generation', price: '$99/mo' },
-    { name: 'Website Chatbot Widget', price: '$149/mo' },
-    { name: 'WhatsApp Chatbot', price: '$199/mo' },
-    { name: 'All-Inboxes Chatbot', price: '$299/mo' },
-    { name: 'Nivoda Integration', price: '$249/mo' },
-    { name: 'Unlimited Calls', price: '+$200/mo' },
-    { name: 'Custom Voice/Analytics', price: '+$300/mo' },
+    { name: 'White-glove onboarding sprint', price: '$1,500 one-time' },
+    { name: 'Extra showroom location', price: '+$399/mo' },
   ],
-  annualNote: 'Annual: 20% off (e.g. Pro = $7,670/year upfront).',
+  annualNote: 'Annual billing: pay yearly upfront; one-time setup fee waived (monthly plans include setup).',
 };
 
 export const BLOG_POSTS: BlogPost[] = [
@@ -97,7 +159,7 @@ export const BLOG_POSTS: BlogPost[] = [
       2. **Staff Burnout:** Constant interruptions hinder master jewelers at the bench.
       3. **Inconsistent Quotes:** Ensure every rough estimate follows your specific pricing logic.
       4. **No-Shows:** Automated reminders keep schedules full and revenue flowing.
-      5. **Data Silos:** Automatically push every caller’s details into your CRM.
+      5. **Data Silos:** Automatically push every caller's details into your CRM.
     `
   },
   {
@@ -110,11 +172,11 @@ export const BLOG_POSTS: BlogPost[] = [
     youtubeUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
     content: `
       ## The ROI Equation
-      When you invest $3,000 in an AI receptionist, you aren't just buying software. You are buying time and opportunity.
+      When you invest in an AI receptionist, you aren't just buying software. You are buying time and opportunity.
 
       ### The Math
       - **Cost of Staffing:** A full-time receptionist costs $40k+/year plus benefits.
-      - **Opportunity Cost:** If AI captures just *one* extra custom ring lead per month, it pays for itself in less than 90 days.
+      - **Opportunity Cost:** If AI captures just *one* extra custom ring lead per month, it pays for itself quickly.
     `
   }
   // ... Imagine 7 more posts here to satisfy the SEO requirement

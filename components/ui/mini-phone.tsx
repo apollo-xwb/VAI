@@ -35,7 +35,7 @@ export function MiniPhone({ className, isDarkMode = true }: MiniPhoneProps) {
   };
 
   const textClass = isDarkMode ? 'text-white' : 'text-navy-900';
-  const mutedClass = isDarkMode ? 'text-navy-300' : 'text-navy-600';
+  const mutedClass = isDarkMode ? 'text-slate-400' : 'text-navy-600';
   const inputBg = isDarkMode ? 'bg-white/10 border-white/20' : 'bg-navy-100/80 border-navy-200';
 
   return (
@@ -46,7 +46,7 @@ export function MiniPhone({ className, isDarkMode = true }: MiniPhoneProps) {
         className
       )}
       role="group"
-      aria-label="Test Fourcee – enter number and call"
+      aria-label="Fourcee demo call – enter number and call"
     >
       {status === 'success' ? (
         <div className="text-center py-4 animate-in fade-in duration-300">
@@ -63,7 +63,7 @@ export function MiniPhone({ className, isDarkMode = true }: MiniPhoneProps) {
               <Phone className={cn('w-5 h-5', textClass)} />
             </div>
             <div>
-              <p className={cn('text-sm font-bold', textClass)}>Test Fourcee</p>
+              <p className={cn('text-sm font-bold', textClass)}>Fourcee demo</p>
               <p className={cn('text-[10px] uppercase tracking-wider', mutedClass)}>We&apos;ll call you</p>
             </div>
           </div>

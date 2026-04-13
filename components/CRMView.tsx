@@ -1,258 +1,227 @@
-
-import React, { useState } from 'react';
-import { CallRecord } from '../types';
-import fcShad from '../public/assets/fcshad.png';
-
-const MOCK_CALLS: CallRecord[] = [
-  { id: '1', caller: '+1 (555) 0123', duration: '4:12', status: 'Booked', sentiment: 'Positive', timestamp: '10:45 AM', transcript: "Hi, I'm looking for a 2ct sapphire engagement ring. Your AI suggested a consultation on Friday at 4 PM, which works perfectly." },
-  { id: '2', caller: 'Sarah Jenkins', duration: '2:45', status: 'Estimate', sentiment: 'Neutral', timestamp: '9:30 AM', transcript: "Can I get a rough estimate for resizing an 18k gold band? AI quoted $150-200. I'll bring it in tomorrow." },
-  { id: '3', caller: '+1 (415) 8881', duration: '1:20', status: 'Missed', sentiment: 'Urgent', timestamp: '8:15 AM', transcript: "Calling about the custom pendant. Need to change the engraving text before production starts." },
-  { id: '4', caller: 'Robert Miller', duration: '6:30', status: 'Inquiry', sentiment: 'Positive', timestamp: 'Yesterday', transcript: "Discussing the clarity difference between VVS1 and VS2. AI provided a great comparison chart." },
-];
+import React, { useEffect, useMemo, useState } from 'react';
 
 interface CRMViewProps {
   isDarkMode?: boolean;
 }
 
-export const CRMView: React.FC<CRMViewProps> = ({ isDarkMode = false }) => {
-  const [activeTab, setActiveTab] = useState<'overview' | 'calls' | 'billing'>('overview');
-  const [selectedCall, setSelectedCall] = useState<CallRecord | null>(null);
+interface LeadLog {
+  id: string;
+  time: string;
+  customerName: string;
+  intent: string;
+  status: string;
+}
 
-  const renderContent = () => {
-    switch (activeTab) {
-      case 'overview':
-        return (
-          <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-              <StatCard title="Total Calls" value="1,284" sub="+12% from last week" />
-              <StatCard title="Bookings" value="42" sub="3.2% conversion" color="text-green-600" />
-              <StatCard title="Value Captured" value="$64,500" sub="Est. through AI" color="text-navy-900 dark:text-white" />
-              <StatCard title="AI Uptime" value="100%" sub="Active since Oct 1" />
-            </div>
+type PortalTab = 'simulation' | 'overview';
 
-            <div className="grid md:grid-cols-3 gap-8">
-              <div className="md:col-span-2 glass-card rounded-[2.5rem] p-8 border border-silver-100 dark:border-navy-800">
-                <div className="flex justify-between items-center mb-8">
-                  <h3 className="text-xl font-bold serif text-slate-900 dark:text-white">Live AI Status</h3>
-                  <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-                    <span className="text-[10px] uppercase font-bold text-navy-400">Agent Online</span>
-                  </div>
-                </div>
-                
-                <div className="space-y-6">
-                  <div className="p-6 rounded-2xl bg-pearl-50 dark:bg-navy-900/30 border border-navy-50 dark:border-navy-800">
-                    <p className="text-[10px] font-bold uppercase text-navy-400 mb-2">Current Focus</p>
-                    <p className="text-sm font-medium text-slate-900 dark:text-white">Handling inquiries for "Holiday Custom Pieces" and "Engagement Consultations".</p>
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="p-6 rounded-2xl border border-silver-50 dark:border-navy-800">
-                      <p className="text-[10px] font-bold uppercase text-navy-400 mb-1">Peak Hours</p>
-                      <p className="text-lg font-bold text-slate-900 dark:text-white">19:00 - 22:30</p>
-                    </div>
-                    <div className="p-6 rounded-2xl border border-silver-50 dark:border-navy-800">
-                      <p className="text-[10px] font-bold uppercase text-navy-400 mb-1">Sentiment Avg</p>
-                      <p className="text-lg font-bold text-green-600">8.4 / 10</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
+const formatMoney = (value: number) =>
+  value.toLocaleString('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
 
-              <div className="glass-card rounded-[2.5rem] p-8 border border-silver-100 dark:border-navy-800">
-                <h3 className="text-xl font-bold serif mb-6 text-slate-900 dark:text-white">Account Health</h3>
-                <div className="space-y-6">
-                  <div>
-                    <div className="flex justify-between text-xs font-bold uppercase mb-2">
-                      <span className="text-navy-400">Monthly Usage</span>
-                      <span className="text-navy-900 dark:text-white">72%</span>
-                    </div>
-                    <div className="h-2 w-full bg-navy-50 dark:bg-navy-900 rounded-full overflow-hidden">
-                      <div className="h-full bg-navy-900 dark:bg-white rounded-full" style={{ width: '72%' }} />
-                    </div>
-                  </div>
-                  <div className="pt-4 border-t border-navy-50 dark:border-navy-800">
-                    <p className="text-[10px] uppercase font-bold text-navy-400 mb-4">Plan Actions</p>
-                    <button onClick={() => setActiveTab('billing')} className="w-full py-3 text-xs font-bold uppercase tracking-widest text-navy-900 dark:text-white border border-navy-100 dark:border-navy-800 rounded-xl hover:bg-navy-50 dark:hover:bg-navy-800 transition-all">
-                      Manage Subscription
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        );
-      case 'calls':
-        return (
-          <div className="grid md:grid-cols-3 gap-8 animate-in fade-in slide-in-from-right-4 duration-500">
-            <div className="md:col-span-2 space-y-4">
-              <div className="glass-card rounded-[2.5rem] overflow-hidden border border-silver-100 dark:border-navy-800">
-                <table className="w-full text-left">
-                  <thead className="bg-navy-50/30 dark:bg-navy-900/50 border-b border-navy-100 dark:border-navy-800">
-                    <tr className="text-[10px] uppercase font-bold text-navy-400 dark:text-navy-300 tracking-widest">
-                      <th className="px-8 py-6">Caller</th>
-                      <th className="px-8 py-6">Status</th>
-                      <th className="px-8 py-6">Sentiment</th>
-                      <th className="px-8 py-6">Time</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-navy-50 dark:divide-navy-800">
-                    {MOCK_CALLS.map(call => (
-                      <tr 
-                        key={call.id} 
-                        className={`hover:bg-navy-50/50 dark:hover:bg-navy-800/30 cursor-pointer transition-colors ${selectedCall?.id === call.id ? 'bg-navy-50 dark:bg-navy-800/50' : ''}`}
-                        onClick={() => setSelectedCall(call)}
-                      >
-                        <td className="px-8 py-6 text-sm font-bold text-navy-900 dark:text-white">{call.caller}</td>
-                        <td className="px-8 py-6">
-                          <span className={`text-[10px] px-3 py-1.5 rounded-full font-bold uppercase tracking-tighter ${
-                            call.status === 'Booked' ? 'bg-green-100 text-green-700' : 
-                            call.status === 'Missed' ? 'bg-red-100 text-red-700' : 'bg-navy-100 dark:bg-navy-800 text-navy-700 dark:text-navy-200'
-                          }`}>
-                            {call.status}
-                          </span>
-                        </td>
-                        <td className="px-8 py-6">
-                          <div className={`flex items-center gap-2 text-xs font-bold ${
-                            call.sentiment === 'Positive' ? 'text-green-600' : 
-                            call.sentiment === 'Urgent' ? 'text-orange-600' : 'text-navy-400 dark:text-navy-300'
-                          }`}>
-                            <div className={`w-2 h-2 rounded-full ${
-                               call.sentiment === 'Positive' ? 'bg-green-600' : 
-                               call.sentiment === 'Urgent' ? 'bg-orange-600' : 'bg-navy-400'
-                            }`} />
-                            {call.sentiment}
-                          </div>
-                        </td>
-                        <td className="px-8 py-6 text-[10px] font-bold text-navy-300 uppercase">{call.timestamp}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
+export const CRMView: React.FC<CRMViewProps> = () => {
+  const [activeTab, setActiveTab] = useState<PortalTab>('simulation');
+  const [revenueSaved, setRevenueSaved] = useState(125500);
+  const [appointmentsBooked, setAppointmentsBooked] = useState(48);
+  const [logEntries, setLogEntries] = useState<LeadLog[]>([]);
+  const [transcriptIndex, setTranscriptIndex] = useState(0);
 
-            <div className="space-y-6">
-              {selectedCall ? (
-                <div className="glass-card rounded-[2.5rem] p-8 space-y-8 animate-in fade-in slide-in-from-bottom-4 border border-silver-100 dark:border-navy-800">
-                  <div>
-                    <p className="text-[10px] font-bold uppercase text-navy-400 mb-3 tracking-[0.2em]">Full Transcription</p>
-                    <div className="text-sm italic text-navy-700 dark:text-navy-200 leading-relaxed bg-pearl-50 dark:bg-navy-900/30 p-6 rounded-2xl border border-navy-50 dark:border-navy-800">
-                      "{selectedCall.transcript}"
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-1 gap-3">
-                    <button className="w-full py-4 bg-navy-900 dark:bg-white text-white dark:text-navy-950 rounded-2xl text-[10px] font-bold uppercase tracking-widest hover:shadow-2xl transition-all">
-                      Listen to Recording
-                    </button>
-                    <button className="w-full py-4 border border-navy-100 dark:border-navy-800 text-navy-900 dark:text-white rounded-2xl text-[10px] font-bold uppercase tracking-widest hover:bg-navy-50 dark:hover:bg-navy-800 transition-all">
-                      Flag for Follow-up
-                    </button>
-                  </div>
-                </div>
-              ) : (
-                <div className="glass-card rounded-[2.5rem] p-16 text-center text-navy-300 border border-silver-100 dark:border-navy-800">
-                  <p className="serif text-lg mb-2">No Selection</p>
-                  <p className="text-[10px] font-bold uppercase tracking-widest">Select a log for AI intelligence</p>
-                </div>
-              )}
-            </div>
-          </div>
-        );
-      case 'billing':
-        return (
-          <div className="max-w-4xl mx-auto space-y-8 animate-in fade-in zoom-in-95 duration-500">
-            <div className="glass-card rounded-[3rem] p-12 border border-silver-100 dark:border-navy-800 shadow-2xl overflow-hidden relative">
-              <div className="absolute top-0 right-0 w-64 h-64 bg-navy-500/5 blur-[100px] pointer-events-none" />
-              <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8 mb-12">
-                <div>
-                  <h3 className="text-3xl font-bold serif text-slate-900 dark:text-white mb-2">Premium Suite</h3>
-                  <p className="text-sm font-medium text-navy-400 uppercase tracking-widest">Active • Next bill: Nov 24, 2025</p>
-                </div>
-                <div className="text-right">
-                  <p className="text-4xl font-bold dark:text-white serif">$199<span className="text-sm font-sans text-navy-400">/mo</span></p>
-                  <button className="text-[10px] font-bold uppercase tracking-widest text-navy-900 dark:text-white mt-2 border-b border-navy-900 dark:border-white">Change Plan</button>
-                </div>
-              </div>
+  // Customize these names to simulate your exact showroom personas.
+  const simulatedNames = useMemo(
+    () => [
+      'Amelia Stone',
+      'Noah Patel',
+      'Harper Wellington',
+      'Mason Brooks',
+      'Sophia Vale',
+      'Ethan Rhodes',
+      'Olivia Sterling',
+      'Liam Carter',
+    ],
+    []
+  );
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-12 pt-12 border-t border-navy-50 dark:border-navy-800">
-                <div>
-                  <h4 className="text-[10px] font-bold uppercase text-navy-400 mb-6 tracking-widest">Billing History</h4>
-                  <div className="space-y-4">
-                    {[
-                      { date: 'Oct 24, 2025', amount: '$199.00', status: 'Paid' },
-                      { date: 'Sep 24, 2025', amount: '$199.00', status: 'Paid' },
-                      { date: 'Aug 24, 2025', amount: '$4,199.00', status: 'Paid (Setup + Plan)' }
-                    ].map((bill, idx) => (
-                      <div key={idx} className="flex justify-between items-center text-sm py-2 border-b border-navy-50 dark:border-navy-900/50">
-                        <span className="font-medium dark:text-white">{bill.date}</span>
-                        <div className="text-right">
-                          <p className="font-bold dark:text-white">{bill.amount}</p>
-                          <p className="text-[10px] text-navy-400 font-bold uppercase tracking-tight">{bill.status}</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                <div>
-                  <h4 className="text-[10px] font-bold uppercase text-navy-400 mb-6 tracking-widest">Included Features</h4>
-                  <ul className="space-y-3">
-                    {['Estimates & Quotes', 'CRM Real-time Sync', 'Luxury AI Voice', 'Priority Support'].map(f => (
-                      <li key={f} className="flex items-center gap-3 text-sm font-medium dark:text-navy-100">
-                        <span className="text-green-600">✓</span> {f}
-                      </li>
-                    ))}
-                  </ul>
-                  <button className="mt-10 w-full py-4 bg-navy-950 dark:bg-white text-white dark:text-navy-950 rounded-2xl text-[10px] font-bold uppercase tracking-widest hover:scale-105 transition-all shadow-xl">
-                    Add Multi-Location Access (+$100/mo)
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        );
-    }
-  };
+  // Customize these intent labels to match your future campaign angles.
+  const simulatedIntents = useMemo(
+    () => [
+      'Oval Diamond Query',
+      'Halo Ring Consultation',
+      'Emerald Cut Upgrade',
+      'Lab-Grown Bridal Request',
+      'Custom Setting Appointment',
+      'Eye-Clean Diamond Clarification',
+      '2.5ct Comparison Request',
+    ],
+    []
+  );
+
+  const transcriptScript = useMemo(
+    () =>
+      [
+        'Agent: Thank you for calling Fourcee Vault. How may I assist you today?',
+        'Customer: I am looking for eye-clean diamonds and want to compare oval options.',
+        'Agent: Perfect. I can see availability now. Would a private showroom consultation suit you?',
+        'Customer: Yes, can I do today at 2 PM?',
+        'Agent: Confirmed. You are booked for 2 PM. A confirmation SMS is on the way.',
+      ].join(' '),
+    []
+  );
+
+  useEffect(() => {
+    const pushLead = () => {
+      const now = new Date();
+      const customerName = simulatedNames[Math.floor(Math.random() * simulatedNames.length)];
+      const intent = simulatedIntents[Math.floor(Math.random() * simulatedIntents.length)];
+
+      setLogEntries((prev) => [
+        {
+          id: `${now.getTime()}-${Math.random()}`,
+          time: now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+          customerName,
+          intent,
+          status: '✅ Qualified & Booked',
+        },
+        ...prev,
+      ].slice(0, 12));
+    };
+
+    pushLead();
+    const startDelayMs = 10000 + Math.floor(Math.random() * 5001);
+    let nextTimeout: ReturnType<typeof setTimeout>;
+    let timeoutCancelled = false;
+
+    const schedule = (delayMs: number) => {
+      nextTimeout = setTimeout(() => {
+        if (timeoutCancelled) return;
+        pushLead();
+        schedule(10000 + Math.floor(Math.random() * 5001));
+      }, delayMs);
+    };
+
+    schedule(startDelayMs);
+    return () => {
+      timeoutCancelled = true;
+      clearTimeout(nextTimeout);
+    };
+  }, [simulatedIntents, simulatedNames]);
+
+  useEffect(() => {
+    const metricInterval = setInterval(() => {
+      setRevenueSaved((prev) => prev + Math.floor(Math.random() * 1900) + 300);
+      setAppointmentsBooked((prev) => prev + (Math.random() > 0.45 ? 1 : 0));
+    }, 5000);
+    return () => clearInterval(metricInterval);
+  }, []);
+
+  useEffect(() => {
+    const typingInterval = setInterval(() => {
+      setTranscriptIndex((prev) => {
+        if (prev >= transcriptScript.length) return prev;
+        return prev + 1;
+      });
+    }, 34);
+    return () => clearInterval(typingInterval);
+  }, [transcriptScript]);
 
   return (
-    <div className="pt-12 pb-8 md:pb-12 px-6 bg-transparent transition-colors">
-      <div className="max-w-6xl mx-auto space-y-12">
-        <header className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
-          <div className="animate-in slide-in-from-left-4 duration-700">
-          <img
-            src={fcShad}
-            alt="Fourcee mark"
-            className={`h-8 md:h-10 mb-4 object-contain ${isDarkMode ? 'invert' : ''}`}
-          />
-            <h1 className="text-5xl font-bold serif text-navy-900 dark:text-white tracking-tighter">Showroom Portal</h1>
-            <p className="text-navy-400 dark:text-navy-500 font-bold uppercase tracking-[0.2em] text-[10px] mt-2">The Gold Standard in Jeweller AI</p>
-          </div>
-          <div className="flex bg-pearl-50 dark:bg-navy-900 p-1.5 rounded-2xl border border-navy-100 dark:border-navy-800 animate-in slide-in-from-right-4 duration-700">
-            {(['overview', 'calls', 'billing'] as const).map(tab => (
-              <button
-                key={tab}
-                onClick={() => setActiveTab(tab)}
-                className={`px-8 py-3 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all ${
-                  activeTab === tab 
-                    ? 'bg-navy-900 dark:bg-white text-white dark:text-navy-950 shadow-xl' 
-                    : 'text-navy-400 hover:text-navy-900 dark:hover:text-white'
-                }`}
-              >
-                {tab}
-              </button>
-            ))}
-          </div>
-        </header>
-
-        {renderContent()}
+    <div className="min-h-screen px-4 py-8 md:px-8 md:py-10 text-[#E7E7E7]">
+      <div className="mx-auto flex w-full max-w-7xl items-center justify-between">
+        <h1 className="text-xs uppercase tracking-[0.35em] text-[#CCFF00]/80">Showroom Portal</h1>
+        <div className="flex rounded-full border border-white/10 bg-black/50 p-1 backdrop-blur-xl">
+          {(['simulation', 'overview'] as const).map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              className={`rounded-full px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.25em] transition ${
+                activeTab === tab ? 'bg-[#CCFF00] text-black' : 'text-white/70 hover:text-white'
+              }`}
+            >
+              {tab}
+            </button>
+          ))}
+        </div>
       </div>
+
+      {activeTab === 'overview' ? (
+        <div className="mx-auto mt-8 grid w-full max-w-7xl gap-4 md:grid-cols-3">
+          <OverviewCard title="Revenue Saved" value={formatMoney(revenueSaved)} />
+          <OverviewCard title="Appointments Booked (AI)" value={appointmentsBooked.toString()} />
+          <OverviewCard title="Average Handling Time" value="1.2 Mins" />
+        </div>
+      ) : (
+        <div className="mx-auto mt-8 flex w-full max-w-7xl flex-col gap-6">
+          <header className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-r from-black via-[#111111] to-[#1C1C1C] p-6 md:p-8 shadow-[0_20px_100px_rgba(0,0,0,0.65)]">
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_85%_20%,rgba(204,255,0,0.2),transparent_38%)]" />
+            <div className="relative z-10 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+              <div>
+                <p className="text-[10px] uppercase tracking-[0.35em] text-[#CCFF00]/70">FOURCEE</p>
+                <h2 className="mt-2 text-2xl font-semibold tracking-tight text-white md:text-3xl">
+                  FOURCEE — Intelligence Engine
+                </h2>
+              </div>
+              <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 backdrop-blur-xl">
+                <p className="text-[10px] uppercase tracking-[0.28em] text-white/60">Global Vault Sync</p>
+                <div className="mt-2 flex items-center gap-2 text-sm font-semibold text-[#CCFF00]">
+                  <span className="h-2.5 w-2.5 rounded-full bg-[#CCFF00] animate-pulse" />
+                  Online
+                </div>
+              </div>
+            </div>
+          </header>
+
+          <div className="grid gap-6 lg:grid-cols-[1.5fr_0.9fr]">
+            <section className="rounded-3xl border border-white/10 bg-white/[0.03] p-5 backdrop-blur-2xl shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]">
+              <div className="mb-4 flex items-center justify-between">
+                <h3 className="text-sm uppercase tracking-[0.3em] text-[#CCFF00]">Lead Collision Log</h3>
+                <p className="text-[10px] uppercase tracking-[0.25em] text-white/55">Live Stream</p>
+              </div>
+              <div className="space-y-2">
+                {logEntries.map((entry) => (
+                  <div
+                    key={entry.id}
+                    className="grid gap-2 rounded-2xl border border-white/10 bg-black/40 p-4 text-xs md:grid-cols-[0.7fr_1fr_1.4fr_1fr]"
+                  >
+                    <span className="text-white/60">{entry.time}</span>
+                    <span className="font-medium text-white">{entry.customerName}</span>
+                    <span className="text-white/80">{entry.intent}</span>
+                    <span className="font-medium text-[#CCFF00]">{entry.status}</span>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            <aside className="rounded-3xl border border-white/10 bg-white/[0.04] p-5 backdrop-blur-2xl">
+              <h3 className="text-sm uppercase tracking-[0.3em] text-[#CCFF00]">Live Transcription</h3>
+              <div className="mt-4 min-h-[300px] rounded-2xl border border-white/10 bg-black/50 p-4 text-sm leading-relaxed text-white/85">
+                <span className="whitespace-pre-wrap">
+                  {transcriptScript.slice(0, transcriptIndex)}
+                  {transcriptIndex < transcriptScript.length && (
+                    <span className="ml-0.5 inline-block h-4 w-2 animate-pulse bg-[#CCFF00]" />
+                  )}
+                </span>
+              </div>
+            </aside>
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-3">
+            <MetricCard label="Revenue Saved" value={formatMoney(revenueSaved)} />
+            <MetricCard label="Appointments Booked (AI)" value={appointmentsBooked.toString()} />
+            <MetricCard label="Average Handling Time" value="1.2 Mins" />
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
-const StatCard: React.FC<{ title: string; value: string; sub: string; color?: string }> = ({ title, value, sub, color = 'text-navy-900 dark:text-white' }) => (
-  <div className="glass-card rounded-[2rem] p-8 border border-silver-50 dark:border-navy-800 shadow-xl transition-all hover:-translate-y-1">
-    <p className="text-[10px] font-bold uppercase text-navy-400 dark:text-navy-500 tracking-[0.2em] mb-2">{title}</p>
-    <p className={`text-3xl font-bold serif ${color}`}>{value}</p>
-    <p className="text-[10px] font-bold text-navy-300 dark:text-navy-600 mt-2 uppercase tracking-tight">{sub}</p>
+const MetricCard: React.FC<{ label: string; value: string }> = ({ label, value }) => (
+  <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-5 backdrop-blur-2xl">
+    <p className="text-[10px] uppercase tracking-[0.28em] text-white/60">{label}</p>
+    <p className="mt-3 text-2xl font-semibold tracking-tight text-[#CCFF00] md:text-3xl">{value}</p>
+  </div>
+);
+
+const OverviewCard: React.FC<{ title: string; value: string }> = ({ title, value }) => (
+  <div className="rounded-3xl border border-white/10 bg-white/[0.05] p-6 backdrop-blur-xl shadow-[0_10px_30px_rgba(0,0,0,0.35)]">
+    <p className="text-[10px] uppercase tracking-[0.28em] text-white/60">{title}</p>
+    <p className="mt-3 text-3xl font-semibold text-[#CCFF00]">{value}</p>
   </div>
 );

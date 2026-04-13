@@ -1,6 +1,7 @@
 
 export enum AppView {
   LANDING = 'landing',
+  LEAD_MAGNET = 'lead-magnet',
   BLOG = 'blog',
   BLOG_POST = 'blog-post',
   CHECKOUT = 'checkout',
@@ -45,4 +46,6 @@ export interface CheckoutState {
   upsells: string[];
   form: Record<string, string>;
   step: number;
+  /** Billing cadence for checkout totals */
+  billingCycle: 'monthly' | 'annual';
 }

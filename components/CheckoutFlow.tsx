@@ -8,20 +8,32 @@ interface CheckoutFlowProps {
   initialPackageId?: string | null;
 }
 
+const LEGACY_PACKAGE_IDS: Record<string, string> = { premium: 'pro' };
+
 export const CheckoutFlow: React.FC<CheckoutFlowProps> = ({ isDarkMode = false, initialPackageId }) => {
-  const resolvedInitialId = initialPackageId && PACKAGES.some(p => p.id === initialPackageId) ? initialPackageId : PACKAGES[1].id;
+  const normalizedInitial =
+    initialPackageId && LEGACY_PACKAGE_IDS[initialPackageId]
+      ? LEGACY_PACKAGE_IDS[initialPackageId]
+      : initialPackageId;
+  const resolvedInitialId =
+    normalizedInitial && PACKAGES.some((p) => p.id === normalizedInitial) ? normalizedInitial : PACKAGES[1].id;
   const [state, setState] = useState<CheckoutState>({
     packageId: resolvedInitialId,
     upsells: [],
     form: {},
-    step: 1
+    step: 1,
+    billingCycle: 'monthly',
   });
 
   const selectedPackage = PACKAGES.find(p => p.id === state.packageId)!;
   const upsellTotal = UPSELLS.filter(u => state.upsells.includes(u.id)).reduce((acc, curr) => acc + (curr.price || 0), 0);
   const upsellMonthlyTotal = UPSELLS.filter(u => state.upsells.includes(u.id))
     .reduce((acc, u) => acc + (('monthlyPrice' in u && (u as { monthlyPrice?: number }).monthlyPrice) || 0), 0);
-  const total = selectedPackage.price + upsellTotal;
+  /** Due today: annual = yearly + one-time upsells (setup waived). Monthly = setup + first month + monthly upsells + one-time upsells */
+  const total =
+    state.billingCycle === 'annual'
+      ? selectedPackage.yearlyPrice + upsellTotal
+      : selectedPackage.price + selectedPackage.monthly + upsellMonthlyTotal + upsellTotal;
   const monthlyTotal = selectedPackage.monthly + upsellMonthlyTotal;
 
   const nextStep = () => setState(s => ({ ...s, step: s.step + 1 }));
@@ -39,15 +51,48 @@ export const CheckoutFlow: React.FC<CheckoutFlowProps> = ({ isDarkMode = false, 
       case 1:
         return (
           <div className="space-y-10 animate-in fade-in duration-500">
-            <div className="text-center max-w-2xl mx-auto">
-              <h2 className="text-3xl md:text-4xl font-bold serif text-navy-900 dark:text-white">Build Your Solution</h2>
+            <div className="text-center max-w-3xl mx-auto">
+              <h2 className="text-3xl md:text-4xl font-bold serif text-navy-900 dark:text-white">
+                Get Live in 2 Hours — Choose Your Plan
+              </h2>
               <p className="mt-3 text-sm text-navy-600 dark:text-navy-400 leading-relaxed">
-                Choose your voice tier, then add capabilities. Your AI agent is the foundation — expand from here.
+                Setup takes less than 2 hours. Once active, you&apos;ll never lose another client to a missed call again.
               </p>
             </div>
+
+            <div className="flex flex-wrap items-center justify-center gap-3">
+              <span className="text-[10px] font-bold uppercase tracking-widest text-navy-700 dark:text-navy-300">
+                Billing
+              </span>
+              <div className="inline-flex rounded-full border border-silver-200 dark:border-navy-700 p-1">
+                <button
+                  type="button"
+                  onClick={() => setState((s) => ({ ...s, billingCycle: 'monthly' }))}
+                  className={`rounded-full px-4 py-2 text-[10px] font-bold uppercase tracking-widest transition ${
+                    state.billingCycle === 'monthly'
+                      ? 'bg-navy-900 text-white dark:bg-white dark:text-navy-950'
+                      : 'text-navy-600 dark:text-navy-400'
+                  }`}
+                >
+                  Monthly
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setState((s) => ({ ...s, billingCycle: 'annual' }))}
+                  className={`rounded-full px-4 py-2 text-[10px] font-bold uppercase tracking-widest transition ${
+                    state.billingCycle === 'annual'
+                      ? 'bg-navy-900 text-white dark:bg-white dark:text-navy-950'
+                      : 'text-navy-600 dark:text-navy-400'
+                  }`}
+                >
+                  Annual
+                </button>
+              </div>
+            </div>
+
             <div>
               <p className="text-[10px] font-bold uppercase tracking-widest text-navy-700 dark:text-navy-300 mb-4">Voice Tier</p>
-              <div className="grid md:grid-cols-3 gap-4">
+              <div className="grid sm:grid-cols-2 xl:grid-cols-4 gap-4">
                 {[...PACKAGES]
                   .sort((a, b) => b.monthly - a.monthly)
                   .map(pkg => (
@@ -57,16 +102,36 @@ export const CheckoutFlow: React.FC<CheckoutFlowProps> = ({ isDarkMode = false, 
                     className={`p-6 rounded-2xl border-2 cursor-pointer transition-all ${state.packageId === pkg.id ? 'border-navy-900 dark:border-white bg-white dark:bg-navy-900 shadow-xl' : 'border-silver-200 dark:border-navy-800 hover:border-navy-300'}`}
                   >
                     <p className="text-[10px] font-bold uppercase tracking-widest text-navy-700 dark:text-navy-300 mb-2">{pkg.name}</p>
-                    <p className="text-2xl sm:text-3xl font-bold serif text-navy-900 dark:text-white">${pkg.monthly}/mo</p>
-                    <p className="text-xs text-navy-600 dark:text-navy-400 mb-4">Setup: ${pkg.price.toLocaleString()}</p>
-                    <ul className="text-xs space-y-2 text-navy-800 dark:text-navy-400">
-                      {pkg.features.map(f => <li key={f} className="flex items-center gap-2"><span className="text-navy-900 dark:text-white">✓</span> {f}</li>)}
+                    {state.billingCycle === 'annual' ? (
+                      <>
+                        <p className="text-2xl sm:text-3xl font-bold serif text-navy-900 dark:text-white">
+                          ${pkg.yearlyPrice.toLocaleString()}
+                          <span className="text-lg font-sans font-semibold">/yr</span>
+                        </p>
+                        <p className="text-xs text-emerald-700 dark:text-emerald-400 mt-1 font-semibold">Setup fee waived</p>
+                        <p className="text-[10px] text-navy-500 dark:text-navy-500 mt-1">Billed annually · save the one-time setup</p>
+                      </>
+                    ) : (
+                      <>
+                        <p className="text-2xl sm:text-3xl font-bold serif text-navy-900 dark:text-white">
+                          ${pkg.monthly}
+                          <span className="text-lg font-sans font-semibold">/mo</span>
+                        </p>
+                        <p className="text-xs text-navy-700 dark:text-navy-300 mt-1">
+                          + ${pkg.price.toLocaleString()} one-time setup
+                        </p>
+                        <p className="text-[10px] text-navy-500 dark:text-navy-500 mt-1">{pkg.description}</p>
+                      </>
+                    )}
+                    <ul className="text-xs space-y-2 text-navy-800 dark:text-navy-400 mt-4">
+                      {pkg.features.map(f => <li key={f} className="flex items-start gap-2"><span className="text-navy-900 dark:text-white shrink-0">✓</span> {f}</li>)}
                     </ul>
                   </div>
                 ))}
               </div>
             </div>
 
+            {UPSELLS.length > 0 && (
             <div>
               <p className="text-[10px] font-bold uppercase tracking-widest text-navy-700 dark:text-navy-300 mb-4">Optional Capabilities</p>
               <div className="space-y-4">
@@ -140,6 +205,7 @@ export const CheckoutFlow: React.FC<CheckoutFlowProps> = ({ isDarkMode = false, 
                 })}
               </div>
             </div>
+            )}
           </div>
         );
       case 2:
@@ -186,14 +252,25 @@ export const CheckoutFlow: React.FC<CheckoutFlowProps> = ({ isDarkMode = false, 
             <div className="text-center">
               <h2 className="text-3xl md:text-4xl font-bold serif text-navy-900 dark:text-white">Secure Payment</h2>
               <p className="mt-3 text-sm text-navy-600 dark:text-navy-400 leading-relaxed">
-                One-time setup today. Monthly subscription billed after deployment.
+                {state.billingCycle === 'annual'
+                  ? 'Annual plan: pay today, then renew each year. One-time setup fee waived when you pay annually.'
+                  : 'One-time setup + first month + any add-ons due today. Setup is waived if you switch to annual billing on the previous step.'}
               </p>
             </div>
             <div className="bg-white dark:bg-navy-900/40 p-8 sm:p-10 rounded-3xl shadow-xl border border-silver-100 dark:border-navy-800">
               <div className="mb-8 pb-6 border-b border-navy-100 dark:border-navy-800">
                 <p className="text-[10px] font-bold uppercase text-navy-700 dark:text-navy-300 mb-1">Due Today</p>
                 <p className="text-4xl sm:text-5xl font-bold serif text-navy-900 dark:text-white">${total.toLocaleString()}</p>
-                <p className="text-xs text-navy-700 dark:text-navy-400 mt-2">Setup + first month. Then ${monthlyTotal}/mo.</p>
+                <p className="text-xs text-navy-700 dark:text-navy-400 mt-2">
+                  {state.billingCycle === 'annual' ? (
+                    <>Setup fee waived · yearly subscription</>
+                  ) : (
+                    <>
+                      Includes ${selectedPackage.price.toLocaleString()} setup + first month (${selectedPackage.monthly}) + add-ons.
+                      Then <span className="font-semibold">${monthlyTotal.toLocaleString()}/mo</span> ongoing.
+                    </>
+                  )}
+                </p>
               </div>
               <div className="space-y-4">
                 <div>

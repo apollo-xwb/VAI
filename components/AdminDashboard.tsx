@@ -15,7 +15,7 @@ export interface AdminClient {
   id: string;
   name: string;
   email: string;
-  package: 'Starter' | 'Pro' | 'Enterprise';
+  package: 'Starter' | 'Pro' | 'Enterprise' | 'Diamond';
   monthlyFee: number;
   setupFeePaid: boolean;
   addOns: string[];
@@ -30,15 +30,16 @@ export interface AdminClient {
   paymentHistory: PaymentRecord[];
 }
 
-const PACKAGES: AdminClient['package'][] = ['Starter', 'Pro', 'Enterprise'];
+const PACKAGES: AdminClient['package'][] = ['Starter', 'Pro', 'Enterprise', 'Diamond'];
 const PAYMENT_STATUSES: PaymentStatus[] = ['paid', 'missed', 'overdue'];
 
 const MOCK_CLIENTS: AdminClient[] = [
-  { id: '1', name: 'Royal Diamonds Ltd', email: 'contact@royaldiamonds.com', package: 'Pro', monthlyFee: 799, setupFeePaid: true, addOns: ['Nivoda Integration', 'Website Chatbot'], totalMRR: 1197, paymentStatus: 'paid', lastPaymentDate: '2025-02-01', renewalDate: '2025-03-01', annualPlan: false, unsubscribeDate: null, active: true, notes: 'VIP account.', paymentHistory: [{ date: '2025-02-01', amount: 1197, status: 'paid' }, { date: '2025-01-01', amount: 1197, status: 'paid' }] },
-  { id: '2', name: 'Rossi Haute Joaillerie', email: 'julianna@rossi-jewelry.com', package: 'Enterprise', monthlyFee: 1299, setupFeePaid: true, addOns: ['Nivoda Integration', 'All-Inboxes Chatbot', 'Custom Voice / Analytics'], totalMRR: 2147, paymentStatus: 'paid', lastPaymentDate: '2025-02-15', renewalDate: '2026-02-15', annualPlan: true, unsubscribeDate: null, active: true, notes: '', paymentHistory: [{ date: '2025-02-15', amount: 25764, status: 'paid', note: 'Annual upfront' }] },
-  { id: '3', name: 'Boutique Éclat', email: 'hello@eclat.fr', package: 'Starter', monthlyFee: 499, setupFeePaid: true, addOns: [], totalMRR: 499, paymentStatus: 'overdue', lastPaymentDate: '2025-01-10', renewalDate: '2025-02-10', annualPlan: false, unsubscribeDate: null, active: true, notes: 'Follow up on overdue.', paymentHistory: [{ date: '2025-01-10', amount: 499, status: 'paid' }, { date: '2024-12-10', amount: 499, status: 'paid' }] },
-  { id: '4', name: 'London Diamonds', email: 'info@londondiamonds.co.uk', package: 'Pro', monthlyFee: 799, setupFeePaid: true, addOns: ['WhatsApp Chatbot'], totalMRR: 998, paymentStatus: 'missed', lastPaymentDate: '2024-12-01', renewalDate: '2025-01-01', annualPlan: false, unsubscribeDate: null, active: true, notes: '', paymentHistory: [{ date: '2024-12-01', amount: 998, status: 'paid' }] },
-  { id: '5', name: 'Silver Lane Jewelers', email: 'admin@silverlane.com', package: 'Starter', monthlyFee: 499, setupFeePaid: false, addOns: [], totalMRR: 0, paymentStatus: 'overdue', lastPaymentDate: '—', renewalDate: '2025-03-20', annualPlan: false, unsubscribeDate: '2025-02-28', active: false, notes: 'Churned.', paymentHistory: [] },
+  { id: '1', name: 'Royal Diamonds Ltd', email: 'contact@royaldiamonds.com', package: 'Pro', monthlyFee: 997, setupFeePaid: true, addOns: ['Extra showroom location'], totalMRR: 1396, paymentStatus: 'paid', lastPaymentDate: '2025-02-01', renewalDate: '2025-03-01', annualPlan: false, unsubscribeDate: null, active: true, notes: 'VIP account.', paymentHistory: [{ date: '2025-02-01', amount: 1396, status: 'paid' }, { date: '2025-01-01', amount: 1396, status: 'paid' }] },
+  { id: '2', name: 'Rossi Haute Joaillerie', email: 'julianna@rossi-jewelry.com', package: 'Enterprise', monthlyFee: 1997, setupFeePaid: true, addOns: ['White-glove onboarding sprint'], totalMRR: 1997, paymentStatus: 'paid', lastPaymentDate: '2025-02-15', renewalDate: '2026-02-15', annualPlan: true, unsubscribeDate: null, active: true, notes: '', paymentHistory: [{ date: '2025-02-15', amount: 19164, status: 'paid', note: 'Annual upfront' }] },
+  { id: '3', name: 'Boutique Éclat', email: 'hello@eclat.fr', package: 'Starter', monthlyFee: 497, setupFeePaid: true, addOns: [], totalMRR: 497, paymentStatus: 'overdue', lastPaymentDate: '2025-01-10', renewalDate: '2025-02-10', annualPlan: false, unsubscribeDate: null, active: true, notes: 'Follow up on overdue.', paymentHistory: [{ date: '2025-01-10', amount: 497, status: 'paid' }, { date: '2024-12-10', amount: 497, status: 'paid' }] },
+  { id: '4', name: 'London Diamonds', email: 'info@londondiamonds.co.uk', package: 'Pro', monthlyFee: 997, setupFeePaid: true, addOns: [], totalMRR: 997, paymentStatus: 'missed', lastPaymentDate: '2024-12-01', renewalDate: '2025-01-01', annualPlan: false, unsubscribeDate: null, active: true, notes: '', paymentHistory: [{ date: '2024-12-01', amount: 997, status: 'paid' }] },
+  { id: '5', name: 'Silver Lane Jewelers', email: 'admin@silverlane.com', package: 'Starter', monthlyFee: 497, setupFeePaid: false, addOns: [], totalMRR: 0, paymentStatus: 'overdue', lastPaymentDate: '—', renewalDate: '2025-03-20', annualPlan: false, unsubscribeDate: '2025-02-28', active: false, notes: 'Churned.', paymentHistory: [] },
+  { id: '6', name: 'Apex Vault', email: 'ops@apexvault.com', package: 'Diamond', monthlyFee: 3499, setupFeePaid: true, addOns: [], totalMRR: 3499, paymentStatus: 'paid', lastPaymentDate: '2025-02-20', renewalDate: '2025-03-20', annualPlan: false, unsubscribeDate: null, active: true, notes: '', paymentHistory: [{ date: '2025-02-20', amount: 3499, status: 'paid' }] },
 ];
 
 function escapeCsvCell(s: string | number): string {
@@ -429,10 +430,10 @@ function AddForm({ onAdd, onCancel }: { onAdd: (p: Omit<AdminClient, 'id'>) => v
     name: '',
     email: '',
     package: 'Starter',
-    monthlyFee: 499,
+    monthlyFee: 497,
     setupFeePaid: false,
     addOns: [],
-    totalMRR: 499,
+    totalMRR: 497,
     paymentStatus: 'paid',
     lastPaymentDate: '',
     renewalDate: '',
@@ -457,7 +458,11 @@ function AddForm({ onAdd, onCancel }: { onAdd: (p: Omit<AdminClient, 'id'>) => v
       </div>
       <div>
         <label className="text-[10px] font-bold uppercase block mb-1 text-navy-500 dark:text-navy-400">Package</label>
-        <select value={form.package} onChange={(e) => setForm((f) => ({ ...f, package: e.target.value as AdminClient['package'], monthlyFee: e.target.value === 'Starter' ? 499 : e.target.value === 'Pro' ? 799 : 1299, totalMRR: e.target.value === 'Starter' ? 499 : e.target.value === 'Pro' ? 799 : 1299 }))} className="w-full px-4 py-2.5 rounded-xl border border-navy-200 dark:border-navy-700 bg-white dark:bg-navy-900 text-navy-900 dark:text-white">
+        <select value={form.package} onChange={(e) => {
+          const pkg = e.target.value as AdminClient['package'];
+          const fee = pkg === 'Starter' ? 497 : pkg === 'Pro' ? 997 : pkg === 'Enterprise' ? 1997 : 3499;
+          setForm((f) => ({ ...f, package: pkg, monthlyFee: fee, totalMRR: fee }));
+        }} className="w-full px-4 py-2.5 rounded-xl border border-navy-200 dark:border-navy-700 bg-white dark:bg-navy-900 text-navy-900 dark:text-white">
           {PACKAGES.map((p) => <option key={p} value={p}>{p}</option>)}
         </select>
       </div>
