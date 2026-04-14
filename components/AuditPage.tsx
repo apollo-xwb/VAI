@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import logoUrl from '../assets/logo.png';
 import placeholderGif from '../public/assets/placeholder.gif';
 import nivodaGif from '../public/assets/nivoda.gif';
@@ -28,7 +28,7 @@ type BreakdownRow = {
   monthlyImpact: string;
 };
 
-/** Audited client — swap `logoUrl` import or public path for their real mark */
+/** Audited client details for page copy */
 const AUDITED = {
   name: 'Cape Diamonds',
   location: 'Green Point, Cape Town',
@@ -103,9 +103,40 @@ const scrollToId = (id: string) => {
 
 export const AuditPage: React.FC<AuditPageProps> = ({ isDarkMode, onGetLive, onBookCall }) => {
   const generatedDate = useMemo(() => 'April 13, 2026', []);
+  const [showIntroSplash, setShowIntroSplash] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setShowIntroSplash(false), 2800);
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <div className="min-h-screen bg-black pb-8 text-white [background:radial-gradient(ellipse_100%_60%_at_50%_-10%,rgba(212,175,55,0.07),transparent_55%),linear-gradient(180deg,#0a0a0a_0%,#000_40%,#050505_100%)]">
+      {showIntroSplash && (
+        <div className="fixed inset-0 z-[120] flex items-center justify-center bg-black/95 p-6 backdrop-blur-md">
+          <div className="w-full max-w-2xl rounded-[2rem] border border-amber-300/25 bg-gradient-to-br from-zinc-950 via-black to-zinc-900 p-8 text-center shadow-[0_20px_80px_rgba(0,0,0,0.65),inset_0_1px_0_rgba(255,255,255,0.08)] md:p-10">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.35em] text-amber-200/80">Confidential audit brief</p>
+            <h2 className="mt-3 text-2xl font-semibold text-slate-100 md:text-4xl">Specially Prepared for {AUDITED.name}</h2>
+            <p className="mt-3 text-sm leading-relaxed text-slate-300 md:text-base">
+              This intelligence report is private, tailored to your showroom performance, and intended only for the
+              {` `}<span className="font-semibold text-amber-100">{AUDITED.name}</span> leadership team.
+            </p>
+            <div className="mt-6 inline-flex items-center gap-2 rounded-full border border-emerald-300/30 bg-emerald-100/5 px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-emerald-300">
+              <span className="h-2 w-2 rounded-full bg-emerald-300 animate-pulse" />
+              Secure access granted
+            </div>
+            <div className="mt-7">
+              <button
+                type="button"
+                onClick={() => setShowIntroSplash(false)}
+                className="rounded-full border border-white/20 bg-white/5 px-5 py-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-200 transition hover:bg-white/10"
+              >
+                Continue to report
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       <div className="fixed top-0 left-0 right-0 z-40 border-b border-white/10 bg-black/90 backdrop-blur-xl">
         <div className="mx-auto flex w-full max-w-7xl flex-col gap-3 px-4 py-3 md:px-8">
           <div className="flex flex-wrap items-start justify-between gap-4">
@@ -134,7 +165,7 @@ export const AuditPage: React.FC<AuditPageProps> = ({ isDarkMode, onGetLive, onB
         </div>
       </div>
 
-      <div className="mx-auto w-full max-w-7xl px-4 pt-32 md:px-8 md:pt-36">
+      <div className="mx-auto w-full max-w-7xl px-4 pt-52 sm:pt-48 md:px-8 md:pt-40">
         {/* Hero: copy + Google reviews + MiniPhone + 3D ring */}
         <section className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-gradient-to-br from-zinc-950 via-black to-zinc-900 p-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] md:p-10">
           <div
@@ -166,9 +197,7 @@ export const AuditPage: React.FC<AuditPageProps> = ({ isDarkMode, onGetLive, onB
               </div>
 
               <div className="mt-4 flex flex-wrap items-center gap-3 rounded-2xl border border-white/10 bg-black/40 px-4 py-3 shadow-inner">
-                <span className="bg-gradient-to-r from-amber-300 via-yellow-200 to-amber-500 bg-clip-text text-lg text-transparent">
-                  ★★★★★
-                </span>
+                <span className="text-lg text-amber-300 drop-shadow-[0_0_8px_rgba(253,224,71,0.55)]">★★★★★</span>
                 <span className="bg-gradient-to-r from-white to-amber-200 bg-clip-text text-lg font-semibold text-transparent">
                   4.9
                 </span>
@@ -258,7 +287,7 @@ export const AuditPage: React.FC<AuditPageProps> = ({ isDarkMode, onGetLive, onB
           <div className="mt-8 flex flex-col gap-8 rounded-[2rem] border border-white/10 bg-gradient-to-br from-zinc-950/90 via-black to-zinc-900 p-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] lg:flex-row lg:items-center lg:justify-between lg:gap-10 lg:p-10">
             <div className="text-center lg:max-w-xl lg:text-left">
               <p className="text-[10px] uppercase tracking-[0.28em] text-slate-500">Revenue Impact</p>
-              <p className="mt-3 bg-gradient-to-r from-amber-200 via-yellow-100 to-slate-200 bg-clip-text text-2xl font-semibold leading-tight text-transparent lg:text-4xl">
+              <p className="mt-3 text-2xl font-semibold leading-tight text-slate-100 lg:text-4xl">
                 Estimated Monthly Lost Revenue: $18,700 - $24,900
               </p>
               <p className="mt-2 text-sm text-slate-500">~$21,400 / month at typical mid-range assumptions</p>
@@ -283,7 +312,12 @@ export const AuditPage: React.FC<AuditPageProps> = ({ isDarkMode, onGetLive, onB
 
         {/* Table */}
         <section className="mt-10">
-          <h2 className="text-lg font-semibold text-slate-100">Missed Calls Breakdown</h2>
+          <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+            <h2 className="text-lg font-semibold text-slate-100">Missed Calls Breakdown</h2>
+            <div className="rounded-full border border-red-400/30 bg-red-950/20 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-red-200/90">
+              High-intent calls at risk
+            </div>
+          </div>
           <div className="mt-4 overflow-hidden rounded-3xl border border-white/10">
             <table className="w-full">
               <thead className="bg-white/[0.04] text-left">
@@ -302,7 +336,7 @@ export const AuditPage: React.FC<AuditPageProps> = ({ isDarkMode, onGetLive, onB
                     <td className="px-5 py-4 text-sm text-white/90">{row.callType}</td>
                     <td className="px-5 py-4 text-sm text-white/80">{row.weeklyMissed}</td>
                     <td className="px-5 py-4 text-sm font-medium">
-                      <span className="bg-gradient-to-r from-amber-200 to-yellow-100 bg-clip-text text-transparent">
+                      <span className="text-amber-100">
                         {row.monthlyImpact}
                       </span>
                     </td>
@@ -311,15 +345,79 @@ export const AuditPage: React.FC<AuditPageProps> = ({ isDarkMode, onGetLive, onB
               </tbody>
             </table>
           </div>
+          <div className="mt-6 rounded-3xl border border-white/10 bg-gradient-to-br from-zinc-950/90 via-black to-zinc-900 p-4 md:p-6">
+            <div className="grid gap-4 md:gap-5">
+              <div className="grid w-full items-stretch gap-3 md:grid-cols-[minmax(0,1fr)_168px]">
+                <div className="rounded-2xl border border-emerald-300/30 bg-emerald-100/90 p-4 text-emerald-900">
+                  <p className="text-base font-semibold">High-value product inquiries</p>
+                  <p className="mt-1 text-sm text-emerald-800">Pricing, availability &amp; detailed questions</p>
+                  <p className="mt-2 text-sm font-medium text-emerald-700">Highest revenue potential per call</p>
+                </div>
+                <div className="rounded-2xl border border-emerald-300/30 bg-emerald-900/80 p-4 text-center text-emerald-50">
+                  <p className="text-[10px] uppercase tracking-[0.2em] text-emerald-200/80">Monthly impact</p>
+                  <p className="mt-2 text-2xl font-bold">$$$</p>
+                </div>
+              </div>
+
+              <div className="grid w-[88%] items-stretch gap-3 md:w-full md:grid-cols-[minmax(0,1fr)_168px]">
+                <div className="rounded-2xl border border-blue-300/30 bg-blue-100/90 p-4 text-blue-900">
+                  <p className="text-base font-semibold">Custom &amp; bespoke requests</p>
+                  <p className="mt-1 text-sm text-blue-800">Complex orders needing consultation</p>
+                  <p className="mt-2 text-sm font-medium text-blue-700">Mid-to-high revenue per conversion</p>
+                </div>
+                <div className="rounded-2xl border border-blue-300/30 bg-blue-900/80 p-4 text-center text-blue-50">
+                  <p className="text-[10px] uppercase tracking-[0.2em] text-blue-200/80">Monthly impact</p>
+                  <p className="mt-2 text-2xl font-bold">$$</p>
+                </div>
+              </div>
+
+              <div className="grid w-[76%] items-stretch gap-3 md:w-full md:grid-cols-[minmax(0,1fr)_168px]">
+                <div className="rounded-2xl border border-amber-300/35 bg-amber-100/90 p-4 text-amber-900">
+                  <p className="text-base font-semibold">Booking requests</p>
+                  <p className="mt-1 text-sm text-amber-800">Appointments &amp; scheduling</p>
+                  <p className="mt-2 text-sm font-medium text-amber-700">Consistent volume, steady value</p>
+                </div>
+                <div className="rounded-2xl border border-amber-300/35 bg-amber-900/80 p-4 text-center text-amber-50">
+                  <p className="text-[10px] uppercase tracking-[0.2em] text-amber-200/85">Monthly impact</p>
+                  <p className="mt-2 text-2xl font-bold">$</p>
+                </div>
+              </div>
+            </div>
+            <p className="mt-5 text-center text-sm text-slate-300">
+              Every missed call is a missed opportunity — the cost adds up across all categories.
+            </p>
+          </div>
+          <div className="mt-4 grid gap-3 md:grid-cols-3">
+            <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-4">
+              <p className="text-[10px] uppercase tracking-[0.2em] text-slate-500">Most exposed segment</p>
+              <p className="mt-2 text-sm font-semibold text-slate-100">Diamond &amp; Gold pricing inquiries</p>
+            </div>
+            <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-4">
+              <p className="text-[10px] uppercase tracking-[0.2em] text-slate-500">Immediate monthly leak</p>
+              <p className="mt-2 text-sm font-semibold text-amber-100">$18,700 - $24,900</p>
+            </div>
+            <div className="rounded-2xl border border-amber-400/25 bg-amber-950/20 p-4">
+              <p className="text-[10px] uppercase tracking-[0.2em] text-amber-200/80">Decision pressure</p>
+              <p className="mt-2 text-sm font-semibold text-slate-100">Each missed call compounds every week.</p>
+            </div>
+          </div>
           <SectionTrustFooter />
         </section>
 
         <section className="mt-10 rounded-[2rem] border border-white/10 bg-white/[0.03] p-6 md:p-8">
           <h2 className="text-xl font-semibold text-slate-100">What This Means For Your Business</h2>
-          <p className="mt-3 max-w-4xl text-sm leading-relaxed text-white/75">
-            You are currently losing between $18,700 and $24,900 every month simply because calls are going unanswered.
-            Most of these callers do not call back.
-          </p>
+          <div className="mt-4 grid gap-4 md:grid-cols-[1.2fr_0.8fr]">
+            <div className="rounded-2xl border border-white/10 bg-black/40 p-5">
+              <p className="text-sm leading-relaxed text-white/85">
+                You are currently losing between <span className="font-semibold text-amber-100">$18,700 and $24,900</span>{' '}
+                every month simply because calls are going unanswered. Most of these callers do not call back.
+              </p>
+            </div>
+            <div className="rounded-2xl border border-red-400/25 bg-red-950/20 p-5">
+              <p className="text-[10px] uppercase tracking-[0.2em] text-red-200/85">Behavioral reality</p>
+              <p className="mt-2 text-sm font-semibold text-slate-100">Buyers call the next jeweller within minutes.</p>
+            </div>
+          </div>
           <SectionTrustFooter />
         </section>
 
@@ -374,7 +472,7 @@ export const AuditPage: React.FC<AuditPageProps> = ({ isDarkMode, onGetLive, onB
 
         <section className="mt-10 rounded-[2rem] border border-amber-500/20 bg-gradient-to-br from-zinc-950 via-black to-zinc-900 p-8 text-center shadow-[inset_0_1px_0_rgba(212,175,55,0.12)]">
           <p className="text-[10px] uppercase tracking-[0.3em] text-amber-200/80">Choose Your Next Step</p>
-          <h2 className="mt-3 bg-gradient-to-r from-white via-slate-200 to-amber-100/90 bg-clip-text text-2xl font-semibold text-transparent md:text-4xl">
+          <h2 className="mt-3 text-2xl font-semibold text-slate-100 md:text-4xl">
             You are currently losing between $18,700 and $24,900 every month simply because calls are going unanswered.
           </h2>
           <div className="mt-7 flex flex-wrap justify-center gap-3">

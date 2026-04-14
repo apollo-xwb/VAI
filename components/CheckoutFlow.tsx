@@ -102,27 +102,43 @@ export const CheckoutFlow: React.FC<CheckoutFlowProps> = ({ isDarkMode = false, 
                     className={`p-6 rounded-2xl border-2 cursor-pointer transition-all ${state.packageId === pkg.id ? 'border-navy-900 dark:border-white bg-white dark:bg-navy-900 shadow-xl' : 'border-silver-200 dark:border-navy-800 hover:border-navy-300'}`}
                   >
                     <p className="text-[10px] font-bold uppercase tracking-widest text-navy-700 dark:text-navy-300 mb-2">{pkg.name}</p>
-                    {state.billingCycle === 'annual' ? (
-                      <>
-                        <p className="text-2xl sm:text-3xl font-bold serif text-navy-900 dark:text-white">
-                          ${pkg.yearlyPrice.toLocaleString()}
-                          <span className="text-lg font-sans font-semibold">/yr</span>
-                        </p>
-                        <p className="text-xs text-emerald-700 dark:text-emerald-400 mt-1 font-semibold">Setup fee waived</p>
-                        <p className="text-[10px] text-navy-500 dark:text-navy-500 mt-1">Billed annually · save the one-time setup</p>
-                      </>
-                    ) : (
-                      <>
-                        <p className="text-2xl sm:text-3xl font-bold serif text-navy-900 dark:text-white">
-                          ${pkg.monthly}
-                          <span className="text-lg font-sans font-semibold">/mo</span>
-                        </p>
-                        <p className="text-xs text-navy-700 dark:text-navy-300 mt-1">
-                          + ${pkg.price.toLocaleString()} one-time setup
-                        </p>
-                        <p className="text-[10px] text-navy-500 dark:text-navy-500 mt-1">{pkg.description}</p>
-                      </>
-                    )}
+                    <p className="text-2xl sm:text-3xl font-bold serif text-navy-900 dark:text-white">
+                      {state.billingCycle === 'annual' ? `$${pkg.yearlyPrice.toLocaleString()}` : `$${pkg.monthly.toLocaleString()}`}
+                      <span className="text-lg font-sans font-semibold">{state.billingCycle === 'annual' ? '/yr' : '/mo'}</span>
+                    </p>
+                    <div className="mt-3 space-y-2 rounded-xl border border-silver-200/80 bg-silver-50/70 p-3 dark:border-navy-700 dark:bg-navy-900/40">
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setState((s) => ({ ...s, billingCycle: 'monthly' }));
+                        }}
+                        className={`flex w-full items-center justify-between rounded-lg px-2 py-1.5 text-[10px] font-semibold uppercase tracking-[0.18em] transition ${
+                          state.billingCycle === 'monthly'
+                            ? 'bg-navy-900 text-white dark:bg-white dark:text-navy-950'
+                            : 'text-navy-700 dark:text-navy-300'
+                        }`}
+                      >
+                        <span>Monthly</span>
+                        <span>${pkg.monthly.toLocaleString()}/mo + ${pkg.price.toLocaleString()} setup</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setState((s) => ({ ...s, billingCycle: 'annual' }));
+                        }}
+                        className={`flex w-full items-center justify-between rounded-lg px-2 py-1.5 text-[10px] font-semibold uppercase tracking-[0.18em] transition ${
+                          state.billingCycle === 'annual'
+                            ? 'bg-navy-900 text-white dark:bg-white dark:text-navy-950'
+                            : 'text-navy-700 dark:text-navy-300'
+                        }`}
+                      >
+                        <span>Annual</span>
+                        <span>${pkg.yearlyPrice.toLocaleString()}/yr · no setup</span>
+                      </button>
+                    </div>
+                    <p className="text-[10px] text-navy-500 dark:text-navy-500 mt-2">{pkg.description}</p>
                     <ul className="text-xs space-y-2 text-navy-800 dark:text-navy-400 mt-4">
                       {pkg.features.map(f => <li key={f} className="flex items-start gap-2"><span className="text-navy-900 dark:text-white shrink-0">✓</span> {f}</li>)}
                     </ul>

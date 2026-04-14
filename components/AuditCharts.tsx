@@ -44,7 +44,7 @@ export function CallVolumeBarChart() {
   ];
   return (
     <div className="rounded-[2rem] border border-white/10 bg-gradient-to-br from-zinc-950 via-black to-zinc-900 p-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] md:p-8">
-      <h3 className="text-lg font-semibold text-slate-100">
+      <h3 className="audit-heading-font text-lg text-slate-100">
         Call Volume &amp; Answer Rate
       </h3>
       <p className="mt-1 text-xs text-slate-400">Weekly estimates based on your audit model</p>
@@ -64,11 +64,11 @@ export function CallVolumeBarChart() {
           })}
         </svg>
       </div>
-      <div className="mt-2 flex flex-wrap justify-center gap-8 text-center">
+      <div className="mt-3 grid grid-cols-3 gap-3 text-center">
         {bars.map((b) => (
-          <div key={b.label}>
-            <p className="max-w-[6rem] text-[10px] font-bold uppercase tracking-[0.12em] text-slate-500">{b.label}</p>
-            <p className="mt-1 bg-gradient-to-r from-amber-200 to-yellow-100 bg-clip-text text-sm font-semibold text-transparent">
+          <div key={b.label} className="min-w-0">
+            <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-slate-400">{b.label}</p>
+            <p className="mt-1 text-xs font-semibold text-slate-100 sm:text-sm">
               {b.text}
             </p>
           </div>
@@ -120,7 +120,7 @@ export function RevenueLeakLineChart() {
   const d = points.map((v, i) => `${i === 0 ? 'M' : 'L'} ${toX(i)} ${toY(v)}`).join(' ');
   return (
     <div className="rounded-[2rem] border border-white/10 bg-gradient-to-br from-zinc-950 via-black to-zinc-900 p-6 md:p-8">
-      <h3 className="text-lg font-semibold text-slate-100">Your Hidden Revenue Leak</h3>
+      <h3 className="audit-heading-font text-lg text-slate-100">Your Hidden Revenue Leak</h3>
       <p className="mt-1 text-xs text-slate-400">Cumulative estimated missed revenue (6 months)</p>
       <div className="mt-6 overflow-x-auto">
         <svg viewBox={`0 0 ${w} ${h}`} className="w-full min-w-[320px]" aria-hidden>
@@ -146,11 +146,7 @@ export function RevenueLeakLineChart() {
           <span>Month 1</span>
           <span>Month 6</span>
         </div>
-        <p className="mt-3 text-right text-sm font-semibold">
-          <span className="bg-gradient-to-r from-amber-300 via-white to-slate-300 bg-clip-text text-transparent">
-            ~$128,000+ cumulative exposure
-          </span>
-        </p>
+        <p className="mt-3 text-right text-sm font-semibold text-slate-100">~$128,000+ cumulative exposure</p>
       </div>
     </div>
   );
@@ -180,7 +176,7 @@ export function MissedCallDonutChart() {
   });
   return (
     <div className="rounded-[2rem] border border-white/10 bg-gradient-to-br from-zinc-950 via-black to-zinc-900 p-6 md:p-8">
-      <h3 className="text-lg font-semibold text-slate-100">Missed Calls by Type</h3>
+      <h3 className="audit-heading-font text-lg text-slate-100">Missed Calls by Type</h3>
       <p className="mt-1 text-xs text-slate-400">Share of missed-call volume (estimated)</p>
       <div className="mt-6 flex flex-col items-center gap-6 md:flex-row md:items-start md:justify-center">
         <svg viewBox="0 0 120 120" className="h-44 w-44 shrink-0">
@@ -217,11 +213,17 @@ export function MissedCallDonutChart() {
         <ul className="space-y-3 text-sm">
           {segments.map((s) => (
             <li key={s.label} className="flex items-center gap-3">
-              <span className="h-3 w-8 rounded-full bg-gradient-to-r from-slate-300 via-amber-200 to-slate-600 shadow-inner" />
+              <span
+                className={`h-3 w-8 rounded-full shadow-inner ${
+                  s.gradId === 'donut-gold'
+                    ? 'bg-gradient-to-r from-amber-100 via-amber-400 to-amber-800'
+                    : s.gradId === 'donut-silver'
+                      ? 'bg-gradient-to-r from-slate-100 via-slate-400 to-slate-700'
+                      : 'bg-gradient-to-r from-slate-300 via-slate-500 to-slate-900'
+                }`}
+              />
               <span className="text-slate-200">{s.label}</span>
-              <span className="bg-gradient-to-r from-amber-200 to-yellow-100 bg-clip-text font-semibold text-transparent">
-                {s.pct}%
-              </span>
+              <span className="font-semibold text-amber-100">{s.pct}%</span>
             </li>
           ))}
         </ul>
@@ -252,11 +254,11 @@ export function BeforeAfterCards() {
 export function GbpSnapshotMockup() {
   return (
     <div className="rounded-[2rem] border border-white/10 bg-gradient-to-br from-zinc-950 to-black p-6 md:p-8">
-      <h3 className="text-lg font-semibold text-slate-100">Google Business Profile Snapshot</h3>
+      <h3 className="audit-heading-font text-lg text-slate-100">Google Business Profile Snapshot</h3>
       <div className="mt-4 rounded-2xl border border-white/10 bg-black/50 p-5 shadow-inner">
         <div className="flex flex-wrap items-center gap-2">
-          <span className="bg-gradient-to-r from-amber-300 via-yellow-200 to-amber-500 bg-clip-text text-lg text-transparent">★★★★★</span>
-          <span className="bg-gradient-to-r from-white to-amber-200 bg-clip-text text-sm font-semibold text-transparent">4.9</span>
+          <span className="text-lg text-amber-300 drop-shadow-[0_0_8px_rgba(253,224,71,0.55)]">★★★★★</span>
+          <span className="text-sm font-semibold text-slate-100">4.9</span>
           <span className="text-xs text-slate-500">(142 reviews)</span>
         </div>
         <p className="mt-4 text-sm italic text-slate-300">
@@ -295,7 +297,7 @@ export function TrafficPieChart() {
   });
   return (
     <div className="rounded-[2rem] border border-white/10 bg-gradient-to-br from-zinc-950 via-black to-zinc-900 p-6 md:p-8">
-      <h3 className="text-lg font-semibold text-slate-100">Where your calls are coming from</h3>
+      <h3 className="audit-heading-font text-lg text-slate-100">Where your calls are coming from</h3>
       <p className="mt-1 text-xs text-slate-400">Traffic source mix (illustrative)</p>
       <div className="mt-6 flex flex-col items-center gap-4 md:flex-row md:justify-center">
         <svg viewBox="0 0 100 100" className="h-36 w-36">
@@ -319,15 +321,26 @@ export function TrafficPieChart() {
             <path key={i} d={p.d} fill={`url(#${p.id})`} stroke="#0a0a0a" strokeWidth="0.5" />
           ))}
         </svg>
-        <ul className="space-y-2 text-sm">
+        <div className="w-full max-w-[240px] rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+          <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-400">Legend</p>
+          <ul className="space-y-2 text-sm">
           {slices.map((s) => (
-            <li key={s.label} className="flex items-center gap-2">
-              <span className="h-2.5 w-8 rounded-full bg-gradient-to-r from-slate-400 to-amber-300/60" />
-              <span className="text-slate-200">{s.label}</span>
-              <span className="bg-gradient-to-r from-amber-200 to-white bg-clip-text font-medium text-transparent">{s.pct}%</span>
+            <li key={s.label} className="flex items-center gap-2 rounded-xl border border-white/10 bg-black/40 px-2.5 py-2">
+              <span
+                className={`h-2.5 w-8 rounded-full shadow-inner ${
+                  s.id === 'pie-g'
+                    ? 'bg-gradient-to-r from-slate-500 via-slate-200 to-slate-700'
+                    : s.id === 'pie-w'
+                      ? 'bg-gradient-to-r from-amber-200 via-amber-400 to-amber-700'
+                      : 'bg-gradient-to-r from-slate-300 to-slate-800'
+                }`}
+              />
+              <span className="flex-1 text-slate-200">{s.label}</span>
+              <span className="font-medium text-slate-100">{s.pct}%</span>
             </li>
           ))}
-        </ul>
+          </ul>
+        </div>
       </div>
     </div>
   );
@@ -335,7 +348,7 @@ export function TrafficPieChart() {
 
 export function SectionTrustFooter() {
   return (
-    <p className="mt-4 text-[10px] leading-relaxed text-slate-400">
+    <p className="mt-4 text-center text-[10px] leading-relaxed text-slate-400 sm:text-left">
       Data sourced from your Google Business Profile + public web data + industry benchmarks.
     </p>
   );

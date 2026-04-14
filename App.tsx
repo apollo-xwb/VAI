@@ -911,7 +911,7 @@ const App: React.FC = () => {
         />
       </div>
 
-      {(currentView === AppView.LANDING || currentView === AppView.LEAD_MAGNET) && (
+      {currentView === AppView.LANDING && (
         <div className="fixed top-8 sm:top-8 md:top-12 left-[68%] sm:left-[60%] md:left-[58%] -translate-x-1/2 z-[100] pointer-events-none">
           <img
             src={isDarkMode ? fcWhite : fcBlack}
